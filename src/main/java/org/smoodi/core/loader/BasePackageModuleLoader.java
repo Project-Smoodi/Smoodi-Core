@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Slf4j
-public class BasePackageModuleLoader implements ModuleLoader {
+public class BasePackageModuleLoader implements PackageBasedModuleLoader {
 
     // Module Scanner
-    private static final ModuleScanner ms = new DefaultModuleScanner();
+    private final ModuleScanner ms = new DefaultModuleScanner();
 
     // Module Initializer
-    private static final ModuleInitializer mi = new DefaultModuleInitializer();
+    private final ModuleInitializer mi = new DefaultModuleInitializer();
 
     @Override
     public void loadModules(String basePackage) {
