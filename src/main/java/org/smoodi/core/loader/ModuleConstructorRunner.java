@@ -1,8 +1,5 @@
 package org.smoodi.core.loader;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.context.ModuleContainer;
@@ -11,12 +8,10 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModuleConstructorRunner {
 
     // Module Container
-    private static final ModuleContainer mc = SmoodiFramework.getModuleContainer();
-
+    private final ModuleContainer mc = SmoodiFramework.getModuleContainer();
 
     @SneakyThrows
     public void create(List<Constructor<?>> constructors) {
@@ -71,7 +66,4 @@ public class ModuleConstructorRunner {
             }
         }
     }
-
-    @Getter
-    private static final ModuleConstructorRunner instance = new ModuleConstructorRunner();
 }

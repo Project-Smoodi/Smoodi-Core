@@ -1,13 +1,9 @@
 package org.smoodi.core.loader;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.smoodi.core.SmoodiStarter;
 
 import java.lang.reflect.Constructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigurableModuleConstructorSearcherProvider implements ModuleConstructorSearcher {
 
     private ModuleConstructorSearcher cache = null;
@@ -38,8 +34,4 @@ public class ConfigurableModuleConstructorSearcherProvider implements ModuleCons
 
         return cache.findConstructor(klass);
     }
-
-    @Getter
-    private static final ModuleConstructorSearcher instance =
-            new ConfigurableModuleConstructorSearcherProvider();
 }

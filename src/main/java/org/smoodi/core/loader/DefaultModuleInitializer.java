@@ -1,17 +1,14 @@
 package org.smoodi.core.loader;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultModuleInitializer implements ModuleInitializer {
 
-    private final ModuleConstructorSearcher searcher = ModuleConstructorSearcher.getInstance();
+    private final ModuleConstructorSearcher searcher = new ConfigurableModuleConstructorSearcherProvider();
+
+    private final ModuleConstructorRunner mr = new ModuleConstructorRunner();
 
     @Override
     public void initialize(List<String> moduleNames) {
@@ -30,9 +27,6 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             constructors.add(constructor);
         });
 
-        ModuleConstructorRunner.getInstance().create(constructors);
+        mr.create(constructors);
     }
-
-    @Getter
-    private static final ModuleInitializer instance = new DefaultModuleInitializer();
 }

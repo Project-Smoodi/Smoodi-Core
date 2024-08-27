@@ -12,6 +12,8 @@ public class SmoodiFramework {
     @Getter
     private static final ModuleContainer moduleContainer = new DefaultModuleContainer();
 
+    static SmoodiStarter starter = new SmoodiStarter();
+
     @Getter
     private static final SmoodiFramework instance = new SmoodiFramework();
 }

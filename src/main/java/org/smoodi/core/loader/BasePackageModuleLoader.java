@@ -1,20 +1,17 @@
 package org.smoodi.core.loader;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BasePackageModuleLoader implements ModuleLoader {
 
     // Module Scanner
-    private static final ModuleScanner ms = ModuleScanner.getDefaultInstance();
+    private static final ModuleScanner ms = new DefaultModuleScanner();
 
-    private static final ModuleInitializer mi = ModuleInitializer.getInstance();
+    // Module Initializer
+    private static final ModuleInitializer mi = new DefaultModuleInitializer();
 
     @Override
     public void loadModules(String basePackage) {
@@ -23,8 +20,4 @@ public class BasePackageModuleLoader implements ModuleLoader {
 
         mi.initialize(moduleNames);
     }
-
-    // Singleton
-    @Getter
-    private final static ModuleLoader instance = new BasePackageModuleLoader();
 }
