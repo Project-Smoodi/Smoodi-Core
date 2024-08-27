@@ -9,9 +9,9 @@ public class ConfigurableModuleConstructorSearcherProvider implements ModuleCons
     private ModuleConstructorSearcher cache = null;
 
     @Override
-    public Constructor<?> findConstructor(Class<?> klass) {
+    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
         if (cache != null) {
-            return cache.findConstructor(klass);
+            return cache.findModuleInitConstructor(klass);
         }
 
         ModuleConstructorTarget targeting =
@@ -32,6 +32,6 @@ public class ConfigurableModuleConstructorSearcherProvider implements ModuleCons
                 cache = new DefaultModuleConstructorSearcher();
         }
 
-        return cache.findConstructor(klass);
+        return cache.findModuleInitConstructor(klass);
     }
 }

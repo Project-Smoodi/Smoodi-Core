@@ -6,7 +6,7 @@ public class DefaultModuleConstructorSearcher
         implements ModuleConstructorSearcher {
 
     @Override
-    public Constructor<?> findConstructor(Class<?> klass) {
+    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
         Constructor<?> emptyConstructor = null;
 
         if (klass.getConstructors().length == 1) {

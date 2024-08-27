@@ -22,7 +22,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             } catch (ClassNotFoundException e) {
                 return;
             }
-            final Constructor<?> constructor = searcher.findConstructor(klass);
+            final Constructor<?> constructor = searcher.findModuleInitConstructor(klass);
 
             constructors.add(constructor);
         });

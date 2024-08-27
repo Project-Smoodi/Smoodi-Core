@@ -6,7 +6,7 @@ public class EmptyModuleConstructorSearcher
         implements ModuleConstructorSearcher {
 
     @Override
-    public Constructor<?> findConstructor(Class<?> klass) {
+    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
 
         for (Constructor<?> constructor : klass.getConstructors()) {
             if (constructor.getParameterCount() == 0) {
