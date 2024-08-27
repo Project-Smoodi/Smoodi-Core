@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.init.LoggerInitializer;
 import org.smoodi.core.loader.BasePackageModuleLoader;
 import org.smoodi.core.loader.ModuleCreationError;
+import org.smoodi.core.loader.ModuleDeclareError;
 import org.smoodi.core.loader.ModuleLoader;
 
 import java.time.Duration;
@@ -25,7 +26,7 @@ public final class SmoodiStarter {
 
             SmoodiFramework.getStarter().moduleLoader.loadModules(mainClass.getPackage().getName());
 
-        } catch (ModuleCreationError error) {
+        } catch (ModuleCreationError | ModuleDeclareError error) {
             log.error(error.getMessage(), error);
             return;
         } catch (Exception e) {
