@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ModuleConstructorTarget {
 
-    TargetBy target = TargetBy.DEFAULT;
+    public TargetBy target() default TargetBy.DEFAULT;
 }
 
