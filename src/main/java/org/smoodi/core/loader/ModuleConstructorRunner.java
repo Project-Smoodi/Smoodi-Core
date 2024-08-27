@@ -21,7 +21,7 @@ public class ModuleConstructorRunner {
 
         while (true) {
             if (lastTurnListSize == constructors.size()) {
-                throw new IllegalStateException("Circular reference found");
+                throw new IllegalStateException("Circular reference found on " + constructors.size() + " modules : " + constructors);
             }
             lastTurnListSize = constructors.size();
 
