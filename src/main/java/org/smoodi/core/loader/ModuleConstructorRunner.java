@@ -24,6 +24,8 @@ public class ModuleConstructorRunner {
                 throw new IllegalStateException("Circular reference found");
             }
 
+            final List<Constructor<?>> remove = new ArrayList<>();
+
             for (Constructor<?> constructor : constructors) {
                 final List<Object> parameters = new ArrayList<>(constructors.size());
 
@@ -38,14 +40,16 @@ public class ModuleConstructorRunner {
                 if (parameters.size() == constructors.size()) {
                     try {
                         mc.save(
-                                constructor.newInstance(parameters)
+                                constructor.newInstance(parameters.toArray())
                         );
-                        constructors.remove(constructor);
+                        remove.add(constructor);
                     } catch (IllegalArgumentException e) {
-                        throw new IllegalStateException("Invalid parameters entered during constructor call");
+                        throw new IllegalStateException("Invalid parameters entered during constructor call", e);
                     }
                 }
             }
+
+            constructors.removeAll(remove);
 
             if (constructors.isEmpty()) {
                 return;
