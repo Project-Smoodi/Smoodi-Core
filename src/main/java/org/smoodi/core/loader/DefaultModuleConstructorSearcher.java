@@ -14,7 +14,7 @@ public class DefaultModuleConstructorSearcher
         }
 
         for (Constructor<?> constructor : klass.getConstructors()) {
-            if (constructor.getAnnotation(ModuleConstructor.class) != null) {
+            if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
                 return constructor;
             }
 

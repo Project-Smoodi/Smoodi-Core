@@ -8,7 +8,7 @@ public class AnnotatedModuleConstructorSearcher
     @Override
     public Constructor<?> findModuleInitConstructor(Class<?> klass) {
         for (Constructor<?> constructor : klass.getConstructors()) {
-            if (constructor.getAnnotation(ModuleConstructor.class) != null) {
+            if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
                 return constructor;
             }
         }
