@@ -9,6 +9,10 @@ public class DefaultModuleConstructorSearcher
     public Constructor<?> findConstructor(Class<?> klass) {
         Constructor<?> emptyConstructor = null;
 
+        if (klass.getConstructors().length == 1) {
+            return klass.getConstructors()[0];
+        }
+
         for (Constructor<?> constructor : klass.getConstructors()) {
             if (constructor.getAnnotation(ModuleConstructor.class) != null) {
                 return constructor;
