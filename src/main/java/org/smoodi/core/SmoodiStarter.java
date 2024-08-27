@@ -15,11 +15,10 @@ public final class SmoodiStarter {
     public static Class<?> mainClass = null;
 
     public static void startSmoodi(Class<?> mainClass) {
-        final LocalDateTime started = LocalDateTime.now();
+        final LocalDateTime startedAt = LocalDateTime.now();
+        SmoodiStarter.mainClass = mainClass;
 
         try {
-
-            SmoodiStarter.mainClass = mainClass;
 
             SmoodiFramework.getStarter().moduleLoader.loadModules(mainClass.getPackage().getName());
 
@@ -27,11 +26,11 @@ public final class SmoodiStarter {
             SmoodiStarter.log.error(e.getMessage(), e);
         }
 
-        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime finishedAt = LocalDateTime.now();
         SmoodiStarter.log.info(
                 "Smoodi started on {} seconds. Started at : {}, Initialize finished at : {}",
-                (double) (Duration.between(now, started).getNano() / 1_000_000_000),
-                started, now
+                (double) (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000),
+                startedAt, finishedAt
         );
     }
 }
