@@ -15,9 +15,13 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
         final List<Object> found = new ArrayList<>();
 
-        subTypes.forEach(subType -> found.addAll(
-                objects.get(klass)
-        ));
+        subTypes.forEach(subType -> {
+            if (objects.get(subType) != null) {
+                found.addAll(
+                        objects.get(subType)
+                );
+            }
+        });
 
         if (found.size() == 1) {
             return (List<T>) found;
@@ -27,9 +31,9 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
                 it -> it.getClass().getAnnotation(Module.class).isPrimary()).toList();
 
         if (primary.size() > 1) {
-            throw new IllegalStateException("Many primary module found. Primary module MUST BE one.");
-        } else if (primary.isEmpty()) {
-            throw new IllegalStateException("Many modules found BUT the primary module does not exist.");
+            throw new IllegalStateException("Many primary module found. Primary module MUST BE one: " + klass.getName());
+        } else if (primary.isEmpty() && found.size() > 1) {
+            throw new IllegalStateException("Many modules found BUT the primary module does not exist: " + klass.getName());
         }
 
         return (List<T>) List.of(primary);
