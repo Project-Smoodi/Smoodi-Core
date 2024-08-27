@@ -14,7 +14,4 @@ public class SmoodiFramework {
 
     @Getter
     private static final SmoodiStarter starter = new SmoodiStarter();
-
-    @Getter
-    private static final SmoodiFramework instance = new SmoodiFramework();
 }
