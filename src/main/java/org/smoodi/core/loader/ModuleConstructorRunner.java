@@ -15,7 +15,7 @@ public class ModuleConstructorRunner {
 
     @SneakyThrows
     public void create(List<Constructor<?>> constructors) {
-        createEmptyConstructor(constructors);
+        createDefaultConstructors(constructors);
 
         int lastTurnListSize = constructors.size() + 1;
 
@@ -23,6 +23,7 @@ public class ModuleConstructorRunner {
             if (lastTurnListSize == constructors.size()) {
                 throw new IllegalStateException("Circular reference found");
             }
+            lastTurnListSize = constructors.size();
 
             final List<Constructor<?>> remove = new ArrayList<>();
 
@@ -37,7 +38,7 @@ public class ModuleConstructorRunner {
                     parameters.add(parameter);
                 }
 
-                if (parameters.size() == constructors.size()) {
+                if (parameters.size() == constructor.getParameterCount()) {
                     try {
                         mc.save(
                                 constructor.newInstance(parameters.toArray())
@@ -54,13 +55,11 @@ public class ModuleConstructorRunner {
             if (constructors.isEmpty()) {
                 return;
             }
-
-            lastTurnListSize = constructors.size();
         }
     }
 
     @SneakyThrows
-    private void createEmptyConstructor(List<Constructor<?>> constructors) {
+    private void createDefaultConstructors(List<Constructor<?>> constructors) {
 
         List<Constructor<?>> defaultConstructors = new ArrayList<>();
 
