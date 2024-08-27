@@ -10,5 +10,6 @@ public class DefaultStaticModuleLoader implements StaticModuleLoader {
     @Override
     public void loadModules() {
         moduleContainer.save(moduleContainer);
+        moduleContainer.save(SmoodiFramework.getInstance());
     }
 }
