@@ -14,11 +14,11 @@ public class ConfigurableModuleConstructorSearcherProvider implements ModuleCons
             return cache.findModuleInitConstructor(klass);
         }
 
-        ModuleConstructorTarget targeting =
-                SmoodiStarter.mainClass.getAnnotation(ModuleConstructorTarget.class);
+        ModuleInitConstructorTargeter targeting =
+                SmoodiStarter.mainClass.getAnnotation(ModuleInitConstructorTargeter.class);
 
         if (targeting == null) {
-            throw new IllegalStateException("ModuleConstructorTarget annotation not found in main class " + SmoodiStarter.mainClass.getName());
+            throw new IllegalStateException("ModuleInitConstructorTargeter annotation not found in main class " + SmoodiStarter.mainClass.getName());
         }
 
         switch (targeting.target()) {
