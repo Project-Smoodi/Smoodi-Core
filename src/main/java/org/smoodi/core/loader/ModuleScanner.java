@@ -1,4 +1,4 @@
-package org.smoodi.core.init.loader;
+package org.smoodi.core.loader;
 
 import java.util.Set;
 
