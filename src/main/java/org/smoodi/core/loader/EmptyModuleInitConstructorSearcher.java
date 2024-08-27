@@ -14,7 +14,7 @@ public class EmptyModuleInitConstructorSearcher
             }
         }
 
-        throw new IllegalStateException(
+        throw new ModuleDeclareError(
                 "Cannot found module initialization constructor in class: " + klass.getName()
                         + " with searcher: " + this.getClass().getName()
         );

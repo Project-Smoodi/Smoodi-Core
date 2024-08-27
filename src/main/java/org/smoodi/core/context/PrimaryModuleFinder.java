@@ -1,6 +1,7 @@
 package org.smoodi.core.context;
 
 import org.smoodi.core.Module;
+import org.smoodi.core.loader.ModuleDeclareError;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +33,9 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
                 it -> it.getClass().getAnnotation(Module.class).isPrimary()).toList();
 
         if (primary.size() > 1) {
-            throw new IllegalStateException("Many primary module found. Primary module MUST BE one: " + klass.getName());
+            throw new ModuleDeclareError("Many primary module found. Primary module MUST BE one: " + klass.getName());
         } else if (primary.isEmpty() && found.size() > 1) {
-            throw new IllegalStateException("Many modules found BUT the primary module does not exist: " + klass.getName());
+            throw new ModuleDeclareError("Many modules found BUT the primary module does not exist: " + klass.getName());
         }
 
         return Collections.emptyList();

@@ -21,7 +21,7 @@ public class ModuleInitConstructorRunner {
 
         while (true) {
             if (lastTurnListSize == constructors.size()) {
-                throw new IllegalStateException("Circular reference found on " + constructors.size() + " modules : " + constructors);
+                throw new ModuleCreationError("Circular reference found on " + constructors.size() + " modules : " + constructors);
             }
             lastTurnListSize = constructors.size();
 
@@ -45,7 +45,7 @@ public class ModuleInitConstructorRunner {
                         );
                         initializedConstructors.add(constructor);
                     } catch (IllegalArgumentException e) {
-                        throw new IllegalStateException("Invalid parameters entered during constructor call", e);
+                        throw new ModuleCreationError("Invalid parameters entered during constructor call", e);
                     }
                 }
             }
