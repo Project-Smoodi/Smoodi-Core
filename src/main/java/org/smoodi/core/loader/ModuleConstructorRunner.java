@@ -57,13 +57,21 @@ public class ModuleConstructorRunner {
 
     @SneakyThrows
     private void createEmptyConstructor(List<Constructor<?>> constructors) {
+
+        List<Constructor<?>> defaultConstructors = new ArrayList<>();
+
         for (Constructor<?> constructor : constructors) {
             if (constructor.getParameterCount() == 0) {
-                constructors.remove(constructor);
-                mc.save(
-                        constructor.newInstance()
-                );
+                defaultConstructors.add(constructor);
+                break;
             }
+        }
+
+        for (Constructor<?> constructor : defaultConstructors) {
+            constructors.remove(constructor);
+            mc.save(
+                    constructor.newInstance()
+            );
         }
     }
 }
