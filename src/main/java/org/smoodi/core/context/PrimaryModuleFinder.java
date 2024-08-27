@@ -3,6 +3,7 @@ package org.smoodi.core.context;
 import org.smoodi.core.Module;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,6 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
             throw new IllegalStateException("Many modules found BUT the primary module does not exist: " + klass.getName());
         }
 
-        return (List<T>) List.of(primary);
+        return Collections.emptyList();
     }
 }
