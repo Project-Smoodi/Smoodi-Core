@@ -21,9 +21,15 @@ public final class SmoodiStarter {
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime started = LocalDateTime.now();
 
-        SmoodiStarter.mainClass = mainClass;
+        try {
 
-        instance.moduleLoader.loadModules(mainClass.getPackage().getName());
+            SmoodiStarter.mainClass = mainClass;
+
+            instance.moduleLoader.loadModules(mainClass.getPackage().getName());
+
+        } catch (Exception e) {
+            instance.logger.error(e.getMessage(), e);
+        }
 
         final LocalDateTime now = LocalDateTime.now();
         instance.logger.info(
