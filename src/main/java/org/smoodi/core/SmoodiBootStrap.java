@@ -15,8 +15,8 @@ public final class SmoodiBootStrap {
 
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
-        SmoodiFramework.startBootStrap(mainClass);
         LoggerInitializer.configureLogback();
+        SmoodiFramework.startBootStrap(mainClass);
 
         try {
             SmoodiFramework.getStarter().moduleLoader.loadModules(

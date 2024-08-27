@@ -3,21 +3,29 @@ package org.smoodi.core;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.container.DefaultModuleContainer;
 import org.smoodi.core.container.ModuleContainer;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmoodiFramework {
 
-    private final ModuleContainer moduleContainer = new DefaultModuleContainer();
+    private ModuleContainer moduleContainer = null;
 
     public static ModuleContainer getModuleContainer() {
+        if (getInstance().moduleContainer == null) {
+            getInstance().moduleContainer = new DefaultModuleContainer();
+        }
         return SmoodiFramework.getInstance().moduleContainer;
     }
 
-    private SmoodiBootStrap starter = new SmoodiBootStrap();
+    private SmoodiBootStrap starter = null;
 
     public static SmoodiBootStrap getStarter() {
+        if (getInstance().starter == null) {
+            getInstance().starter = new SmoodiBootStrap();
+        }
         return SmoodiFramework.getInstance().starter;
     }
 
@@ -29,6 +37,7 @@ public final class SmoodiFramework {
     public static SmoodiFramework getInstance() {
         if (instance == null) {
             instance = new SmoodiFramework();
+            log.info("{} was initialized", SmoodiFramework.class.getName());
         }
         return instance;
     }
