@@ -10,10 +10,10 @@ import org.smoodi.core.context.ModuleContainer;
 public class SmoodiFramework {
 
     @Getter
-    private final ModuleContainer moduleContainer = new DefaultModuleContainer();
+    private static final ModuleContainer moduleContainer = new DefaultModuleContainer();
 
     @Getter
-    private final SmoodiStarter starter = new SmoodiStarter();
+    private static final SmoodiStarter starter = new SmoodiStarter();
 
     @Getter
     private static final SmoodiFramework instance = new SmoodiFramework();
