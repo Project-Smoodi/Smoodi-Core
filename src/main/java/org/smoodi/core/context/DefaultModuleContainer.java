@@ -1,13 +1,13 @@
 package org.smoodi.core.context;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultModuleContainer extends CachedProxyModuleContainer {
 
-    private final Map<Class<?>, List<Object>> modules = new HashMap<>();
+    private final Map<Class<?>, List<Object>> modules = new ConcurrentHashMap<>();
 
     private final PrimaryModuleFinder pf = new PrimaryModuleFinder();
     private final ModuleListFinder lf = new ModuleListFinder();
