@@ -21,7 +21,7 @@ public final class SmoodiStarter {
 
             SmoodiStarter.mainClass = mainClass;
 
-            SmoodiFramework.starter.moduleLoader.loadModules(mainClass.getPackage().getName());
+            SmoodiFramework.getInstance().getStarter().moduleLoader.loadModules(mainClass.getPackage().getName());
 
         } catch (Exception e) {
             SmoodiStarter.log.error(e.getMessage(), e);
