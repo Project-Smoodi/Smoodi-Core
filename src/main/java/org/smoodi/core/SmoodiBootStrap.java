@@ -10,6 +10,8 @@ import org.smoodi.core.loader.StaticModuleLoader;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static org.smoodi.core.SmoodiFramework.*;
+
 @Slf4j
 public final class SmoodiBootStrap {
 
@@ -20,14 +22,11 @@ public final class SmoodiBootStrap {
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
         LoggerInitializer.configureLogback();
-        SmoodiFramework.startBootStrap(mainClass);
+        startBootStrap(mainClass);
 
         try {
-            SmoodiFramework.getStarter().staticModuleLoader.loadModules();
-            SmoodiFramework.getStarter().moduleLoader.loadModules(
-                    SmoodiFramework.class.getPackage().getName());
-            SmoodiFramework.getStarter().moduleLoader.loadModules(mainClass.getPackage().getName());
 
+            loadModules();
 
         } catch (Throwable error) {
             log.error(error.getMessage(), error);
@@ -41,6 +40,13 @@ public final class SmoodiBootStrap {
                 startedAt, finishedAt
         );
 
-        SmoodiFramework.finishBootStrap();
+        finishBootStrap();
+    }
+
+    private static void loadModules() {
+        getStarter().staticModuleLoader.loadModules();
+        getStarter().moduleLoader.loadModules(
+                SmoodiFramework.class.getPackage().getName());
+        getStarter().moduleLoader.loadModules(getMainClass().getPackage().getName());
     }
 }
