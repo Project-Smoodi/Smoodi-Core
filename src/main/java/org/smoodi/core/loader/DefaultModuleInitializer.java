@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DefaultModuleInitializer implements ModuleInitializer {
 
-    private final ModuleConstructorSearcher searcher = new ConfigurableModuleConstructorSearcherProvider();
+    private final ModuleInitConstructorSearcher searcher = new ConfigurableModuleInitConstructorSearcherProvider();
 
     private final ModuleConstructorRunner mr = new ModuleConstructorRunner();
 

@@ -2,8 +2,8 @@ package org.smoodi.core.loader;
 
 import java.lang.reflect.Constructor;
 
-public class AnnotatedModuleConstructorSearcher
-        implements ModuleConstructorSearcher {
+public class AnnotatedModuleInitConstructorSearcher
+        implements ModuleInitConstructorSearcher {
 
     @Override
     public Constructor<?> findModuleInitConstructor(Class<?> klass) {

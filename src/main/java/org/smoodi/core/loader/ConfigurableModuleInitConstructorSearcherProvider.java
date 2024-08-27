@@ -4,9 +4,9 @@ import org.smoodi.core.SmoodiStarter;
 
 import java.lang.reflect.Constructor;
 
-public class ConfigurableModuleConstructorSearcherProvider implements ModuleConstructorSearcher {
+public class ConfigurableModuleInitConstructorSearcherProvider implements ModuleInitConstructorSearcher {
 
-    private ModuleConstructorSearcher cache = null;
+    private ModuleInitConstructorSearcher cache = null;
 
     @Override
     public Constructor<?> findModuleInitConstructor(Class<?> klass) {
@@ -23,13 +23,13 @@ public class ConfigurableModuleConstructorSearcherProvider implements ModuleCons
 
         switch (targeting.target()) {
             case EMPTY_CONSTRUCTOR:
-                cache = new EmptyModuleConstructorSearcher();
+                cache = new EmptyModuleInitConstructorSearcher();
                 break;
             case ANNOTATED:
-                cache = new AnnotatedModuleConstructorSearcher();
+                cache = new AnnotatedModuleInitConstructorSearcher();
                 break;
             default:
-                cache = new DefaultModuleConstructorSearcher();
+                cache = new DefaultModuleInitConstructorSearcher();
         }
 
         return cache.findModuleInitConstructor(klass);
