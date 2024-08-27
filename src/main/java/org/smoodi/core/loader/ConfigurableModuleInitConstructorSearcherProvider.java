@@ -1,6 +1,6 @@
 package org.smoodi.core.loader;
 
-import org.smoodi.core.SmoodiStarter;
+import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.config.ConfigurationError;
 
 import java.lang.reflect.Constructor;
@@ -29,10 +29,10 @@ public class ConfigurableModuleInitConstructorSearcherProvider implements Module
         }
 
         ModuleInitConstructorTargeter targeting =
-                SmoodiStarter.mainClass.getAnnotation(ModuleInitConstructorTargeter.class);
+                SmoodiFramework.getMainClass().getAnnotation(ModuleInitConstructorTargeter.class);
 
         if (targeting == null) {
-            throw new ConfigurationError("ModuleInitConstructorTargeter annotation not found in main class " + SmoodiStarter.mainClass.getName());
+            throw new ConfigurationError("ModuleInitConstructorTargeter annotation not found in main class " + SmoodiFramework.getMainClass().getName());
         }
 
         switch (targeting.target()) {

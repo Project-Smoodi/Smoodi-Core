@@ -1,14 +1,15 @@
 package org.smoodi.core.context;
 
 import org.reflections.Reflections;
-import org.smoodi.core.SmoodiStarter;
+import org.smoodi.core.SmoodiFramework;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ReflectionBasedModuleFinder implements ModuleFinder {
 
-    private static final Reflections reflections = new Reflections(SmoodiStarter.mainClass.getPackageName());
+    private static final Reflections reflections =
+            new Reflections(SmoodiFramework.getMainClass().getPackageName());
 
     protected List<Class<?>> collectWithSubTypes(Class<?> klass) {
 

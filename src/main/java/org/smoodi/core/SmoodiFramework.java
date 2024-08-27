@@ -13,5 +13,31 @@ public class SmoodiFramework {
     private static final ModuleContainer moduleContainer = new DefaultModuleContainer();
 
     @Getter
-    private static final SmoodiStarter starter = new SmoodiStarter();
+    private static SmoodiBootStrap starter = new SmoodiBootStrap();
+
+    @Getter
+    private static Class<?> mainClass = null;
+
+    private static boolean isBootStrapStarted = false;
+    private static boolean isBootStrapFinished = false;
+
+    public static void startBootStrap(Class<?> mainClass) {
+        if (isBootStrapStarted) {
+            return;
+        }
+
+        SmoodiFramework.mainClass = mainClass;
+
+        isBootStrapStarted = true;
+    }
+
+    public static void finishBootStrap() {
+        if (isBootStrapFinished) {
+            return;
+        }
+
+        SmoodiFramework.starter = null;
+
+        isBootStrapFinished = true;
+    }
 }
