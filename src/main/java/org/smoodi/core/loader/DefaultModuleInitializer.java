@@ -8,7 +8,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
     private final ModuleInitConstructorSearcher searcher = new ConfigurableModuleInitConstructorSearcherProvider();
 
-    private final ModuleConstructorRunner mr = new ModuleConstructorRunner();
+    private final ModuleInitConstructorRunner mr = new ModuleInitConstructorRunner();
 
     @Override
     public void initialize(List<String> moduleNames) {
@@ -27,6 +27,6 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             constructors.add(constructor);
         });
 
-        mr.create(constructors);
+        mr.runConstructor(constructors);
     }
 }

@@ -8,14 +8,14 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleConstructorRunner {
+public class ModuleInitConstructorRunner {
 
     // Module Container
     private final ModuleContainer mc = SmoodiFramework.getModuleContainer();
 
     @SneakyThrows
-    public void create(List<Constructor<?>> constructors) {
-        createDefaultConstructors(constructors);
+    public void runConstructor(List<Constructor<?>> constructors) {
+        initDefaultConstructors(constructors);
 
         int lastTurnListSize = constructors.size() + 1;
 
@@ -25,32 +25,32 @@ public class ModuleConstructorRunner {
             }
             lastTurnListSize = constructors.size();
 
-            final List<Constructor<?>> remove = new ArrayList<>();
+            final List<Constructor<?>> initializedConstructors = new ArrayList<>();
 
             for (Constructor<?> constructor : constructors) {
-                final List<Object> parameters = new ArrayList<>(constructors.size());
+                final List<Object> preparatoryParameters = new ArrayList<>(constructors.size());
 
                 for (Class<?> parameterType : constructor.getParameterTypes()) {
-                    var parameter = mc.getPrimaryModuleByClass(parameterType);
-                    if (parameter == null) {
+                    var foundTypedModule = mc.getPrimaryModuleByClass(parameterType);
+                    if (foundTypedModule == null) {
                         break;
                     }
-                    parameters.add(parameter);
+                    preparatoryParameters.add(foundTypedModule);
                 }
 
-                if (parameters.size() == constructor.getParameterCount()) {
+                if (preparatoryParameters.size() == constructor.getParameterCount()) {
                     try {
                         mc.save(
-                                constructor.newInstance(parameters.toArray())
+                                constructor.newInstance(preparatoryParameters.toArray())
                         );
-                        remove.add(constructor);
+                        initializedConstructors.add(constructor);
                     } catch (IllegalArgumentException e) {
                         throw new IllegalStateException("Invalid parameters entered during constructor call", e);
                     }
                 }
             }
 
-            constructors.removeAll(remove);
+            constructors.removeAll(initializedConstructors);
 
             if (constructors.isEmpty()) {
                 return;
@@ -59,7 +59,7 @@ public class ModuleConstructorRunner {
     }
 
     @SneakyThrows
-    private void createDefaultConstructors(List<Constructor<?>> constructors) {
+    private void initDefaultConstructors(List<Constructor<?>> constructors) {
 
         List<Constructor<?>> defaultConstructors = new ArrayList<>();
 
