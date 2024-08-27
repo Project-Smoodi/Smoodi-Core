@@ -1,11 +1,13 @@
 package org.smoodi.core.loader;
 
+import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.config.ConfigurationError;
 
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
+@Slf4j
 public class ConfigurableModuleInitConstructorSearcherProvider implements ModuleInitConstructorSearcher {
 
     private ModuleInitConstructorSearcher cache = null;
@@ -45,6 +47,8 @@ public class ConfigurableModuleInitConstructorSearcherProvider implements Module
             default:
                 cache = new DefaultModuleInitConstructorSearcher();
         }
+
+        log.info("Module initialization constructor selected by strategy {}", targeting.target().name());
 
         return findVerifiedModuleInitConstructor(klass);
     }

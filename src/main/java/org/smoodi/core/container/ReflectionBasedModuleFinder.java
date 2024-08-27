@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class ReflectionBasedModuleFinder implements ModuleFinder {
 
-    private static final Reflections reflections =
+    private final Reflections reflections =
             new Reflections(SmoodiFramework.getMainClass().getPackageName());
 
     protected List<Class<?>> collectWithSubTypes(Class<?> klass) {

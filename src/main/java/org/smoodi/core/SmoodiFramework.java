@@ -7,37 +7,41 @@ import org.smoodi.core.container.DefaultModuleContainer;
 import org.smoodi.core.container.ModuleContainer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SmoodiFramework {
+public final class SmoodiFramework {
 
-    @Getter
-    private static final ModuleContainer moduleContainer = new DefaultModuleContainer();
+    private final ModuleContainer moduleContainer = new DefaultModuleContainer();
 
-    @Getter
-    private static SmoodiBootStrap starter = new SmoodiBootStrap();
+    public static ModuleContainer getModuleContainer() {
+        return SmoodiFramework.getInstance().moduleContainer;
+    }
+
+    private SmoodiBootStrap starter = new SmoodiBootStrap();
+
+    public static SmoodiBootStrap getStarter() {
+        return SmoodiFramework.getInstance().starter;
+    }
 
     @Getter
     private static Class<?> mainClass = null;
 
-    private static boolean isBootStrapStarted = false;
-    private static boolean isBootStrapFinished = false;
+    private static SmoodiFramework instance = null;
+
+    public static SmoodiFramework getInstance() {
+        if (instance == null) {
+            instance = new SmoodiFramework();
+        }
+        return instance;
+    }
 
     public static void startBootStrap(Class<?> mainClass) {
-        if (isBootStrapStarted) {
+        if (instance != null) {
             return;
         }
-
         SmoodiFramework.mainClass = mainClass;
-
-        isBootStrapStarted = true;
+        getInstance();
     }
 
     public static void finishBootStrap() {
-        if (isBootStrapFinished) {
-            return;
-        }
-
-        SmoodiFramework.starter = null;
-
-        isBootStrapFinished = true;
+        getInstance().starter = null;
     }
 }
