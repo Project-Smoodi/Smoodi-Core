@@ -16,6 +16,7 @@ public final class SmoodiFramework {
     public static ModuleContainer getModuleContainer() {
         if (getInstance().moduleContainer == null) {
             getInstance().moduleContainer = new DefaultModuleContainer();
+            log.info("{} was initialized", ModuleContainer.class.getName());
         }
         return SmoodiFramework.getInstance().moduleContainer;
     }
@@ -25,6 +26,7 @@ public final class SmoodiFramework {
     public static SmoodiBootStrap getStarter() {
         if (getInstance().starter == null) {
             getInstance().starter = new SmoodiBootStrap();
+            log.info("{} was initialized", SmoodiBootStrap.class.getName());
         }
         return SmoodiFramework.getInstance().starter;
     }
