@@ -2,7 +2,7 @@ package org.smoodi.core.loader;
 
 import lombok.SneakyThrows;
 import org.smoodi.core.SmoodiFramework;
-import org.smoodi.core.context.ModuleContainer;
+import org.smoodi.core.container.ModuleContainer;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

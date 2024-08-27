@@ -1,4 +1,4 @@
-package org.smoodi.core.context;
+package org.smoodi.core.container;
 
 import java.util.List;
 

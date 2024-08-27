@@ -1,4 +1,4 @@
-package org.smoodi.core.context;
+package org.smoodi.core.container;
 
 import org.reflections.Reflections;
 import org.smoodi.core.SmoodiFramework;

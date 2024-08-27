@@ -3,8 +3,8 @@ package org.smoodi.core;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.smoodi.core.context.DefaultModuleContainer;
-import org.smoodi.core.context.ModuleContainer;
+import org.smoodi.core.container.DefaultModuleContainer;
+import org.smoodi.core.container.ModuleContainer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SmoodiFramework {

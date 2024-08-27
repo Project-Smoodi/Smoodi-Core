@@ -1,4 +1,4 @@
-package org.smoodi.core.context;
+package org.smoodi.core.container;
 
 import org.smoodi.core.Module;
 import org.smoodi.core.loader.ModuleDeclareError;
