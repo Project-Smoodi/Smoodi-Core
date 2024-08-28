@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.smoodi.core.container.DefaultModuleContainer;
-import org.smoodi.core.container.ModuleContainer;
+import org.smoodi.core.module.container.DefaultModuleContainer;
+import org.smoodi.core.module.container.ModuleContainer;
 
 import java.util.HashSet;
 import java.util.Set;
