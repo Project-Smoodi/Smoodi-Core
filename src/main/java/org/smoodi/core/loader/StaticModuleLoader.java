@@ -1,6 +1,6 @@
 package org.smoodi.core.loader;
 
-public interface StaticModuleLoader {
+public interface StaticModuleLoader extends ModuleLoader {
 
     void loadModules();
 }
