@@ -12,7 +12,6 @@ import static org.smoodi.core.SmoodiFramework.*;
 
 @Slf4j
 public final class SmoodiBootStrap {
-    ;
 
     private final PackageBasedModuleLoader moduleLoader =
             new ModuleLoaderComposite();
@@ -34,7 +33,7 @@ public final class SmoodiBootStrap {
         final LocalDateTime finishedAt = LocalDateTime.now();
         log.info(
                 "Smoodi started on {} seconds. Started at : {}, Initialize finished at : {}",
-                (double) (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000),
+                (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000.0),
                 startedAt, finishedAt
         );
 

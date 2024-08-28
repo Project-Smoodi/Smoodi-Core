@@ -53,6 +53,7 @@ public final class SmoodiFramework {
     public static SmoodiFramework getInstance() {
         if (instance == null) {
             instance = new SmoodiFramework();
+            instance.addedProjects.add(SmoodiProjects.SMOODI_CORE);
             log.info("{} was initialized", SmoodiFramework.class.getName());
         }
         return instance;

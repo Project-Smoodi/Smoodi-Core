@@ -1,6 +1,6 @@
 package org.smoodi.core.loader;
 
-public interface PackageBasedModuleLoader {
+public interface PackageBasedModuleLoader extends ModuleLoader {
 
     void loadModules(String basePackage);
 }

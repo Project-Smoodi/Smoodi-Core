@@ -38,4 +38,9 @@ public class DefaultModuleContainer extends CachedProxyModuleContainer {
     protected <T> List<T> getModulesByClassImpl(Class<T> klass) {
         return lf.find(modules, klass);
     }
+
+    @Override
+    public int getModuleCount() {
+        return modules.size();
+    }
 }
