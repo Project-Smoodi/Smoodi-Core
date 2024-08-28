@@ -1,4 +1,4 @@
-package org.smoodi.core.init.loader;
+package org.smoodi.core.module.loader;
 
 import javassist.bytecode.ClassFile;
 import lombok.RequiredArgsConstructor;

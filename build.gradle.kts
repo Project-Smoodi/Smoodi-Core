@@ -75,9 +75,9 @@ publishing {
 
                 developers {
                     developer {
-                        id.set("your-id")
-                        name.set("Your Name")
-                        email.set("your-email@example.com")
+                        id.set("Daybreak312")
+                        name.set("Daybreak312")
+                        email.set("ty82afg12@gmail.com")
                     }
                 }
             }
