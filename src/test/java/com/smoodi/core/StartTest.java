@@ -1,4 +1,4 @@
-package org.smoodi.core;
+package com.smoodi.core;
 
 import org.smoodi.core.loader.ModuleConstructorTarget;
 
