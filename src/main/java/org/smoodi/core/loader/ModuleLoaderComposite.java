@@ -18,13 +18,23 @@ public class ModuleLoaderComposite implements PackageBasedModuleLoader {
             new DefaultStaticModuleLoader();
 
     @Override
-    public void loadModules(String basePackage) {
+    public int loadModules(String basePackage) {
         log.info(LOG_PREFIX + "Module loading started at {}", LocalDateTime.now());
 
-        staticModuleLoader.loadModules();
-        smoodiProjectModuleLoader.loadModules();
-        packageBasedModuleLoader.loadModules(SmoodiFramework.getMainClass().getPackage().getName());
+        int totalLoadedModules = 0;
 
-        log.info(LOG_PREFIX + "Total \"{}\" modules are loaded at {}", SmoodiFramework.getModuleContainer().getModuleCount(), LocalDateTime.now());
+        totalLoadedModules += staticModuleLoader.loadModules();
+        totalLoadedModules += smoodiProjectModuleLoader.loadModules();
+        totalLoadedModules += packageBasedModuleLoader.loadModules(SmoodiFramework.getMainClass().getPackage().getName());
+
+        final int moduleContainerModules = SmoodiFramework.getModuleContainer().getModuleCount();
+
+        if (log.isDebugEnabled() && totalLoadedModules != moduleContainerModules) {
+            log.debug("Smoodi driven loaders loaded {} modules BUT ModuleContainer containing {} modules.", totalLoadedModules, moduleContainerModules);
+        }
+
+        log.info(LOG_PREFIX + "Total \"{}\" modules are loaded at {}", totalLoadedModules, LocalDateTime.now());
+
+        return totalLoadedModules;
     }
 }

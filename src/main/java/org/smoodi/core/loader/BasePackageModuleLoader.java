@@ -14,10 +14,12 @@ public class BasePackageModuleLoader implements PackageBasedModuleLoader {
     private final ModuleInitializer mi = new DefaultModuleInitializer();
 
     @Override
-    public void loadModules(String basePackage) {
+    public int loadModules(String basePackage) {
 
         final List<String> moduleNames = ms.getModuleClassNames(basePackage).stream().toList();
 
         mi.initialize(moduleNames);
+
+        return moduleNames.size();
     }
 }

@@ -9,11 +9,15 @@ public class DefaultStaticModuleLoader implements StaticModuleLoader {
 
     private final ModuleContainer moduleContainer = SmoodiFramework.getModuleContainer();
 
+    private static final int STATIC_MODULE_COUNT = 2;
+
     @Override
-    public void loadModules() {
+    public int loadModules() {
         moduleContainer.save(moduleContainer);
         moduleContainer.save(SmoodiFramework.getInstance());
 
-        log.info(LOG_PREFIX + "Statically-Initialized \"2\" Modules are loaded.");
+        log.info(LOG_PREFIX + "Statically-Initialized \"{}\" Modules are loaded.", STATIC_MODULE_COUNT);
+
+        return STATIC_MODULE_COUNT;
     }
 }
