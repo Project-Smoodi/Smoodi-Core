@@ -7,9 +7,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.container.DefaultModuleContainer;
 import org.smoodi.core.container.ModuleContainer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmoodiFramework {
+
+    private final Set<SmoodiProjects> addedProjects =
+            new HashSet<>();
+
+    public static void addSmoodiProject(final SmoodiProjects smoodiModules) {
+        getInstance().addedProjects.add(smoodiModules);
+    }
+
+    public static Set<SmoodiProjects> getAddedSmoodiProjects() {
+        return Set.copyOf(getInstance().addedProjects);
+    }
 
     private ModuleContainer moduleContainer = null;
 
