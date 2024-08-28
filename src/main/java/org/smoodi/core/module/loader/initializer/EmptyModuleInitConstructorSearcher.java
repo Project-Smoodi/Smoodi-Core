@@ -1,17 +1,17 @@
-package org.smoodi.core.module.loader;
+package org.smoodi.core.module.loader.initializer;
 
 import org.smoodi.core.module.ModuleDeclareError;
-import org.smoodi.core.module.ModuleInitConstructor;
 
 import java.lang.reflect.Constructor;
 
-public class AnnotatedModuleInitConstructorSearcher
+public class EmptyModuleInitConstructorSearcher
         implements ModuleInitConstructorSearcher {
 
     @Override
     public Constructor<?> findModuleInitConstructor(Class<?> klass) {
+
         for (Constructor<?> constructor : klass.getConstructors()) {
-            if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
+            if (constructor.getParameterCount() == 0) {
                 return constructor;
             }
         }

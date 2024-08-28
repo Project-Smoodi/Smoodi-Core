@@ -1,4 +1,4 @@
-package org.smoodi.core.module.loader;
+package org.smoodi.core.module.loader.initializer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
