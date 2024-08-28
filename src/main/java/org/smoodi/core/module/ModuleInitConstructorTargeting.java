@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModuleInitConstructorTargeter {
+public @interface ModuleInitConstructorTargeting {
 
     TargetBy target() default TargetBy.DEFAULT;
 }

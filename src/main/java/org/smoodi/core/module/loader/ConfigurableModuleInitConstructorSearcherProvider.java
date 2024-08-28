@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.config.ConfigurationError;
 import org.smoodi.core.module.ModuleDeclareError;
-import org.smoodi.core.module.ModuleInitConstructorTargeter;
+import org.smoodi.core.module.ModuleInitConstructorTargeting;
 
 import java.lang.reflect.Constructor;
 import java.util.Set;
@@ -32,11 +32,11 @@ public class ConfigurableModuleInitConstructorSearcherProvider implements Module
             return findVerifiedModuleInitConstructor(klass);
         }
 
-        ModuleInitConstructorTargeter targeting =
-                SmoodiFramework.getMainClass().getAnnotation(ModuleInitConstructorTargeter.class);
+        ModuleInitConstructorTargeting targeting =
+                SmoodiFramework.getMainClass().getAnnotation(ModuleInitConstructorTargeting.class);
 
         if (targeting == null) {
-            throw new ConfigurationError("ModuleInitConstructorTargeter annotation not found in main class " + SmoodiFramework.getMainClass().getName());
+            throw new ConfigurationError(ModuleInitConstructorTargeting.class.getSimpleName() + " annotation not found in main class " + SmoodiFramework.getMainClass().getName());
         }
 
         switch (targeting.target()) {
