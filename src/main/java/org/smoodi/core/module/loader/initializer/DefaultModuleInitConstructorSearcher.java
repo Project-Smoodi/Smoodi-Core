@@ -1,4 +1,4 @@
-package org.smoodi.core.module.loader;
+package org.smoodi.core.module.loader.initializer;
 
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleInitConstructor;

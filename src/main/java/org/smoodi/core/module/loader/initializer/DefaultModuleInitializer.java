@@ -1,4 +1,4 @@
-package org.smoodi.core.module.loader;
+package org.smoodi.core.module.loader.initializer;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
