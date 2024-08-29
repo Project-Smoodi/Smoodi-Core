@@ -27,7 +27,7 @@ public class ConfigurableModuleInitConstructorSearcherProvider implements Module
     );
 
     @Override
-    public Constructor<Object> findModuleInitConstructor(Class<Object> klass) {
+    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
         if (cache != null) {
             return findVerifiedModuleInitConstructor(klass);
         }
@@ -55,7 +55,7 @@ public class ConfigurableModuleInitConstructorSearcherProvider implements Module
         return findVerifiedModuleInitConstructor(klass);
     }
 
-    private Constructor<Object> findVerifiedModuleInitConstructor(Class<Object> klass) {
+    private Constructor<?> findVerifiedModuleInitConstructor(Class<?> klass) {
         var constructor = cache.findModuleInitConstructor(klass);
 
         for (Class<?> parameterType : constructor.getParameterTypes()) {
