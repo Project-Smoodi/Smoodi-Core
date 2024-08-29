@@ -13,16 +13,16 @@ public class DefaultModuleInitializer implements ModuleInitializer {
     @Override
     public void initialize(List<String> moduleNames) {
 
-        final List<Constructor<?>> constructors = new ArrayList<>();
+        final List<Constructor<Object>> constructors = new ArrayList<>();
 
         moduleNames.forEach((moduleName) -> {
-            Class<?> klass;
+            Class<Object> klass;
             try {
-                klass = Class.forName(moduleName);
+                klass = (Class<Object>) Class.forName(moduleName);
             } catch (ClassNotFoundException e) {
                 return;
             }
-            final Constructor<?> constructor = searcher.findModuleInitConstructor(klass);
+            final Constructor<Object> constructor = searcher.findModuleInitConstructor(klass);
 
             constructors.add(constructor);
         });
