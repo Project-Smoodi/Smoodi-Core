@@ -53,6 +53,7 @@ tasks.withType<JavaCompile> {
 }
 
 publishing {
+
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
@@ -69,7 +70,7 @@ publishing {
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
 
@@ -80,12 +81,19 @@ publishing {
                         email.set("ty82afg12@gmail.com")
                     }
                 }
+
+                scm {
+                    connection.set("scm:git:git://github.com/Project-Smoodi/Smoodi-Core.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:Project-Smoodi/Smoodi-Core.git")
+                    url.set("https://github.com/Project-Smoodi/Smoodi-Core")
+                }
             }
         }
     }
+
     repositories {
         maven {
-            name = "Smooid-Framework-Core"
+            name = "Smoodi-Framework-Core"
             url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
             credentials {
                 username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
