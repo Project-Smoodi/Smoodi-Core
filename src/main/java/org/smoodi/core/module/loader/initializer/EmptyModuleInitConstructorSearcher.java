@@ -8,11 +8,11 @@ public class EmptyModuleInitConstructorSearcher
         implements ModuleInitConstructorSearcher {
 
     @Override
-    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
+    public Constructor<Object> findModuleInitConstructor(Class<Object> klass) {
 
         for (Constructor<?> constructor : klass.getConstructors()) {
             if (constructor.getParameterCount() == 0) {
-                return constructor;
+                return (Constructor<Object>) constructor;
             }
         }
 

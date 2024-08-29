@@ -9,16 +9,16 @@ public class DefaultModuleInitConstructorSearcher
         implements ModuleInitConstructorSearcher {
 
     @Override
-    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
+    public Constructor<Object> findModuleInitConstructor(Class<Object> klass) {
         Constructor<?> emptyConstructor = null;
 
         if (klass.getConstructors().length == 1) {
-            return klass.getConstructors()[0];
+            return (Constructor<Object>) klass.getConstructors()[0];
         }
 
         for (Constructor<?> constructor : klass.getConstructors()) {
             if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
-                return constructor;
+                return (Constructor<Object>) constructor;
             }
 
             if (constructor.getParameterCount() == 0) {
@@ -27,7 +27,7 @@ public class DefaultModuleInitConstructorSearcher
         }
 
         if (emptyConstructor != null) {
-            return emptyConstructor;
+            return (Constructor<Object>) emptyConstructor;
         }
 
         throw new ModuleDeclareError(

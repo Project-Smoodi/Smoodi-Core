@@ -15,20 +15,20 @@ public class ModuleInitConstructorRunner {
     private final ModuleContainer mc = SmoodiFramework.getModuleContainer();
 
     @SneakyThrows
-    public void runConstructor(List<Constructor<?>> constructors) {
+    public void runConstructor(List<Constructor<Object>> constructors) {
         initDefaultConstructors(constructors);
 
         int lastTurnListSize = constructors.size() + 1;
 
         while (true) {
             if (lastTurnListSize == constructors.size()) {
-                throw new ModuleCreationError("Circular reference found on " + constructors.size() + " modules : " + constructors);
+                CircularDependencySearch.search(constructors);
             }
             lastTurnListSize = constructors.size();
 
-            final List<Constructor<?>> initializedConstructors = new ArrayList<>();
+            final List<Constructor<Object>> initializedConstructors = new ArrayList<>();
 
-            for (Constructor<?> constructor : constructors) {
+            for (Constructor<Object> constructor : constructors) {
                 final List<Object> preparatoryParameters = new ArrayList<>(constructors.size());
 
                 for (Class<?> parameterType : constructor.getParameterTypes()) {
@@ -60,7 +60,7 @@ public class ModuleInitConstructorRunner {
     }
 
     @SneakyThrows
-    private void initDefaultConstructors(List<Constructor<?>> constructors) {
+    private void initDefaultConstructors(List<Constructor<Object>> constructors) {
 
         List<Constructor<?>> defaultConstructors = new ArrayList<>();
 
