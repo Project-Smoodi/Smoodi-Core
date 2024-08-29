@@ -15,7 +15,7 @@ public class ModuleInitConstructorRunner {
     private final ModuleContainer mc = SmoodiFramework.getModuleContainer();
 
     @SneakyThrows
-    public void runConstructor(List<Constructor<Object>> constructors) {
+    public void runConstructor(List<Constructor<?>> constructors) {
         initDefaultConstructors(constructors);
 
         int lastTurnListSize = constructors.size() + 1;
@@ -26,9 +26,9 @@ public class ModuleInitConstructorRunner {
             }
             lastTurnListSize = constructors.size();
 
-            final List<Constructor<Object>> initializedConstructors = new ArrayList<>();
+            final List<Constructor<?>> initializedConstructors = new ArrayList<>();
 
-            for (Constructor<Object> constructor : constructors) {
+            for (Constructor<?> constructor : constructors) {
                 final List<Object> preparatoryParameters = new ArrayList<>(constructors.size());
 
                 for (Class<?> parameterType : constructor.getParameterTypes()) {
@@ -60,7 +60,7 @@ public class ModuleInitConstructorRunner {
     }
 
     @SneakyThrows
-    private void initDefaultConstructors(List<Constructor<Object>> constructors) {
+    private void initDefaultConstructors(List<Constructor<?>> constructors) {
 
         List<Constructor<?>> defaultConstructors = new ArrayList<>();
 
