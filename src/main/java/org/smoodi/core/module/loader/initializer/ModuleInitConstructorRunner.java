@@ -22,7 +22,7 @@ public class ModuleInitConstructorRunner {
 
         while (true) {
             if (lastTurnListSize == constructors.size()) {
-                throw new ModuleCreationError("Circular reference found on " + constructors.size() + " modules : " + constructors);
+                CircularDependencySearch.search(constructors);
             }
             lastTurnListSize = constructors.size();
 
