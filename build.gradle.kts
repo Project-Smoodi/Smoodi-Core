@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "org.smoodi.core"
-version = "0.0.1-ALPHA"
 
 repositories {
     mavenCentral()
