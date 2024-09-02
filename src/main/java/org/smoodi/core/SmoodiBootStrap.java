@@ -8,7 +8,8 @@ import org.smoodi.core.module.loader.PackageBasedModuleLoader;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static org.smoodi.core.SmoodiFramework.*;
+import static org.smoodi.core.SmoodiFramework.finishBootStrap;
+import static org.smoodi.core.SmoodiFramework.getStarter;
 
 @Slf4j
 public final class SmoodiBootStrap {
@@ -19,7 +20,7 @@ public final class SmoodiBootStrap {
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
         LoggerInitializer.configureLogback();
-        startBootStrap(mainClass);
+        SmoodiFramework.initSmoodiFramework(mainClass);
 
         try {
 

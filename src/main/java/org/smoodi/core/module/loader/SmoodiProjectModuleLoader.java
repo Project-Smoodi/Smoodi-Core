@@ -2,10 +2,9 @@ package org.smoodi.core.module.loader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.smoodi.core.SmoodiFramework;
-import org.smoodi.core.SmoodiProjects;
+import org.smoodi.core.SubprojectPackageManager;
 
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -16,14 +15,14 @@ public class SmoodiProjectModuleLoader implements StaticModuleLoader {
 
     @Override
     public int loadModules() {
-        final Set<SmoodiProjects> projects = SmoodiFramework.getAddedSmoodiProjects();
+        final Map<String, Package> projects = Map.copyOf(SubprojectPackageManager.getSubprojects());
 
         AtomicInteger totalModuleCount = new AtomicInteger();
 
-        projects.forEach(it -> {
-                    final int moduleCount = packageLoader.loadModules(it.basePackage);
+        projects.forEach((key, value) -> {
+                    final int moduleCount = packageLoader.loadModules(value.getName());
 
-                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", it, it.basePackage, moduleCount);
+                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), moduleCount);
 
                     totalModuleCount.addAndGet(moduleCount);
                 }
