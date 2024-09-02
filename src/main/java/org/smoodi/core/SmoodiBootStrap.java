@@ -20,7 +20,7 @@ public final class SmoodiBootStrap {
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
         LoggerInitializer.configureLogback();
-        startBootStrap(mainClass);
+        SmoodiFramework.initSmoodiFramework(mainClass);
 
         try {
 

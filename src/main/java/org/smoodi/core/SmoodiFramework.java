@@ -44,7 +44,7 @@ public final class SmoodiFramework {
         return instance;
     }
 
-    public static void startBootStrap(Class<?> mainClass) {
+    public static void initSmoodiFramework(Class<?> mainClass) {
         if (instance != null) {
             return;
         }
