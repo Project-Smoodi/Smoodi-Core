@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SmoodiProjectModuleLoader implements StaticModuleLoader {
+public class SmoodiProjectModuleLoader implements ModuleLoader {
 
     private final BasePackageModuleLoader packageLoader;
 

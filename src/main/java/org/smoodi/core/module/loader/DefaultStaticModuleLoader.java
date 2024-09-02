@@ -5,7 +5,7 @@ import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.container.ModuleContainer;
 
 @Slf4j
-public class DefaultStaticModuleLoader implements StaticModuleLoader {
+public class DefaultStaticModuleLoader implements ModuleLoader {
 
     private final ModuleContainer moduleContainer = SmoodiFramework.getModuleContainer();
 

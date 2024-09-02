@@ -2,8 +2,8 @@ package org.smoodi.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.init.LoggerInitializer;
+import org.smoodi.core.module.loader.ModuleLoader;
 import org.smoodi.core.module.loader.ModuleLoaderComposite;
-import org.smoodi.core.module.loader.PackageBasedModuleLoader;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import static org.smoodi.core.SmoodiFramework.getStarter;
 @Slf4j
 public final class SmoodiBootStrap {
 
-    private final PackageBasedModuleLoader moduleLoader =
+    private final ModuleLoader moduleLoader =
             new ModuleLoaderComposite();
 
     public static void startSmoodi(Class<?> mainClass) {
@@ -24,7 +24,7 @@ public final class SmoodiBootStrap {
 
         try {
 
-            getStarter().moduleLoader.loadModules(mainClass.getPackageName());
+            getStarter().moduleLoader.loadModules();
 
         } catch (Throwable error) {
             log.error(error.getMessage(), error);
