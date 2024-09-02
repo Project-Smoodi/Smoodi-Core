@@ -15,7 +15,11 @@ public class SubprojectPackageManager {
 
     public static void addSubproject(String s, Package p) {
         if (!p.getName().startsWith(SMOODI_PACKAGE_PREFIX)) {
-            throw new IllegalArgumentException("Only smoodi project packages are supported");
+            throw new IllegalArgumentException("Only smoodi project packages are supported. but got " + p.getName());
+        }
+
+        if (subprojects.containsValue(p)) {
+            throw new IllegalArgumentException("Subproject already exists: " + p.getName());
         }
 
         subprojects.put(s, p);
