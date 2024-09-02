@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class DefaultModuleScanner implements ModuleScanner {
+public class DefaultModuleNameScanner implements ModuleNameScanner {
 
     // Reflections Scanner
     private final Scanner rs = new AnnotatedClassScanner(Module.class);

@@ -9,8 +9,8 @@ import java.util.List;
 @Slf4j
 public class BasePackageModuleLoader implements PackageBasedModuleLoader {
 
-    // Module Scanner
-    private final ModuleScanner ms = new DefaultModuleScanner();
+    // Module name Scanner
+    private final ModuleNameScanner ms = new DefaultModuleNameScanner();
 
     // Module Initializer
     private final ModuleInitializer mi = new DefaultModuleInitializer();
