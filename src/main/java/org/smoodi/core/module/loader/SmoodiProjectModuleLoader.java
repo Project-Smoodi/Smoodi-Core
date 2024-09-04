@@ -3,15 +3,19 @@ package org.smoodi.core.module.loader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SubprojectPackageManager;
+import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RequiredArgsConstructor
 public class SmoodiProjectModuleLoader implements ModuleLoader {
 
-    private final BasePackageModuleLoader packageLoader;
+    private final ModuleNameScanner moduleNameScanner;
+
+    private final ModuleInitializer moduleInitializer;
 
     @Override
     public int loadModules() {
@@ -20,11 +24,13 @@ public class SmoodiProjectModuleLoader implements ModuleLoader {
         AtomicInteger totalModuleCount = new AtomicInteger();
 
         projects.forEach((key, value) -> {
-                    final int moduleCount = packageLoader.loadModules(value.getName());
+                    final Set<String> names = moduleNameScanner.getModuleClassNames(value.getName());
 
-                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), moduleCount);
+                    moduleInitializer.initialize(names.stream().toList());
 
-                    totalModuleCount.addAndGet(moduleCount);
+                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), names.size());
+
+                    totalModuleCount.addAndGet(names.size());
                 }
         );
 

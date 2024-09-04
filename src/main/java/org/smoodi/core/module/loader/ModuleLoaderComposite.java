@@ -2,17 +2,23 @@ package org.smoodi.core.module.loader;
 
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.module.loader.initializer.DefaultModuleInitializer;
+import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.time.LocalDateTime;
 
 @Slf4j
 public class ModuleLoaderComposite implements ModuleLoader {
 
+    private final ModuleNameScanner moduleNameScanner = new DefaultModuleNameScanner();
+
+    private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
+
     private final PackageBasedModuleLoader packageBasedModuleLoader =
             new BasePackageModuleLoader();
 
     private final ModuleLoader smoodiProjectModuleLoader =
-            new SmoodiProjectModuleLoader((BasePackageModuleLoader) packageBasedModuleLoader);
+            new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
 
     private final ModuleLoader staticModuleLoader =
             new DefaultStaticModuleLoader();
