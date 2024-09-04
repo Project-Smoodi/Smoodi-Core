@@ -14,17 +14,33 @@ public class ModuleLoaderComposite implements ModuleLoader {
 
     private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
 
-    private final ModuleLoader packageBasedModuleLoader =
-            new MainClassPackageBasedModuleLoader(moduleNameScanner, moduleInitializer);
+    private ModuleLoader packageBasedModuleLoader;
 
-    private final ModuleLoader smoodiProjectModuleLoader =
-            new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
+    private ModuleLoader smoodiProjectModuleLoader;
 
-    private final ModuleLoader staticModuleLoader =
-            new DefaultStaticModuleLoader();
+    private ModuleLoader staticModuleLoader;
+
+    private boolean initialized = false;
+
+    private void init() {
+        if (initialized) {
+            return;
+        }
+
+        packageBasedModuleLoader =
+                new MainClassPackageBasedModuleLoader(moduleNameScanner, moduleInitializer);
+        smoodiProjectModuleLoader =
+                new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
+        staticModuleLoader =
+                new DefaultStaticModuleLoader();
+
+        this.initialized = true;
+    }
 
     @Override
     public int loadModules() {
+        init();
+
         log.info(LOG_PREFIX + "Module loading started at {}", LocalDateTime.now());
 
         int totalLoadedModules = 0;
