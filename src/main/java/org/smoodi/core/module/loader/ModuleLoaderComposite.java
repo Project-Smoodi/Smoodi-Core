@@ -49,7 +49,7 @@ public class ModuleLoaderComposite implements ModuleLoader {
         totalLoadedModules += smoodiProjectModuleLoader.loadModules();
         totalLoadedModules += packageBasedModuleLoader.loadModules();
 
-        final int moduleContainerModules = SmoodiFramework.getModuleContainer().getModuleCount();
+        final int moduleContainerModules = SmoodiFramework.getInstance().getModuleContainer().getModuleCount();
 
         if (log.isDebugEnabled() && totalLoadedModules != moduleContainerModules) {
             log.debug("Smoodi driven loaders loaded {} modules BUT ModuleContainer containing {} modules.", totalLoadedModules, moduleContainerModules);
