@@ -14,8 +14,8 @@ public class ModuleLoaderComposite implements ModuleLoader {
 
     private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
 
-    private final PackageBasedModuleLoader packageBasedModuleLoader =
-            new BasePackageModuleLoader();
+    private final ModuleLoader packageBasedModuleLoader =
+            new MainClassPackageBasedModuleLoader(moduleNameScanner, moduleInitializer);
 
     private final ModuleLoader smoodiProjectModuleLoader =
             new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
@@ -31,7 +31,7 @@ public class ModuleLoaderComposite implements ModuleLoader {
 
         totalLoadedModules += staticModuleLoader.loadModules();
         totalLoadedModules += smoodiProjectModuleLoader.loadModules();
-        totalLoadedModules += packageBasedModuleLoader.loadModules(SmoodiFramework.getMainClass().getPackage().getName());
+        totalLoadedModules += packageBasedModuleLoader.loadModules();
 
         final int moduleContainerModules = SmoodiFramework.getModuleContainer().getModuleCount();
 
