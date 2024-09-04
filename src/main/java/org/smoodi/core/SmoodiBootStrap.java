@@ -14,13 +14,25 @@ import static org.smoodi.core.SmoodiFramework.getStarter;
 @Slf4j
 public final class SmoodiBootStrap {
 
-    private final ModuleLoader moduleLoader =
-            new ModuleLoaderComposite();
+    private ModuleLoader moduleLoader;
+
+    private boolean initialized = false;
+
+    private void init() {
+        if (initialized) {
+            return;
+        }
+
+        moduleLoader = new ModuleLoaderComposite();
+
+        initialized = true;
+    }
 
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
         LoggerInitializer.configureLogback();
         SmoodiFramework.initSmoodiFramework(mainClass);
+        SmoodiFramework.getStarter().init();
 
         try {
 
