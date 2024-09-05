@@ -28,13 +28,13 @@ public final class SmoodiFramework {
             starter = new SmoodiBootStrap();
             log.info("{} was initialized", SmoodiBootStrap.class.getName());
         }
-        return SmoodiFramework.getInstance().starter;
+        return starter;
     }
 
     @Getter
     private static Class<?> mainClass = null;
 
-    protected static SmoodiFramework instance = null;
+    private static SmoodiFramework instance = null;
 
     public static SmoodiFramework getInstance() {
         if (instance == null) {
