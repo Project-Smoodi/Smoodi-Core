@@ -2,30 +2,35 @@ package org.smoodi.core.module.loader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.smoodi.core.SmoodiFramework;
-import org.smoodi.core.SmoodiProjects;
+import org.smoodi.core.SubprojectPackageManager;
+import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SmoodiProjectModuleLoader implements StaticModuleLoader {
+public class SmoodiProjectModuleLoader implements ModuleLoader {
 
-    private final BasePackageModuleLoader packageLoader;
+    private final ModuleNameScanner moduleNameScanner;
+
+    private final ModuleInitializer moduleInitializer;
 
     @Override
     public int loadModules() {
-        final Set<SmoodiProjects> projects = SmoodiFramework.getAddedSmoodiProjects();
+        final Map<String, Package> projects = Map.copyOf(SubprojectPackageManager.getSubprojects());
 
         AtomicInteger totalModuleCount = new AtomicInteger();
 
-        projects.forEach(it -> {
-                    final int moduleCount = packageLoader.loadModules(it.basePackage);
+        projects.forEach((key, value) -> {
+                    final Set<String> names = moduleNameScanner.getModuleClassNames(value.getName());
 
-                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", it, it.basePackage, moduleCount);
+                    moduleInitializer.initialize(names.stream().toList());
 
-                    totalModuleCount.addAndGet(moduleCount);
+                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), names.size());
+
+                    totalModuleCount.addAndGet(names.size());
                 }
         );
 
