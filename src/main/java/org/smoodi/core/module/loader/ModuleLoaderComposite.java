@@ -2,32 +2,54 @@ package org.smoodi.core.module.loader;
 
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.module.loader.initializer.DefaultModuleInitializer;
+import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.time.LocalDateTime;
 
 @Slf4j
-public class ModuleLoaderComposite implements PackageBasedModuleLoader {
+public class ModuleLoaderComposite implements ModuleLoader {
 
-    private final PackageBasedModuleLoader packageBasedModuleLoader =
-            new BasePackageModuleLoader();
+    private final ModuleNameScanner moduleNameScanner = new DefaultModuleNameScanner();
 
-    private final StaticModuleLoader smoodiProjectModuleLoader =
-            new SmoodiProjectModuleLoader((BasePackageModuleLoader) packageBasedModuleLoader);
+    private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
 
-    private final StaticModuleLoader staticModuleLoader =
-            new DefaultStaticModuleLoader();
+    private ModuleLoader packageBasedModuleLoader;
+
+    private ModuleLoader smoodiProjectModuleLoader;
+
+    private ModuleLoader staticModuleLoader;
+
+    private boolean initialized = false;
+
+    private void init() {
+        if (initialized) {
+            return;
+        }
+
+        packageBasedModuleLoader =
+                new MainClassPackageBasedModuleLoader(moduleNameScanner, moduleInitializer);
+        smoodiProjectModuleLoader =
+                new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
+        staticModuleLoader =
+                new DefaultStaticModuleLoader();
+
+        this.initialized = true;
+    }
 
     @Override
-    public int loadModules(String basePackage) {
+    public int loadModules() {
+        init();
+
         log.info(LOG_PREFIX + "Module loading started at {}", LocalDateTime.now());
 
         int totalLoadedModules = 0;
 
         totalLoadedModules += staticModuleLoader.loadModules();
         totalLoadedModules += smoodiProjectModuleLoader.loadModules();
-        totalLoadedModules += packageBasedModuleLoader.loadModules(SmoodiFramework.getMainClass().getPackage().getName());
+        totalLoadedModules += packageBasedModuleLoader.loadModules();
 
-        final int moduleContainerModules = SmoodiFramework.getModuleContainer().getModuleCount();
+        final int moduleContainerModules = SmoodiFramework.getInstance().getModuleContainer().getModuleCount();
 
         if (log.isDebugEnabled() && totalLoadedModules != moduleContainerModules) {
             log.debug("Smoodi driven loaders loaded {} modules BUT ModuleContainer containing {} modules.", totalLoadedModules, moduleContainerModules);

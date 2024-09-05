@@ -12,7 +12,7 @@ import java.util.List;
 public class ModuleInitConstructorRunner {
 
     // Module Container
-    private final ModuleContainer mc = SmoodiFramework.getModuleContainer();
+    private final ModuleContainer mc = SmoodiFramework.getInstance().getModuleContainer();
 
     @SneakyThrows
     public void runConstructor(List<Constructor<?>> constructors) {

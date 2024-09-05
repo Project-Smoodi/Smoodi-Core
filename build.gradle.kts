@@ -42,6 +42,7 @@ tasks.test {
 }
 
 tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
     options.compilerArgs.addAll(
         listOf(
             "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",

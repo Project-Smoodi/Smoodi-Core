@@ -13,22 +13,22 @@ public final class SmoodiFramework {
 
     private ModuleContainer moduleContainer = null;
 
-    public static ModuleContainer getModuleContainer() {
-        if (getInstance().moduleContainer == null) {
-            getInstance().moduleContainer = new DefaultModuleContainer();
+    public ModuleContainer getModuleContainer() {
+        if (moduleContainer == null) {
+            moduleContainer = new DefaultModuleContainer();
             log.info("{} was initialized", ModuleContainer.class.getName());
         }
-        return SmoodiFramework.getInstance().moduleContainer;
+        return moduleContainer;
     }
 
     private SmoodiBootStrap starter = null;
 
-    public static SmoodiBootStrap getStarter() {
-        if (getInstance().starter == null) {
-            getInstance().starter = new SmoodiBootStrap();
+    public SmoodiBootStrap getStarter() {
+        if (starter == null) {
+            starter = new SmoodiBootStrap();
             log.info("{} was initialized", SmoodiBootStrap.class.getName());
         }
-        return SmoodiFramework.getInstance().starter;
+        return starter;
     }
 
     @Getter
