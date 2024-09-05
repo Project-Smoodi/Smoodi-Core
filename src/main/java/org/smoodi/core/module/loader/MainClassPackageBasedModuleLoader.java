@@ -12,7 +12,7 @@ import java.util.List;
 public class MainClassPackageBasedModuleLoader implements ModuleLoader {
 
     // Module name Scanner
-    private final ModuleNameScanner ms;
+    private final ModuleClassScanner ms;
 
     // Module Initializer
     private final ModuleInitializer mi;
@@ -20,12 +20,12 @@ public class MainClassPackageBasedModuleLoader implements ModuleLoader {
     @Override
     public int loadModules() {
 
-        final List<String> moduleNames = ms.getModuleClassNames(
+        final List<Class<?>> moduleClasses = ms.getModuleClasses(
                 SmoodiFramework.getMainClass().getPackage().getName()
         ).stream().toList();
 
-        mi.initialize(moduleNames);
+        mi.initialize(moduleClasses);
 
-        return moduleNames.size();
+        return moduleClasses.size();
     }
 }

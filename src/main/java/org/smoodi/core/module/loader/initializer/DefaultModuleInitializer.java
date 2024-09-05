@@ -12,19 +12,14 @@ public class DefaultModuleInitializer implements ModuleInitializer {
     private final ModuleInitConstructorRunner mr = new ModuleInitConstructorRunner();
 
     @Override
-    public void initialize(List<String> moduleNames) {
+    public void initialize(List<Class<?>> moduleClasses) {
 
         final List<Constructor<?>> constructors = new ArrayList<>();
 
-        for (String moduleName : moduleNames) {
-            try {
-                final Constructor<?> constructor =
-                        searcher.findModuleInitConstructor(
-                                Class.forName(moduleName)
-                        );
-                constructors.add(constructor);
-            } catch (ClassNotFoundException ignored) {
-            }
+        for (Class<?> moduleClass : moduleClasses) {
+            final Constructor<?> constructor =
+                    searcher.findModuleInitConstructor(moduleClass);
+            constructors.add(constructor);
         }
 
         mr.runConstructor(constructors);

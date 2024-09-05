@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface ModuleInitializer {
 
-    void initialize(List<String> moduleNames);
+    void initialize(List<Class<?>> moduleClasses);
 }
