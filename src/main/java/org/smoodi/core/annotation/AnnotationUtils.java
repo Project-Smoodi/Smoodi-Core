@@ -9,40 +9,46 @@ import java.util.List;
 
 public class AnnotationUtils {
 
-    public static Annotation findAnnotation(
+    @SuppressWarnings("unchecked")
+    public static <T extends Annotation> T findAnnotation(
             final Class<?> klass,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
-        return Arrays.stream(klass.getAnnotations())
-                .filter(a -> a.annotationType().equals(annotation))
-                .findFirst()
-                .orElse(null);
+        for (Annotation a : klass.getAnnotations()) {
+            if (a.annotationType().equals(annotation)) {
+                return (T) a;
+            }
+        }
+        return null;
     }
 
-    public static Annotation findAnnotation(
+    public static <T extends Annotation> T findAnnotation(
             final Object obj,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
         return findAnnotation(obj.getClass(), annotation);
     }
 
-    public static List<Annotation> findRepeatableAnnotation(
+    @SuppressWarnings("unchecked")
+    public static <T extends Annotation> List<T> findRepeatableAnnotation(
             final Class<?> klass,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
-        return Arrays.stream(klass.getAnnotations()).filter(a -> a.annotationType().equals(annotation)).toList();
+        return (List<T>) Arrays.stream(klass.getAnnotations())
+                .filter(a -> a.annotationType().equals(annotation)).toList();
     }
 
-    public static List<Annotation> findRepeatableAnnotation(
+    public static <T extends Annotation> List<T> findRepeatableAnnotation(
             final Object obj,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
         return findRepeatableAnnotation(obj.getClass(), annotation);
     }
 
-    public static Annotation findIncludeAnnotation(
+    @SuppressWarnings("unchecked")
+    public static <T extends Annotation> T findIncludeAnnotation(
             final Class<?> klass,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
         final List<Annotation> forSearch = new ArrayList<>(Arrays.stream(klass.getAnnotations()).toList());
         final List<Annotation> newForSearch = new ArrayList<>();
@@ -51,7 +57,7 @@ public class AnnotationUtils {
 
             for (Annotation it : forSearch) {
                 if (it.annotationType().equals(annotation)) {
-                    return it;
+                    return (T) it;
                 }
 
                 newForSearch.addAll(getAvailableAnnotations(it));
@@ -65,26 +71,26 @@ public class AnnotationUtils {
         return null;
     }
 
-    public static Annotation findIncludeAnnotation(
+    public static <T extends Annotation> T findIncludeAnnotation(
             final Object obj,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
         return findIncludeAnnotation(obj.getClass(), annotation);
     }
 
-    public static List<Annotation> findIncludeRepeatableAnnotation(
+    @SuppressWarnings("unchecked")
+    public static <T extends Annotation> List<T> findIncludeRepeatableAnnotation(
             final Class<?> klass,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
-        //
         final List<Annotation> forSearch = new ArrayList<>(Arrays.stream(klass.getAnnotations()).toList());
-        final List<Annotation> found = new ArrayList<>();
+        final List<T> found = new ArrayList<>();
         final List<Annotation> newForSearch = new ArrayList<>();
 
         while (!forSearch.isEmpty()) {
             for (Annotation it : forSearch) {
                 if (it.annotationType().equals(annotation)) {
-                    found.add(it);
+                    found.add((T) it);
                 } else {
                     newForSearch.addAll(getAvailableAnnotations(it));
                 }
@@ -101,9 +107,9 @@ public class AnnotationUtils {
         return found;
     }
 
-    public static List<Annotation> findIncludeRepeatableAnnotation(
+    public static <T extends Annotation> List<T> findIncludeRepeatableAnnotation(
             final Object obj,
-            final Class<? extends Annotation> annotation
+            final Class<T> annotation
     ) {
         return findIncludeRepeatableAnnotation(obj.getClass(), annotation);
     }
