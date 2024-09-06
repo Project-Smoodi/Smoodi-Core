@@ -2,9 +2,7 @@ package org.smoodi.core.module.loader;
 
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
-import org.smoodi.core.module.Configuration;
-import org.smoodi.core.module.Module;
-import org.smoodi.core.module.SmoodiDefaultConfiguration;
+import org.smoodi.core.annotation.Module;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -21,7 +19,7 @@ import static org.reflections.scanners.Scanners.TypesAnnotated;
 public class DefaultModuleClassScanner implements ModuleClassScanner {
 
     private static final List<AnnotatedElement> annotations = new ArrayList<>(
-            List.of(Module.class, Configuration.class, SmoodiDefaultConfiguration.class));
+            List.of(Module.class));
 
     public void addModuleAnnotation(Class<? extends Annotation> annotation) {
         annotations.add(annotation);

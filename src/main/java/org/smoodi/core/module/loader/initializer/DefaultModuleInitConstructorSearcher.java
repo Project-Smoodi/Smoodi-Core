@@ -1,7 +1,7 @@
 package org.smoodi.core.module.loader.initializer;
 
 import org.smoodi.core.module.ModuleDeclareError;
-import org.smoodi.core.module.ModuleInitConstructor;
+import org.smoodi.core.annotation.ModuleInitConstructor;
 
 import java.lang.reflect.Constructor;
 
