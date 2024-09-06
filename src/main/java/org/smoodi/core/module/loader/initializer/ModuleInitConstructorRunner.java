@@ -47,6 +47,8 @@ public class ModuleInitConstructorRunner {
                         initializedConstructors.add(constructor);
                     } catch (IllegalArgumentException e) {
                         throw new ModuleCreationError("Invalid parameters entered during constructor call", e);
+                    } catch (InstantiationException e) {
+                        throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + constructor.getDeclaringClass(), e);
                     }
                 }
             }
@@ -73,9 +75,13 @@ public class ModuleInitConstructorRunner {
 
         for (Constructor<?> constructor : defaultConstructors) {
             constructors.remove(constructor);
-            mc.save(
-                    constructor.newInstance()
-            );
+            try {
+                mc.save(
+                        constructor.newInstance()
+                );
+            } catch (InstantiationException e) {
+                throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + constructor.getDeclaringClass(), e);
+            }
         }
     }
 }
