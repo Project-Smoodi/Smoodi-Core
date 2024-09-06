@@ -7,6 +7,7 @@ import org.smoodi.core.annotation.AnnotationUtils;
 import java.lang.annotation.*;
 import java.util.List;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class AnnotationUtilsTest {
 
     @Target(ElementType.TYPE)
@@ -42,6 +43,9 @@ public class AnnotationUtilsTest {
 
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
+    @RepeatableTestAnnotation
+    @RepeatableTestAnnotation(2)
+    @RepeatableTestAnnotation(3)
     private @interface RepeatAnnotatedTestAnnotation {
     }
 
@@ -60,6 +64,10 @@ public class AnnotationUtilsTest {
     @RepeatableTestAnnotation(2)
     @RepeatableTestAnnotation(3)
     private static class RepeatAnnotatedClass {
+    }
+
+    @RepeatAnnotatedTestAnnotation
+    private static class IncludingRepeatAnnotatedClass {
     }
 
     @Test
@@ -90,4 +98,26 @@ public class AnnotationUtilsTest {
         );
     }
 
+    @Test
+    public void 존재하는_반복된_어노테이션_탐색() {
+        final List<RepeatableTestAnnotations> annotations =
+                AnnotationUtils.findRepeatableAnnotation(RepeatAnnotatedClass.class, RepeatableTestAnnotations.class);
+
+        Assertions.assertNotNull(annotations);
+        var it = annotations.get(0).value();
+        Assertions.assertEquals(1, annotations.getFirst().value()[0].value());
+        Assertions.assertEquals(2, annotations.getFirst().value()[1].value());
+        Assertions.assertEquals(3, annotations.getFirst().value()[2].value());
+    }
+
+    @Test
+    public void 존재하는_내부에_포함된_반복된_어노테이션_탐색() {
+        final List<RepeatableTestAnnotations> annotations =
+                AnnotationUtils.findIncludeRepeatableAnnotation(IncludingRepeatAnnotatedClass.class, RepeatableTestAnnotations.class);
+
+        Assertions.assertNotNull(annotations);
+        Assertions.assertEquals(1, annotations.getFirst().value()[0].value());
+        Assertions.assertEquals(2, annotations.getFirst().value()[1].value());
+        Assertions.assertEquals(3, annotations.getFirst().value()[2].value());
+    }
 }
