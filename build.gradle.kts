@@ -60,7 +60,7 @@ publishing {
 
             groupId = "org.smoodi.framework"
             artifactId = "smoodi-core"
-            version = "0.0.2-ALPHA"
+            version = "0.0.3-ALPHA"
 
             pom {
                 name.set("Smoodi Framework Core")

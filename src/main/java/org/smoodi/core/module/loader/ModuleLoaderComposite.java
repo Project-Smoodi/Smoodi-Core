@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class ModuleLoaderComposite implements ModuleLoader {
 
-    private final ModuleNameScanner moduleNameScanner = new DefaultModuleNameScanner();
+    private final ModuleClassScanner moduleClassScanner = new DefaultModuleClassScanner();
 
     private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
 
@@ -28,9 +28,9 @@ public class ModuleLoaderComposite implements ModuleLoader {
         }
 
         packageBasedModuleLoader =
-                new MainClassPackageBasedModuleLoader(moduleNameScanner, moduleInitializer);
+                new MainClassPackageBasedModuleLoader(moduleClassScanner, moduleInitializer);
         smoodiProjectModuleLoader =
-                new SmoodiProjectModuleLoader(moduleNameScanner, moduleInitializer);
+                new SmoodiProjectModuleLoader(moduleClassScanner, moduleInitializer);
         staticModuleLoader =
                 new DefaultStaticModuleLoader();
 

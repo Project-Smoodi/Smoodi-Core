@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class SmoodiProjectModuleLoader implements ModuleLoader {
 
-    private final ModuleNameScanner moduleNameScanner;
+    private final ModuleClassScanner moduleClassScanner;
 
     private final ModuleInitializer moduleInitializer;
 
@@ -24,13 +24,13 @@ public class SmoodiProjectModuleLoader implements ModuleLoader {
         AtomicInteger totalModuleCount = new AtomicInteger();
 
         projects.forEach((key, value) -> {
-                    final Set<String> names = moduleNameScanner.getModuleClassNames(value.getName());
+                    final Set<Class<?>> moduleClasses = moduleClassScanner.getModuleClasses(value.getName());
 
-                    moduleInitializer.initialize(names.stream().toList());
+                    moduleInitializer.initialize(moduleClasses.stream().toList());
 
-                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), names.size());
+                    log.info(LOG_PREFIX + "Smoodi project \"{}\" of pacakge \"{}\" \"{}\" modules are loaded.", key, value.getName(), moduleClasses.size());
 
-                    totalModuleCount.addAndGet(names.size());
+                    totalModuleCount.addAndGet(moduleClasses.size());
                 }
         );
 
