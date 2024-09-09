@@ -1,12 +1,10 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.core.annotation.AnnotationUtils;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
@@ -30,7 +28,10 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
         }
 
         var primary = found.stream().filter(
-                it -> it.getClass().getAnnotation(Module.class).isPrimary()).toList();
+                it -> Objects.requireNonNull(
+                        AnnotationUtils.findIncludeAnnotation(it.getClass(), Module.class)
+                ).isPrimary()
+        ).toList();
 
         if (primary.size() > 1) {
             throw new ModuleDeclareError("Many primary module found. Primary module MUST BE one: " + klass.getName());
