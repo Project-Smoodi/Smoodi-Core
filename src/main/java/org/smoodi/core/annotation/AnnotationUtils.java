@@ -1,13 +1,21 @@
 package org.smoodi.core.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class AnnotationUtils {
+
+    private static final List<Class<? extends Annotation>> METADATA_ANNOTATIONS = List.of(
+            Target.class,
+            Retention.class,
+            Documented.class,
+            Inherited.class,
+            Native.class,
+            Repeatable.class,
+            Deprecated.class
+    );
 
     @SuppressWarnings("unchecked")
     public static <T extends Annotation> T findAnnotation(
@@ -50,7 +58,7 @@ public class AnnotationUtils {
             final Class<?> klass,
             final Class<T> annotation
     ) {
-        final List<Annotation> forSearch = new ArrayList<>(Arrays.stream(klass.getAnnotations()).toList());
+        final List<Annotation> forSearch = new ArrayList<>(getAvailableAnnotations(klass));
         final List<Annotation> newForSearch = new ArrayList<>();
 
         while (!forSearch.isEmpty()) {
@@ -116,7 +124,7 @@ public class AnnotationUtils {
 
     private static List<Annotation> getAvailableAnnotations(final Class<?> klass) {
         return Arrays.stream(klass.getAnnotations())
-                .filter(it -> !it.annotationType().equals(Target.class) && !it.annotationType().equals(Retention.class))
+                .filter(it -> !METADATA_ANNOTATIONS.contains(it.annotationType()))
                 .toList();
     }
 
