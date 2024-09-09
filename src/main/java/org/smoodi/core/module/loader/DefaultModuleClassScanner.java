@@ -1,53 +1,67 @@
 package org.smoodi.core.module.loader;
 
+import javassist.bytecode.ClassFile;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
-import org.smoodi.core.module.Configuration;
-import org.smoodi.core.module.Module;
-import org.smoodi.core.module.SmoodiDefaultConfiguration;
+import org.reflections.scanners.Scanner;
+import org.smoodi.core.annotation.AnnotationUtils;
+import org.smoodi.core.annotation.Module;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static org.reflections.scanners.Scanners.SubTypes;
-import static org.reflections.scanners.Scanners.TypesAnnotated;
 
 @Slf4j
 public class DefaultModuleClassScanner implements ModuleClassScanner {
 
-    private static final List<AnnotatedElement> annotations = new ArrayList<>(
-            List.of(Module.class, Configuration.class, SmoodiDefaultConfiguration.class));
+    private static final Class<? extends Annotation> MODULE_ANNOTATION =
+            Module.class;
 
-    public void addModuleAnnotation(Class<? extends Annotation> annotation) {
-        annotations.add(annotation);
-    }
+    private final Scanner classScanner = new AnnotatedClassScanner();
 
-    @SafeVarargs
-    public final void addModuleAnnotation(Class<? extends Annotation>... annotations) {
-        for (Class<? extends Annotation> annotation : annotations) {
-            addModuleAnnotation(annotation);
-        }
-    }
-
-    private final org.reflections.util.QueryFunction<org.reflections.Store, Class<?>> reflectionsQuery =
-            SubTypes.of(TypesAnnotated.with(
-                    new HashSet<>(annotations)
-            )).asClass(ClassLoader.getSystemClassLoader());
-
+    @SneakyThrows(ClassNotFoundException.class)
     @Override
     public Set<Class<?>> getModuleClasses(String basePackage) {
-        final Set<Class<?>> moduleClasses = new Reflections(basePackage)
-                .get(reflectionsQuery)
-                .stream().filter(it -> !it.isAnnotation())
-                .collect(Collectors.toSet());
+        final Set<Class<?>> moduleClasses = new HashSet<>();
+
+        for (String s : new Reflections(basePackage, classScanner).getAll(classScanner)) {
+
+            Class<?> it = Class.forName(s);
+
+            if (!it.isAnnotation()) {
+                moduleClasses.add(it);
+            }
+        }
 
         log.info("Scan {} modules with basePackage: \"{}\"", moduleClasses.size(), basePackage);
 
         return moduleClasses;
+    }
+
+    private static final class AnnotatedClassScanner implements Scanner {
+
+        @SneakyThrows(ClassNotFoundException.class)
+        @Override
+        public List<Map.Entry<String, String>> scan(ClassFile classFile) {
+
+            final var annotation = AnnotationUtils.findIncludeAnnotation(
+                    Class.forName(classFile.getName()),
+                    MODULE_ANNOTATION
+            );
+
+            if (annotation != null) {
+                return List.of(
+                        Map.entry(
+                                classFile.getName(),
+                                annotation.annotationType().getName()
+                        )
+                );
+            }
+
+            return List.of();
+        }
     }
 }
