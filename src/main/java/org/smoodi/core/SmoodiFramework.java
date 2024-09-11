@@ -52,11 +52,6 @@ public final class SmoodiFramework {
         getInstance();
 
         SmoodiFramework.mainClass = mainClass;
-
-        SubprojectPackageManager.addSubproject(
-                "Smoodi-Core",
-                SmoodiFramework.class.getPackage()
-        );
     }
 
     public static void finishBootStrap() {
