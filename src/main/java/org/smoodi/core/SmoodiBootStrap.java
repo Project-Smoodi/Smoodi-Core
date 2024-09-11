@@ -7,8 +7,10 @@ import org.smoodi.core.module.loader.ModuleLoaderComposite;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.smoodi.core.SmoodiFramework.*;
+import static org.smoodi.core.SmoodiFramework.finishBootStrap;
+import static org.smoodi.core.SmoodiFramework.getInstance;
 
 @Slf4j
 public final class SmoodiBootStrap {
@@ -37,6 +39,8 @@ public final class SmoodiBootStrap {
 
             getInstance().getStarter().moduleLoader.loadModules();
 
+            new SubprojectBootStrapRunner().run();
+
         } catch (Throwable error) {
             log.error(error.getMessage(), error);
             return;
@@ -50,5 +54,18 @@ public final class SmoodiBootStrap {
         );
 
         finishBootStrap();
+    }
+
+    private static final class SubprojectBootStrapRunner {
+
+        private final List<SubprojectBootStrap> bootStraps =
+                SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
+                        SubprojectBootStrap.class
+                );
+
+        public void run() {
+            log.info("Smoodi subprojects bootstrap started.");
+            bootStraps.forEach(SubprojectBootStrap::start);
+        }
     }
 }
