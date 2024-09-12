@@ -2,6 +2,7 @@ package org.smoodi.core.module.loader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.util.Set;
@@ -10,8 +11,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SmoodiProjectModuleLoader implements ModuleLoader {
 
-    private static final String SMOODI_DEFAULT_PACKAGE = "org.smoodi";
-
     private final ModuleClassScanner moduleClassScanner;
 
     private final ModuleInitializer moduleInitializer;
@@ -19,7 +18,8 @@ public class SmoodiProjectModuleLoader implements ModuleLoader {
     @Override
     public int loadModules() {
 
-        final Set<Class<?>> moduleClasses = moduleClassScanner.getModuleClasses(SMOODI_DEFAULT_PACKAGE);
+        final Set<Class<?>> moduleClasses =
+                moduleClassScanner.getModuleClasses(SmoodiFramework.SMOODI_PACKAGE_PREFIX);
 
         moduleInitializer.initialize(moduleClasses.stream().toList());
 
