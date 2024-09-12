@@ -11,6 +11,8 @@ import org.smoodi.core.module.container.ModuleContainer;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmoodiFramework {
 
+    public static final String SMOODI_PACKAGE_PREFIX = "org.smoodi";
+
     private ModuleContainer moduleContainer = null;
 
     public ModuleContainer getModuleContainer() {
