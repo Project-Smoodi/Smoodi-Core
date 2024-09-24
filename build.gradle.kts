@@ -11,6 +11,10 @@ repositories {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
     }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/Project-Smoodi/Docs-Annotations")
+    }
     mavenCentral()
 }
 
