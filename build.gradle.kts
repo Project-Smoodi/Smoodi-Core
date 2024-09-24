@@ -10,6 +10,10 @@ repositories {
     maven {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
+        }
     }
     mavenCentral()
 }
