@@ -7,6 +7,10 @@ plugins {
 group = "org.smoodi.core"
 
 repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/Project-Smoodi")
+    }
     mavenCentral()
 }
 
@@ -16,9 +20,11 @@ java {
 
 dependencies {
 
+    // Smoodi
+    api("org.smoodi.framework:docs-annotations:1.1.0")
+
     // Java
     implementation("org.reflections:reflections:0.10.2")
-
 
     // Jackson
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
