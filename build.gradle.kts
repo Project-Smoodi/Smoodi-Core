@@ -9,7 +9,7 @@ group = "org.smoodi.core"
 repositories {
     maven {
         name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/Project-Smoodi")
+        url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
     }
     mavenCentral()
 }
