@@ -25,7 +25,7 @@ java {
 dependencies {
 
     // Smoodi
-    api("org.smoodi.framework:docs-annotations:1.1.0-SNAPSHOT")
+    api("org.smoodi.framework:docs-annotations:1.2.0")
 
     // Java
     implementation("org.reflections:reflections:0.10.2")
