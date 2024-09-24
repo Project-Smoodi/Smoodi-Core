@@ -32,9 +32,12 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to GitHub Packages
         run: ./gradlew publish
         env:
           USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.TOKEN }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
