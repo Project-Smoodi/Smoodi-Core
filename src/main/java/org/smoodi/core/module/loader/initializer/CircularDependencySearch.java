@@ -40,6 +40,9 @@ public final class CircularDependencySearch {
                 if (!node.searchFinished && node.visited) {
                     throw new CircularDependencyStackerException(node.klass);
                 }
+                if (node.searchFinished && node.visited) {
+                    continue;
+                }
                 dfsSearch(nodes, nodes.get(parameterType));
             }
         } catch (CircularDependencyStackerException e) {
