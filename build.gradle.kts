@@ -9,7 +9,11 @@ group = "org.smoodi.core"
 repositories {
     maven {
         name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/Project-Smoodi")
+        url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
+        }
     }
     mavenCentral()
 }
@@ -21,7 +25,7 @@ java {
 dependencies {
 
     // Smoodi
-    api("org.smoodi.framework:docs-annotations:1.1.0")
+    api("org.smoodi.framework:docs-annotations:1.2.0")
 
     // Java
     implementation("org.reflections:reflections:0.10.2")
