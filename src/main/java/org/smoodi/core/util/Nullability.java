@@ -9,8 +9,8 @@ import org.smoodi.annotation.Nullable;
 /**
  * <p>Null Safety를 위한 유틸 함수 모음.</p>
  *
- * @since v0.1.0
  * @author Daybreak312
+ * @since v0.1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Nullability {
@@ -24,8 +24,8 @@ public final class Nullability {
      * </pre>
      *
      * @param value null checking 대상
+     * @param <T>   입력값의 타입과 반환형
      * @return null checking을 마친 입력값
-     * @param <T> 입력값의 타입과 반환형
      * @throws NullPointerException 입력값이 {@code null}일 경우
      */
     @NotNull
@@ -58,14 +58,14 @@ public final class Nullability {
     /**
      * <p>두 값을 받아 첫번째 값이 {@code null}일 경우 두번째 값을, 아닐 경우 첫번째 값 반환</p>
      *
-     * @param first 첫번째 값
+     * @param first  첫번째 값
      * @param second 두번째 값
+     * @param <T>    매개변수 타입과 반환형
      * @return 첫번째 값이 {@code null}일 경우 두번째 값, {@code null}이 아닐 경우 첫번째 값 반환
-     * @param <T> 매개변수 타입과 반환형
      */
     @Nullable
     @Api
-    public <T> T firstOrSecondIfNull(@Nullable final T first, @Nullable final T second) {
+    public static <T> T firstOrSecondIfNull(@Nullable final T first, @Nullable final T second) {
         return first == null ? second : first;
     }
 }
