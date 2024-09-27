@@ -68,4 +68,18 @@ public final class Nullability {
     public static <T> T firstOrSecondIfNull(@Nullable final T first, @Nullable final T second) {
         return first == null ? second : first;
     }
+
+    /**
+     * <p>두 문자열을 받아 첫번째 값이 {@code null} 혹은 비어있을 경우 두번째 값을, 아닐 경우 첫번째 값 반환</p>
+     *
+     * @param first  첫번째 값
+     * @param second 두번째 값
+     * @return 첫번째 값이 {@code null} 혹은 비어있을 경우 두번째 값, 아닐 경우 첫번째 값 반환
+     */
+    @Nullable
+    @Api
+    public static String firstOrSecondIfBlank(@Nullable final String first, @Nullable final String second) {
+        return first == null || first.isBlank() ? second : first;
+    }
+
 }
