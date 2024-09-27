@@ -1,6 +1,6 @@
 package org.smoodi.core.module.container;
 
-import org.smoodi.core.annotation.AnnotationUtils;
+import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
 

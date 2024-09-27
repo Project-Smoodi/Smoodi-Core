@@ -1,4 +1,4 @@
-package org.smoodi.core.annotation;
+package org.smoodi.core.util;
 
 import java.lang.annotation.*;
 import java.util.ArrayList;
