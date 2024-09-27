@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanner;
-import org.smoodi.core.annotation.AnnotationUtils;
+import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.annotation.Module;
 
 import java.lang.annotation.Annotation;

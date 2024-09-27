@@ -2,7 +2,7 @@ package com.smoodi.core.annotation;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.smoodi.core.annotation.AnnotationUtils;
+import org.smoodi.core.util.AnnotationUtils;
 
 import java.lang.annotation.*;
 import java.util.List;
