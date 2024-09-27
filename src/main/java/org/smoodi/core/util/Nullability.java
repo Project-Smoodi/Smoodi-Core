@@ -58,10 +58,14 @@ public final class Nullability {
     /**
      * <p>두 값을 받아 첫번째 값이 {@code null}일 경우 두번째 값을, 아닐 경우 첫번째 값 반환</p>
      *
+     * @param first 첫번째 값
+     * @param second 두번째 값
      * @return 첫번째 값이 {@code null}일 경우 두번째 값, {@code null}이 아닐 경우 첫번째 값 반환
      * @param <T> 매개변수 타입과 반환형
      */
-    public <T> T firstOrSecondIfNull(final T first, final T second) {
+    @Nullable
+    @Api
+    public <T> T firstOrSecondIfNull(@Nullable final T first, @Nullable final T second) {
         return first == null ? second : first;
     }
 }
