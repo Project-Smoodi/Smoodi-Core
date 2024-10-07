@@ -1,8 +1,6 @@
 name: Gradle Publishing
 
 on:
-  release:
-    types: [ created ]
   push:
     branches:
       - main
@@ -14,7 +12,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    if: startsWith(github.event.head_commit.message, 'SNAPSHOT') || github.event_name == 'release'
+    if: startsWith(github.event.head_commit.message, 'SNAPSHOT') || startsWith(github.event.head_commit.message, 'RELEASE')
 
     steps:
       - uses: actions/checkout@v4
