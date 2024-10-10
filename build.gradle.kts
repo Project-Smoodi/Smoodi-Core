@@ -105,6 +105,7 @@ publishing {
         maven {
             name = "Smoodi-Framework-Core"
             url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
+            isAllowInsecureProtocol = true
             credentials {
                 username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
