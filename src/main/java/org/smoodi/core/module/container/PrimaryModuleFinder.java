@@ -25,7 +25,7 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
         if (found.size() == 1) {
             //noinspection unchecked
-            return (List<T>) found;
+            return (List<T>) found.stream().toList();
         }
 
         var primary = found.stream().filter(
