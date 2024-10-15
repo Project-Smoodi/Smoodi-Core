@@ -69,7 +69,6 @@ public class ModuleInitConstructorRunner {
         for (Constructor<?> constructor : constructors) {
             if (constructor.getParameterCount() == 0) {
                 defaultConstructors.add(constructor);
-                break;
             }
         }
 

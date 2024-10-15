@@ -1,16 +1,17 @@
 package org.smoodi.core.module.container;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ModuleListFinder extends ReflectionBasedModuleFinder {
 
     @Override
     public <T> List<T> find(Map<Class<?>, List<Object>> objects, Class<T> klass) {
-        final var subTypes = collectWithSubTypes(klass);
+        final List<Class<?>> subTypes = collectWithSubTypes(klass);
 
-        final List<Object> found = new ArrayList<>();
+        final Set<Object> found = new HashSet<>();
 
         subTypes.forEach(subType -> {
             if (objects.get(subType) != null) {
@@ -20,7 +21,7 @@ public class ModuleListFinder extends ReflectionBasedModuleFinder {
             }
         });
 
-
-        return (List<T>) found;
+        //noinspection unchecked
+        return (List<T>) found.stream().toList();
     }
 }

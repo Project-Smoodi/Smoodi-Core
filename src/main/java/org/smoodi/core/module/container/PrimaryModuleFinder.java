@@ -1,8 +1,8 @@
 package org.smoodi.core.module.container;
 
-import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
+import org.smoodi.core.util.AnnotationUtils;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
         final var subTypes = collectWithSubTypes(klass);
 
-        final List<Object> found = new ArrayList<>();
+        final Set<Object> found = new HashSet<>();
 
         subTypes.forEach(subType -> {
             if (objects.get(subType) != null) {
@@ -24,7 +24,8 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
         });
 
         if (found.size() == 1) {
-            return (List<T>) found;
+            //noinspection unchecked
+            return (List<T>) found.stream().toList();
         }
 
         var primary = found.stream().filter(
