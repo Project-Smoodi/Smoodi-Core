@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.module.container.DefaultModuleContainer;
 import org.smoodi.core.module.container.ModuleContainer;
+import org.smoodi.core.util.PackageVerify;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,6 +53,8 @@ public final class SmoodiFramework {
         }
 
         getInstance();
+
+        PackageVerify.verify(mainClass.getPackageName());
 
         SmoodiFramework.mainClass = mainClass;
     }

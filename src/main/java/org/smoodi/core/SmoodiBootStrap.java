@@ -31,11 +31,11 @@ public final class SmoodiBootStrap {
 
     public static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
-        LoggerInitializer.configureLogback();
-        SmoodiFramework.initSmoodiFramework(mainClass);
-        SmoodiFramework.getInstance().getStarter().init();
 
         try {
+            LoggerInitializer.configureLogback();
+            SmoodiFramework.initSmoodiFramework(mainClass);
+            SmoodiFramework.getInstance().getStarter().init();
 
             getInstance().getStarter().moduleLoader.loadModules();
 
