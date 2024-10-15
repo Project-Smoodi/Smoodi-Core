@@ -21,7 +21,7 @@ public class LoggerInitializer {
         encoder.setPattern(
                 "%d{yyyy-MM-dd HH:mm:ss.SSS} " +
                         "%highlight(%-5level) " +
-                        "[%-10thread{10}] " +
+                        "[%-15thread{15}] " +
                         "%cyan(%-38logger{36}) " +
                         ":: " +
                         "%msg%n"
