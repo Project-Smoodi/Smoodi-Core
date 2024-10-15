@@ -1,5 +1,7 @@
 package org.smoodi.core;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.init.LoggerInitializer;
 import org.smoodi.core.module.loader.ModuleLoader;
@@ -13,6 +15,7 @@ import static org.smoodi.core.SmoodiFramework.finishBootStrap;
 import static org.smoodi.core.SmoodiFramework.getInstance;
 
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class SmoodiBootStrap {
 
     private ModuleLoader moduleLoader;
@@ -43,6 +46,7 @@ public final class SmoodiBootStrap {
 
         } catch (Throwable error) {
             log.error(error.getMessage(), error);
+            SmoodiState.setState(SmoodiState.ERRORED);
             return;
         }
 
