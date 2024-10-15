@@ -9,7 +9,7 @@ import java.util.*;
 public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
     @Override
-    public <T> List<T> find(Map<Class<?>, List<Object>> objects, Class<T> klass) {
+    public <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass) {
 
         final var subTypes = collectWithSubTypes(klass);
 
@@ -25,7 +25,7 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
 
         if (found.size() == 1) {
             //noinspection unchecked
-            return (List<T>) found.stream().toList();
+            return (Set<T>) Collections.singleton(found.iterator().next());
         }
 
         var primary = found.stream().filter(
@@ -40,6 +40,6 @@ public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
             throw new ModuleDeclareError("Many modules found BUT the primary module does not exist: " + klass.getName());
         }
 
-        return Collections.emptyList();
+        return Collections.emptySet();
     }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 public class ModuleListFinder extends ReflectionBasedModuleFinder {
 
     @Override
-    public <T> List<T> find(Map<Class<?>, List<Object>> objects, Class<T> klass) {
+    public <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass) {
         final List<Class<?>> subTypes = collectWithSubTypes(klass);
 
         final Set<Object> found = new HashSet<>();
@@ -22,6 +22,6 @@ public class ModuleListFinder extends ReflectionBasedModuleFinder {
         });
 
         //noinspection unchecked
-        return (List<T>) found.stream().toList();
+        return (Set<T>) found;
     }
 }

@@ -9,7 +9,7 @@ import org.smoodi.core.module.loader.ModuleLoaderComposite;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 import static org.smoodi.core.SmoodiFramework.finishBootStrap;
 import static org.smoodi.core.SmoodiFramework.getInstance;
@@ -62,7 +62,7 @@ public final class SmoodiBootStrap {
 
     private static final class SubprojectBootStrapRunner {
 
-        private final List<SubprojectBootStrap> bootStraps =
+        private final Set<SubprojectBootStrap> bootStraps =
                 SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
                         SubprojectBootStrap.class
                 );

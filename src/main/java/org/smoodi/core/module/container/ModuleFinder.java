@@ -1,9 +1,9 @@
 package org.smoodi.core.module.container;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface ModuleFinder {
 
-    <T> List<T> find(Map<Class<?>, List<Object>> objects, Class<T> klass);
+    <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass);
 }
