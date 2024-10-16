@@ -1,6 +1,8 @@
 package org.smoodi.core.module;
 
 import lombok.Getter;
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.StaticFactoryMethod;
 import org.smoodi.core.module.loader.initializer.DefaultModuleInitConstructorSearcher;
 
 import java.lang.reflect.Constructor;
@@ -12,17 +14,17 @@ import java.lang.reflect.Constructor;
  * @see org.smoodi.core.annotation.Module
  * @see Class
  */
-public class ModuleType {
+public class ModuleType<T> {
 
     @Getter
-    protected final Class<?> klass;
+    protected final Class<T> klass;
 
     @Getter
     protected final boolean isSingleton;
 
-    protected Constructor<?> moduleInitConstructor;
+    protected Constructor<T> moduleInitConstructor;
 
-    public Constructor<?> getModuleInitConstructor() {
+    public Constructor<T> getModuleInitConstructor() {
         if (moduleInitConstructor == null) {
             this.moduleInitConstructor = new DefaultModuleInitConstructorSearcher().findModuleInitConstructor(klass);
         }
@@ -31,7 +33,7 @@ public class ModuleType {
     }
 
     protected ModuleType(
-            Class<?> klass,
+            Class<T> klass,
             boolean isSingleton
     ) {
         this.klass = klass;
@@ -39,28 +41,36 @@ public class ModuleType {
     }
 
     protected ModuleType(
-            Class<?> klass,
+            Class<T> klass,
             boolean isSingleton,
-            Constructor<?> moduleInitConstructor
+            Constructor<T> moduleInitConstructor
     ) {
         this.klass = klass;
         this.isSingleton = isSingleton;
         this.moduleInitConstructor = moduleInitConstructor;
     }
 
-    public static ModuleType of(Class<?> klass) {
-        return new ModuleType(klass, true);
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> ModuleType<T> of(Class<T> klass) {
+        return new ModuleType<>(klass, true);
     }
 
-    public static ModuleType of(Class<?> klass, boolean isSingleton) {
-        return new ModuleType(klass, isSingleton);
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> ModuleType<T> of(Class<T> klass, boolean isSingleton) {
+        return new ModuleType<>(klass, isSingleton);
     }
 
-    public static ModuleType of(Constructor<?> moduleInitConstructor) {
-        return new ModuleType(moduleInitConstructor.getDeclaringClass(), true, moduleInitConstructor);
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> ModuleType<T> of(Constructor<T> moduleInitConstructor) {
+        return new ModuleType<>(moduleInitConstructor.getDeclaringClass(), true, moduleInitConstructor);
     }
 
-    public static ModuleType of(Constructor<?> moduleInitConstructor, boolean isSingleton) {
-        return new ModuleType(moduleInitConstructor.getDeclaringClass(), isSingleton, moduleInitConstructor);
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> ModuleType<T> of(Constructor<T> moduleInitConstructor, boolean isSingleton) {
+        return new ModuleType<>(moduleInitConstructor.getDeclaringClass(), isSingleton, moduleInitConstructor);
     }
 }

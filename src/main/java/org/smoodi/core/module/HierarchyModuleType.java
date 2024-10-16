@@ -1,5 +1,9 @@
 package org.smoodi.core.module;
 
+import lombok.Getter;
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.StaticFactoryMethod;
+
 import java.lang.reflect.Constructor;
 import java.util.Set;
 
@@ -13,37 +17,57 @@ import java.util.Set;
  * @see Class
  * @see ModuleType
  */
-public final class HierarchyModuleType extends ModuleType {
+public final class HierarchyModuleType<T> extends ModuleType<T> {
 
-    private final Set<ModuleType> lowerTypes;
+    private final Set<ModuleType<? extends T>> lowerTypes;
 
+    @Getter
     private int initializedLowerModuleTypes = 0;
 
     private HierarchyModuleType(
-            Class<?> klass,
+            Class<T> klass,
             boolean isSingleton,
-            Set<ModuleType> lowerTypes
+            Set<ModuleType<? extends T>> lowerTypes
     ) {
         super(klass, isSingleton);
         this.lowerTypes = lowerTypes;
     }
 
     private HierarchyModuleType(
-            Class<?> klass,
+            Class<T> klass,
             boolean isSingleton,
-            Constructor<?> moduleInitConstructor,
-            Set<ModuleType> lowerTypes
+            Constructor<T> moduleInitConstructor,
+            Set<ModuleType<? extends T>> lowerTypes
     ) {
         super(klass, isSingleton, moduleInitConstructor);
         this.lowerTypes = lowerTypes;
     }
 
-    public static HierarchyModuleType of(Class<?> klass) {
-        return new HierarchyModuleType(klass, false, null);
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> HierarchyModuleType<T> of(Class<T> klass) {
+        return new HierarchyModuleType<>(klass, false, null);
     }
 
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> HierarchyModuleType<T> of(Class<T> klass, boolean isSingleton) {
+        return new HierarchyModuleType<>(klass, isSingleton, null);
+    }
 
-    public void markInit(ModuleType type) {
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> HierarchyModuleType<T> of(Constructor<T> moduleInitConstructor) {
+        return new HierarchyModuleType<>(moduleInitConstructor.getDeclaringClass(), true, moduleInitConstructor, null);
+    }
+
+    @StaticFactoryMethod
+    @NotNull
+    public static <T> HierarchyModuleType<T> of(Constructor<T> moduleInitConstructor, boolean isSingleton) {
+        return new HierarchyModuleType<>(moduleInitConstructor.getDeclaringClass(), isSingleton, moduleInitConstructor, null);
+    }
+
+    public void markInit(ModuleType<? extends T> type) {
         if (this.lowerTypes.contains(type)) {
             this.initializedLowerModuleTypes++;
         }
