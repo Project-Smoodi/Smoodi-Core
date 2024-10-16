@@ -3,9 +3,10 @@ package org.smoodi.core.module.loader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
-import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,9 +26,9 @@ public class MainClassPackageBasedModuleLoader implements ModuleLoader {
             return 0;
         }
 
-        final List<Class<?>> moduleClasses = ms.getModuleClasses(
+        final Set<ModuleType<?>> moduleClasses = ms.getModuleClasses(
                 SmoodiFramework.getMainClass().getPackage().getName()
-        ).stream().toList();
+        );
 
         mi.initialize(moduleClasses);
 

@@ -1,8 +1,10 @@
 package org.smoodi.core.module.loader.initializer;
 
-import java.util.List;
+import org.smoodi.core.module.ModuleType;
+
+import java.util.Set;
 
 public interface ModuleInitializer {
 
-    void initialize(List<Class<?>> moduleClasses);
+    void initialize(Set<ModuleType<?>> moduleTypes);
 }

@@ -5,8 +5,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanner;
-import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.annotation.Module;
+import org.smoodi.core.module.ModuleType;
+import org.smoodi.core.util.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -24,15 +25,15 @@ public class DefaultModuleClassScanner implements ModuleClassScanner {
 
     @SneakyThrows(ClassNotFoundException.class)
     @Override
-    public Set<Class<?>> getModuleClasses(String basePackage) {
-        final Set<Class<?>> moduleClasses = new HashSet<>();
+    public Set<ModuleType<?>> getModuleClasses(String basePackage) {
+        final Set<ModuleType<?>> moduleClasses = new HashSet<>();
 
         for (String s : new Reflections(basePackage, classScanner).getAll(classScanner)) {
 
             Class<?> it = Class.forName(s);
 
             if (!it.isAnnotation()) {
-                moduleClasses.add(it);
+                moduleClasses.add(ModuleType.of(it));
             }
         }
 
