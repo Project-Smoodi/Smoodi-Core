@@ -127,18 +127,16 @@ public class AnnotationUtils {
         return findIncludeRepeatableAnnotation(obj.getClass(), annotation);
     }
 
-    private static List<Annotation> getAvailableAnnotations(final Class<?> klass) {
-        return Arrays.stream(klass.getAnnotations())
-                .filter(it -> !METADATA_ANNOTATIONS.contains(it.annotationType()))
-                .toList();
+    private static List<Annotation> getAvailableAnnotations(final Object obj) {
+        return filterAvailableAnnotations(
+                AnnotationExtractor.getAnnotations(obj)
+        );
     }
 
-    private static List<Annotation> getAvailableAnnotations(final Object obj) {
-        if (obj instanceof Annotation) {
-            return getAvailableAnnotations(((Annotation) obj).annotationType());
-        } else {
-            return getAvailableAnnotations(obj.getClass());
-        }
+    private static List<Annotation> filterAvailableAnnotations(final Annotation[] annotations) {
+        return Arrays.stream(annotations)
+                .filter(it -> !METADATA_ANNOTATIONS.contains(it.annotationType()))
+                .toList();
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
