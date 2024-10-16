@@ -1,28 +1,29 @@
 package org.smoodi.core.module.loader.initializer;
 
-import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.annotation.ModuleInitConstructor;
+import org.smoodi.core.module.ModuleDeclareError;
 
 import java.lang.reflect.Constructor;
 
 public class DefaultModuleInitConstructorSearcher
         implements ModuleInitConstructorSearcher {
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Constructor<?> findModuleInitConstructor(Class<?> klass) {
-        Constructor<?> emptyConstructor = null;
+    public <T> Constructor<T> findModuleInitConstructor(Class<T> klass) {
+        Constructor<T> emptyConstructor = null;
 
         if (klass.getConstructors().length == 1) {
-            return klass.getConstructors()[0];
+            return (Constructor<T>) klass.getConstructors()[0];
         }
 
         for (Constructor<?> constructor : klass.getConstructors()) {
             if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
-                return constructor;
+                return (Constructor<T>) constructor;
             }
 
             if (constructor.getParameterCount() == 0) {
-                emptyConstructor = constructor;
+                emptyConstructor = (Constructor<T>) constructor;
             }
         }
 

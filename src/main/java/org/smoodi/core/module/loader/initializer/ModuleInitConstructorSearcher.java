@@ -4,5 +4,5 @@ import java.lang.reflect.Constructor;
 
 public interface ModuleInitConstructorSearcher {
 
-    Constructor<?> findModuleInitConstructor(Class<?> klass);
+    <T> Constructor<T> findModuleInitConstructor(Class<T> klass);
 }
