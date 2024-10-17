@@ -18,15 +18,18 @@ import java.util.Set;
  * @see org.smoodi.core.annotation.Module
  * @see Class
  */
-public class ModuleType<T> {
+public final class ModuleType<T> {
 
     @Getter
-    protected final Class<T> klass;
+    private final Class<T> klass;
 
     @Getter
-    protected final boolean isCreatable;
+    private final boolean isCreatable;
 
-    protected Constructor<T> moduleInitConstructor;
+    @Getter
+    private T singletonInstance;
+
+    private Constructor<T> moduleInitConstructor;
 
     public Constructor<T> getModuleInitConstructor() {
         if (moduleInitConstructor == null) {
@@ -39,17 +42,14 @@ public class ModuleType<T> {
     @Getter
     private final Set<ModuleType<? extends T>> subTypes;
 
-    @Getter
-    private int initializedLowerModuleTypes = 0;
-
-    protected ModuleType(
+    private ModuleType(
             @NotNull Class<T> klass,
             @NotNull Set<ModuleType<? extends T>> subTypes
     ) {
         this(klass, null, subTypes);
     }
 
-    protected ModuleType(
+    private ModuleType(
             @NotNull Class<T> klass,
             @Nullable Constructor<T> moduleInitConstructor,
             @NotNull Set<ModuleType<? extends T>> subTypes
@@ -95,9 +95,11 @@ public class ModuleType<T> {
         );
     }
 
-    public void markInit(ModuleType<? extends T> type) {
-        if (this.subTypes.contains(type)) {
-            this.initializedLowerModuleTypes++;
+    public void markAsInstanceCreated(T primaryInstance) {
+        if (this.klass.isInstance(primaryInstance)) {
+            this.singletonInstance = primaryInstance;
+        } else {
+            throw new IllegalStateException("Cannot mark as instance created of " + this.klass);
         }
     }
 }
