@@ -1,19 +1,19 @@
 package org.smoodi.core.module.loader.initializer;
 
 import lombok.AllArgsConstructor;
+import org.smoodi.core.module.ModuleType;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 public final class CircularDependencySearch {
 
-    public static void search(List<Constructor<?>> constructors) {
+    public static void search(Set<ModuleType<?>> moduleTypes) {
         final Map<Class<?>, Node> nodes = new HashMap<>();
 
-        for (final Constructor<?> constructor : constructors) {
+        for (final ModuleType<?> moduleType : moduleTypes) {
             nodes.put(
-                    constructor.getDeclaringClass(),
-                    Node.of(constructor));
+                    moduleType.getKlass(),
+                    Node.of(moduleType));
         }
 
         try {
@@ -35,10 +35,10 @@ public final class CircularDependencySearch {
         currentNode.visited = true;
 
         try {
-            for (Class<?> parameterType : currentNode.constructor.getParameterTypes()) {
+            for (Class<?> parameterType : currentNode.moduleType.getModuleInitConstructor().getParameterTypes()) {
                 final var node = nodes.get(parameterType);
                 if (!node.searchFinished && node.visited) {
-                    throw new CircularDependencyStackerException(node.klass);
+                    throw new CircularDependencyStackerException(node.moduleType.getKlass());
                 }
                 if (node.searchFinished && node.visited) {
                     continue;
@@ -46,10 +46,10 @@ public final class CircularDependencySearch {
                 dfsSearch(nodes, nodes.get(parameterType));
             }
         } catch (CircularDependencyStackerException e) {
-            if (e.circularDependencyRoot == currentNode.klass) {
+            if (e.circularDependencyRoot == currentNode.moduleType.getKlass()) {
                 throw e.toIllegalArgumentException();
             }
-            throw new CircularDependencyStackerException(currentNode.klass, e);
+            throw new CircularDependencyStackerException(currentNode.moduleType.getKlass(), e);
         }
 
         currentNode.searchFinished = true;
@@ -57,18 +57,13 @@ public final class CircularDependencySearch {
 
     @AllArgsConstructor
     private static class Node {
-        Class<?> klass;
-        Constructor<?> constructor;
-        List<Class<?>> parameterTypes;
+        ModuleType<?> moduleType;
         boolean visited;
         boolean searchFinished;
 
-        public static Node of(Constructor<?> constructor) {
+        public static Node of(ModuleType<?> moduleType) {
             return new Node(
-                    constructor.getDeclaringClass(),
-                    constructor,
-                    Arrays.stream(constructor.getParameterTypes()).toList(),
-                    false, false
+                    moduleType, false, false
             );
         }
     }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
-import org.smoodi.core.module.loader.initializer.DefaultModuleInitConstructorSearcher;
+import org.smoodi.core.module.loader.initializer.ModuleInitConstructorSearcher;
 import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
@@ -33,7 +33,8 @@ public final class ModuleType<T> {
 
     public Constructor<T> getModuleInitConstructor() {
         if (moduleInitConstructor == null) {
-            this.moduleInitConstructor = new DefaultModuleInitConstructorSearcher().findModuleInitConstructor(klass);
+            this.moduleInitConstructor =
+                    ModuleInitConstructorSearcher.findModuleInitConstructor(this);
         }
 
         return this.moduleInitConstructor;
