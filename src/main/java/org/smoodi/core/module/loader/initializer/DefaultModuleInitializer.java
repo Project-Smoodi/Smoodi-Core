@@ -3,10 +3,10 @@ package org.smoodi.core.module.loader.initializer;
 import lombok.SneakyThrows;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleCreationError;
+import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.container.ModuleContainer;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +38,12 @@ public class DefaultModuleInitializer implements ModuleInitializer {
                                 moduleType.getModuleInitConstructor().getParameterCount());
 
                 for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
+                    try {
+                        ModuleType.of(parameterType);
+                    } catch (IllegalArgumentException e) {
+                        throw new ModuleDeclareError("Module's parameter type MUST BE a module too.: " + parameterType.getName(), e);
+                    }
+
                     if (hasUninitializedSubModuleTypes(ModuleType.of(parameterType))) {
                         break;
                     }
