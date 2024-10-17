@@ -62,6 +62,11 @@ tasks.withType<JavaCompile> {
     )
 }
 
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+
 publishing {
 
     publications {
@@ -70,7 +75,9 @@ publishing {
 
             groupId = "org.smoodi.framework"
             artifactId = "smoodi-core"
-            version = "0.1.1-SNAPSHOT"
+            version = "0.1.1"
+
+            artifact(tasks["sourcesJar"])
 
             pom {
                 name.set("Smoodi Framework Core")
