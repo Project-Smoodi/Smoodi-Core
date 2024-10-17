@@ -5,8 +5,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@IoC
-public @interface Module {
-
-    boolean isPrimary() default false;
+public @interface IoC {
 }

@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.annotation.NotNull;
+import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.module.container.DefaultModuleContainer;
 import org.smoodi.core.module.container.ModuleContainer;
 import org.smoodi.core.util.PackageVerify;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@StaticModule
 public final class SmoodiFramework {
 
     public static final String SMOODI_PACKAGE_PREFIX = "org.smoodi";
