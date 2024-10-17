@@ -2,6 +2,7 @@ package org.smoodi.core.module.loader.initializer;
 
 import org.smoodi.core.annotation.ModuleInitConstructor;
 import org.smoodi.core.module.ModuleDeclareError;
+import org.smoodi.core.util.AnnotationUtils;
 
 import java.lang.reflect.Constructor;
 
@@ -18,7 +19,7 @@ public class DefaultModuleInitConstructorSearcher
         }
 
         for (Constructor<?> constructor : klass.getConstructors()) {
-            if (constructor.getAnnotation(ModuleInitConstructor.class) != null) {
+            if (AnnotationUtils.findIncludeAnnotation(constructor, ModuleInitConstructor.class) != null) {
                 return (Constructor<T>) constructor;
             }
 
