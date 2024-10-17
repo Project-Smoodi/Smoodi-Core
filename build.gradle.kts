@@ -77,6 +77,8 @@ publishing {
             artifactId = "smoodi-core"
             version = "0.1.1-SNAPSHOT"
 
+            artifact(tasks["sourcesJar"])
+
             pom {
                 name.set("Smoodi Framework Core")
                 description.set("The core module of Smoodi.")
