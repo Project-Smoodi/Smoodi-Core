@@ -77,7 +77,7 @@ public final class ModuleType<T> {
 
         return Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
-                new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
+                () -> new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
         );
     }
 
@@ -89,10 +89,7 @@ public final class ModuleType<T> {
         final var klass = moduleInitConstructor.getDeclaringClass();
         return Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
-                new ModuleType<>(
-                        klass,
-                        ModuleUtils.getModuleSubTypes(klass)
-                )
+                () -> new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
         );
     }
 

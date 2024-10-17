@@ -6,6 +6,8 @@ import org.smoodi.annotation.Api;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.Nullable;
 
+import java.util.function.Supplier;
+
 /**
  * <p>Null Safety를 위한 유틸 함수 모음.</p>
  *
@@ -65,8 +67,10 @@ public final class Nullability {
      */
     @Nullable
     @Api
-    public static <T> T firstOrSecondIfNull(@Nullable final T first, @Nullable final T second) {
-        return first == null ? second : first;
+    public static <T> T firstOrSecondIfNull(
+            @Nullable final T first,
+            @NotNull final Supplier<T> second) {
+        return first == null ? second.get() : first;
     }
 
     /**
@@ -78,8 +82,11 @@ public final class Nullability {
      */
     @Nullable
     @Api
-    public static String firstOrSecondIfBlank(@Nullable final String first, @Nullable final String second) {
-        return first == null || first.isBlank() ? second : first;
+    public static String firstOrSecondIfBlank(
+            @Nullable final String first,
+            @Nullable final Supplier<String> second
+    ) {
+        return first == null || first.isBlank() ? second.get() : first;
     }
 
 }
