@@ -3,15 +3,16 @@ package org.smoodi.core.module.container;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.util.AnnotationUtils;
+import org.smoodi.core.util.ModuleSubTypeFinder;
 
 import java.util.*;
 
-public class PrimaryModuleFinder extends ReflectionBasedModuleFinder {
+public class PrimaryModuleFinder implements ModuleFinder {
 
     @Override
     public <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass) {
 
-        final var subTypes = collectWithSubTypes(klass);
+        final var subTypes = ModuleSubTypeFinder.collectWithSubTypes(klass);
 
         final Set<Object> found = new HashSet<>();
 

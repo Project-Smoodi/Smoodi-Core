@@ -1,15 +1,17 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.core.util.ModuleSubTypeFinder;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ModuleListFinder extends ReflectionBasedModuleFinder {
+public class ModuleListFinder implements ModuleFinder {
 
     @Override
     public <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass) {
-        final List<Class<?>> subTypes = collectWithSubTypes(klass);
+        final List<Class<?>> subTypes = ModuleSubTypeFinder.collectWithSubTypes(klass);
 
         final Set<Object> found = new HashSet<>();
 

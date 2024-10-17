@@ -1,5 +1,7 @@
-package org.smoodi.core.module.container;
+package org.smoodi.core.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.reflections.Reflections;
 import org.smoodi.core.SmoodiFramework;
 
@@ -7,11 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ReflectionBasedModuleFinder implements ModuleFinder {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ModuleSubTypeFinder {
 
-    private final List<Reflections> reflections;
+    private static final List<Reflections> reflections;
 
-    {
+    static {
         if (SmoodiFramework.getMainClass().getPackage().getName().startsWith(
                 SmoodiFramework.SMOODI_PACKAGE_PREFIX)) {
             reflections = List.of(
@@ -25,7 +28,7 @@ public abstract class ReflectionBasedModuleFinder implements ModuleFinder {
         }
     }
 
-    protected List<Class<?>> collectWithSubTypes(Class<?> klass) {
+    public static List<Class<?>> collectWithSubTypes(Class<?> klass) {
 
         final Set<Class<?>> subTypes = new HashSet<>();
 
