@@ -1,5 +1,7 @@
 package org.smoodi.core.module.container;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smoodi.core.module.ModuleType;
 
 import java.util.HashSet;
@@ -9,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultModuleContainer extends CachedProxyModuleContainer {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultModuleContainer.class);
     private final Map<ModuleType<?>, Set<Object>> modules = new ConcurrentHashMap<>();
 
     private final PrimaryModuleFinder pf = new PrimaryModuleFinder();
