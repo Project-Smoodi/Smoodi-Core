@@ -13,7 +13,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class AnnotationUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class AnnotationUtils {
 
     private static final List<Class<? extends Annotation>> METADATA_ANNOTATIONS = List.of(
             Target.class,
