@@ -8,14 +8,14 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmoodiState {
 
-    public static final int SLEEPING = 0;
-    public static final int INITIALIZING = 1;
-    public static final int RUNNING = 2;
-    public static final int STOPPING = 3;
-    public static final int STOPPED = 4;
-    public static final int ERRORED = 5;
+    public static final String SLEEPING = "Sleeping";
+    public static final String INITIALIZING = "Initializing";
+    public static final String RUNNING = "Running";
+    public static final String STOPPING = "Stopping";
+    public static final String STOPPED = "Stopped";
+    public static final String ERRORED = "Errored";
 
     @Getter
     @Setter
-    private static int state = SLEEPING;
+    private static String state = SLEEPING;
 }
