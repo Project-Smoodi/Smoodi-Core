@@ -1,6 +1,6 @@
 package org.smoodi.core.module.container;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ModuleContainer {
 
@@ -8,7 +8,7 @@ public interface ModuleContainer {
 
     <T> T getPrimaryModuleByClass(Class<T> klass);
 
-    <T> List<T> getModulesByClass(Class<T> klass);
+    <T> Set<T> getModulesByClass(Class<T> klass);
 
     int getModuleCount();
 }

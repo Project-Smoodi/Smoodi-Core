@@ -7,12 +7,12 @@ import org.smoodi.core.module.container.ModuleContainer;
 @Slf4j
 public class DefaultStaticModuleLoader implements ModuleLoader {
 
-    private final ModuleContainer moduleContainer = SmoodiFramework.getInstance().getModuleContainer();
-
     private static final int STATIC_MODULE_COUNT = 2;
 
     @Override
     public int loadModules() {
+        final ModuleContainer moduleContainer = SmoodiFramework.getInstance().getModuleContainer();
+
         moduleContainer.save(moduleContainer);
         moduleContainer.save(SmoodiFramework.getInstance());
 
