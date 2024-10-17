@@ -4,7 +4,10 @@ import lombok.Getter;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
+import org.smoodi.core.annotation.IoC;
+import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.loader.initializer.ModuleInitConstructorSearcher;
+import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
@@ -66,7 +69,7 @@ public final class ModuleType<T> {
         ModuleTypeContainer.addModuleType(this);
     }
 
-    private boolean isCreatableKlass(@NotNull Class<T> klass) {
+    private static boolean isCreatableKlass(@NotNull Class<?> klass) {
         return !klass.isAnnotation() && !klass.isEnum() && !klass.isInterface() && !klass.isPrimitive() && !klass.isAnonymousClass();
     }
 
@@ -75,6 +78,11 @@ public final class ModuleType<T> {
     public static <T> ModuleType<T> of(@NotNull Class<T> klass) {
         assert klass != null;
 
+        if (!canBeModuleTypeKlass(klass)) {
+            throw new IllegalArgumentException(klass.getSimpleName() + " Cannot be " + ModuleType.class.getSimpleName() + ". Maybe it doesn't have annotation "
+                    + Module.class.getSimpleName());
+        }
+
         return Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
                 () -> new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
@@ -83,14 +91,32 @@ public final class ModuleType<T> {
 
     @StaticFactoryMethod
     @NotNull
-    public static <T> ModuleType<T> of(@NotNull Constructor<T> moduleInitConstructor) {
-        assert moduleInitConstructor != null;
+    public static <T> ModuleType<T> of(@NotNull T o) {
+        assert o != null;
 
-        final var klass = moduleInitConstructor.getDeclaringClass();
-        return Nullability.firstOrSecondIfNull(
+        if (!canBeModuleTypeKlass(o.getClass())) {
+            throw new IllegalArgumentException(o.getClass().getSimpleName() + " Cannot be " + ModuleType.class.getSimpleName() + ". Maybe it doesn't have annotation @"
+                    + Module.class.getSimpleName());
+        }
+
+        @SuppressWarnings("unchecked")
+        var klass = (Class<T>) o.getClass();
+
+        var moduleType = Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
                 () -> new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
         );
+        moduleType.markAsInstanceCreated(o);
+
+        return moduleType;
+    }
+
+    private static boolean canBeModuleTypeKlass(@NotNull Class<?> klass) {
+        if (isCreatableKlass(klass)) {
+            return AnnotationUtils.findIncludeAnnotation(klass, IoC.class) != null;
+        } else {
+            return true;
+        }
     }
 
     public void markAsInstanceCreated(T primaryInstance) {
