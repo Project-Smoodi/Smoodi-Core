@@ -62,6 +62,11 @@ tasks.withType<JavaCompile> {
     )
 }
 
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+
 publishing {
 
     publications {
