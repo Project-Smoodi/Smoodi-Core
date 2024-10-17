@@ -1,6 +1,6 @@
 package org.smoodi.core.module.container;
 
-import org.smoodi.core.util.ModuleSubTypeFinder;
+import org.smoodi.core.module.ModuleType;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,20 +10,19 @@ import java.util.Set;
 public class ModuleListFinder implements ModuleFinder {
 
     @Override
-    public <T> Set<T> find(Map<Class<?>, Set<Object>> objects, Class<T> klass) {
-        final List<Class<?>> subTypes = ModuleSubTypeFinder.collectWithSubTypes(klass);
+    public <T> Set<T> find(Map<ModuleType<?>, Set<Object>> objects, ModuleType<T> moduleType) {
 
-        final Set<Object> found = new HashSet<>();
+        final Set<T> found = new HashSet<>();
 
-        subTypes.forEach(subType -> {
+        moduleType.getSubTypes().forEach(subType -> {
             if (objects.get(subType) != null) {
+                //noinspection unchecked
                 found.addAll(
-                        objects.get(subType)
+                        (List<? extends T>) objects.get(subType)
                 );
             }
         });
 
-        //noinspection unchecked
-        return (Set<T>) found;
+        return found;
     }
 }
