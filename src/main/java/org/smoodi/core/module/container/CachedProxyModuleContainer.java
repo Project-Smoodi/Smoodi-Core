@@ -1,12 +1,13 @@
 package org.smoodi.core.module.container;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public abstract class CachedProxyModuleContainer
         implements ModuleContainer {
 
-    private final HashMap<Class<?>, List<Object>> listCache = new HashMap<>();
+    private final HashMap<Class<?>, Set<Object>> listCache = new HashMap<>();
 
     private final HashMap<Class<?>, Object> primaryCache = new HashMap<>();
 
@@ -26,16 +27,16 @@ public abstract class CachedProxyModuleContainer
     protected abstract <T> T getPrimaryModuleByClassImpl(Class<T> klass);
 
     @Override
-    public final <T> List<T> getModulesByClass(Class<T> klass) {
+    public final <T> Set<T> getModulesByClass(Class<T> klass) {
         if (listCache.get(klass) != null) {
-            return (List<T>) listCache.get(klass);
+            return (Set<T>) listCache.get(klass);
         }
 
         var found = getModulesByClassImpl(klass);
 
-        listCache.put(klass, (List<Object>) found);
+        listCache.put(klass, (Set<Object>) found);
         return found;
     }
 
-    protected abstract <T> List<T> getModulesByClassImpl(Class<T> klass);
+    protected abstract <T> Set<T> getModulesByClassImpl(Class<T> klass);
 }

@@ -14,32 +14,17 @@ public class ModuleLoaderComposite implements ModuleLoader {
 
     private final ModuleInitializer moduleInitializer = new DefaultModuleInitializer();
 
-    private ModuleLoader packageBasedModuleLoader;
+    private final ModuleLoader packageBasedModuleLoader =
+            new MainClassPackageBasedModuleLoader(moduleClassScanner, moduleInitializer);
 
-    private ModuleLoader smoodiProjectModuleLoader;
+    private final ModuleLoader smoodiProjectModuleLoader =
+            new SmoodiProjectModuleLoader(moduleClassScanner, moduleInitializer);
 
-    private ModuleLoader staticModuleLoader;
-
-    private boolean initialized = false;
-
-    private void init() {
-        if (initialized) {
-            return;
-        }
-
-        packageBasedModuleLoader =
-                new MainClassPackageBasedModuleLoader(moduleClassScanner, moduleInitializer);
-        smoodiProjectModuleLoader =
-                new SmoodiProjectModuleLoader(moduleClassScanner, moduleInitializer);
-        staticModuleLoader =
-                new DefaultStaticModuleLoader();
-
-        this.initialized = true;
-    }
+    private final ModuleLoader staticModuleLoader =
+            new DefaultStaticModuleLoader();
 
     @Override
     public int loadModules() {
-        init();
 
         log.info(LOG_PREFIX + "Module loading started at {}", LocalDateTime.now());
 
@@ -52,7 +37,7 @@ public class ModuleLoaderComposite implements ModuleLoader {
         final int moduleContainerModules = SmoodiFramework.getInstance().getModuleContainer().getModuleCount();
 
         if (log.isDebugEnabled() && totalLoadedModules != moduleContainerModules) {
-            log.debug("Smoodi driven loaders loaded {} modules BUT ModuleContainer containing {} modules.", totalLoadedModules, moduleContainerModules);
+            log.warn("Smoodi driven loaders loaded {} modules BUT ModuleContainer containing {} modules.", totalLoadedModules, moduleContainerModules);
         }
 
         log.info(LOG_PREFIX + "Total \"{}\" modules are loaded at {}", totalLoadedModules, LocalDateTime.now());

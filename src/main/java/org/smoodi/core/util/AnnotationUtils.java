@@ -8,9 +8,7 @@ import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.annotation.array.UnmodifiableArray;
 
 import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -19,7 +17,11 @@ public class AnnotationUtils {
 
     private static final List<Class<? extends Annotation>> METADATA_ANNOTATIONS = List.of(
             Target.class,
-            Retention.class
+            Retention.class,
+            Documented.class,
+            Inherited.class,
+            Repeatable.class,
+            Deprecated.class
     );
 
     @SuppressWarnings("unchecked")

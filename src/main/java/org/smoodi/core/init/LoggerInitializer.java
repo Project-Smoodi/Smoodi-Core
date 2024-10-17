@@ -6,13 +6,22 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.reflections.Reflections;
 import org.slf4j.LoggerFactory;
 
-public class LoggerInitializer {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LoggerInitializer {
+
+    private static final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
     public static void configureLogback() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        configureDefault();
+        configureExternalLogger();
+    }
 
+    private static void configureDefault() {
         ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<>();
         consoleAppender.setContext(context);
 
@@ -37,4 +46,8 @@ public class LoggerInitializer {
         rootLogger.addAppender(consoleAppender);
     }
 
+    private static void configureExternalLogger() {
+        Logger reflectionsApiLogger = context.getLogger(Reflections.class);
+        reflectionsApiLogger.setLevel(Level.OFF);
+    }
 }

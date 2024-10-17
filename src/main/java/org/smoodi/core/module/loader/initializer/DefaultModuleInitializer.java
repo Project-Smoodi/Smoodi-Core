@@ -1,27 +1,102 @@
 package org.smoodi.core.module.loader.initializer;
 
+import lombok.SneakyThrows;
+import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.module.ModuleCreationError;
+import org.smoodi.core.module.ModuleType;
+import org.smoodi.core.module.container.ModuleContainer;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DefaultModuleInitializer implements ModuleInitializer {
 
-    private final ModuleInitConstructorSearcher searcher =
-            new DefaultModuleInitConstructorSearcher();
+    // Module Container
+    private final ModuleContainer mc = SmoodiFramework.getInstance().getModuleContainer();
 
-    private final ModuleInitConstructorRunner mr = new ModuleInitConstructorRunner();
-
+    @SneakyThrows
     @Override
-    public void initialize(List<Class<?>> moduleClasses) {
+    public void initialize(Set<ModuleType<?>> moduleTypes) {
+        initDefaultConstructors(moduleTypes);
 
-        final List<Constructor<?>> constructors = new ArrayList<>();
+        int lastTurnListSize = moduleTypes.size() + 1;
 
-        for (Class<?> moduleClass : moduleClasses) {
-            final Constructor<?> constructor =
-                    searcher.findModuleInitConstructor(moduleClass);
-            constructors.add(constructor);
+        while (true) {
+            if (lastTurnListSize == moduleTypes.size()) {
+                CircularDependencySearch.search(moduleTypes);
+            }
+            lastTurnListSize = moduleTypes.size();
+
+            final Set<ModuleType<?>> initializedModuleTypes = new HashSet<>();
+
+            for (ModuleType<?> moduleType : moduleTypes) {
+                final List<Object> readyParameters =
+                        new ArrayList<>(
+                                moduleType.getModuleInitConstructor().getParameterCount());
+
+                for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
+                    if (hasUninitializedSubModuleTypes(ModuleType.of(parameterType))) {
+                        break;
+                    }
+                    var foundTypedModule = mc.getPrimaryModuleByClass(parameterType);
+                    if (foundTypedModule == null) {
+                        break;
+                    }
+                    readyParameters.add(foundTypedModule);
+                }
+
+                if (readyParameters.size() == moduleType.getModuleInitConstructor().getParameterCount()) {
+                    try {
+                        mc.save(
+                                moduleType.getModuleInitConstructor()
+                                        .newInstance(readyParameters.toArray())
+                        );
+                        initializedModuleTypes.add(moduleType);
+                    } catch (IllegalArgumentException e) {
+                        throw new ModuleCreationError("Invalid parameters entered during constructor call", e);
+                    } catch (InstantiationException e) {
+                        throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass(), e);
+                    }
+                }
+            }
+
+            moduleTypes.removeAll(initializedModuleTypes);
+
+            if (moduleTypes.isEmpty()) {
+                return;
+            }
+        }
+    }
+
+    @SneakyThrows
+    private void initDefaultConstructors(Set<ModuleType<?>> moduleTypes) {
+
+        List<ModuleType<?>> defaultConstructorModuleTypes = new ArrayList<>();
+
+        for (ModuleType<?> moduleType : moduleTypes) {
+            if (moduleType.getModuleInitConstructor().getParameterCount() == 0) {
+                defaultConstructorModuleTypes.add(moduleType);
+
+            }
         }
 
-        mr.runConstructor(constructors);
+        for (ModuleType<?> moduleType : defaultConstructorModuleTypes) {
+            moduleTypes.remove(moduleType);
+            try {
+                mc.save(
+                        moduleType.getModuleInitConstructor().newInstance()
+                );
+            } catch (InstantiationException e) {
+                throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass(), e);
+            }
+        }
+    }
+
+    private boolean hasUninitializedSubModuleTypes(ModuleType<?> moduleType) {
+        return moduleType.getSubTypes().stream()
+                .anyMatch(it -> it.isCreatable() && it.getSingletonInstance() == null);
     }
 }

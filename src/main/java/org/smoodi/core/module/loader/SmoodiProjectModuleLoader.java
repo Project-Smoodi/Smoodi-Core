@@ -3,6 +3,7 @@ package org.smoodi.core.module.loader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.util.Set;
@@ -18,10 +19,10 @@ public class SmoodiProjectModuleLoader implements ModuleLoader {
     @Override
     public int loadModules() {
 
-        final Set<Class<?>> moduleClasses =
+        final Set<ModuleType<?>> moduleClasses =
                 moduleClassScanner.getModuleClasses(SmoodiFramework.SMOODI_PACKAGE_PREFIX);
 
-        moduleInitializer.initialize(moduleClasses.stream().toList());
+        moduleInitializer.initialize(moduleClasses);
 
         log.info(LOG_PREFIX + "Smoodi project total {} modules are loaded.", moduleClasses.size());
 

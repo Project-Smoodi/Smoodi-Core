@@ -1,42 +1,39 @@
 package org.smoodi.core.module.container;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.smoodi.core.module.ModuleType;
+
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultModuleContainer extends CachedProxyModuleContainer {
 
-    private final Map<Class<?>, List<Object>> modules = new ConcurrentHashMap<>();
+    private final Map<ModuleType<?>, Set<Object>> modules = new ConcurrentHashMap<>();
 
     private final PrimaryModuleFinder pf = new PrimaryModuleFinder();
     private final ModuleListFinder lf = new ModuleListFinder();
 
     @Override
     public void save(Object module) {
-        /* computeIfAbsent =>
-        if (modules.get(module.getClass()) == null) {
-            modules.put(module.getClass(), new ArrayList<>());
-        }
-        */
-        modules.computeIfAbsent(module.getClass(), k -> new ArrayList<>());
+        modules.computeIfAbsent(ModuleType.of(module.getClass()), k -> new HashSet<>());
 
-        modules.get(module.getClass()).add(module);
+        modules.get(ModuleType.of(module.getClass())).add(module);
     }
 
     @Override
     protected <T> T getPrimaryModuleByClassImpl(Class<T> klass) {
-        final var found = pf.find(modules, klass);
+        final var found = pf.find(modules, ModuleType.of(klass));
 
         if (found.isEmpty()) {
             return null;
         }
-        return found.getFirst();
+        return found.iterator().next();
     }
 
     @Override
-    protected <T> List<T> getModulesByClassImpl(Class<T> klass) {
-        return lf.find(modules, klass);
+    protected <T> Set<T> getModulesByClassImpl(Class<T> klass) {
+        return lf.find(modules, ModuleType.of(klass));
     }
 
     @Override
