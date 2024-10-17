@@ -2,8 +2,10 @@ package org.smoodi.core.module;
 
 import lombok.Getter;
 import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
 import org.smoodi.core.module.loader.initializer.DefaultModuleInitConstructorSearcher;
+import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
 import java.lang.reflect.Constructor;
@@ -34,66 +36,67 @@ public class ModuleType<T> {
         return this.moduleInitConstructor;
     }
 
-    private final Set<ModuleType<? extends T>> lowerTypes;
+    @Getter
+    private final Set<ModuleType<? extends T>> subTypes;
 
     @Getter
     private int initializedLowerModuleTypes = 0;
 
     protected ModuleType(
-            Class<T> klass,
-            Set<ModuleType<? extends T>> lowerTypes
+            @NotNull Class<T> klass,
+            @NotNull Set<ModuleType<? extends T>> subTypes
     ) {
-        assert klass != null;
-        assert lowerTypes != null;
-
-        this.klass = klass;
-        this.isCreatable = isCreatableKlass(klass);
-        this.lowerTypes = lowerTypes;
+        this(klass, null, subTypes);
     }
 
     protected ModuleType(
-            Class<T> klass,
-            Constructor<T> moduleInitConstructor,
-            Set<ModuleType<? extends T>> lowerTypes
+            @NotNull Class<T> klass,
+            @Nullable Constructor<T> moduleInitConstructor,
+            @NotNull Set<ModuleType<? extends T>> subTypes
     ) {
         assert klass != null;
-        assert moduleInitConstructor != null;
-        assert lowerTypes != null;
+        assert subTypes != null;
 
         this.klass = klass;
         this.isCreatable = isCreatableKlass(klass);
         this.moduleInitConstructor = moduleInitConstructor;
-        this.lowerTypes = lowerTypes;
+        this.subTypes = subTypes;
+
+        ModuleTypeContainer.addModuleType(this);
     }
 
-    private boolean isCreatableKlass(Class<T> klass) {
+    private boolean isCreatableKlass(@NotNull Class<T> klass) {
         return !klass.isAnnotation() && !klass.isEnum() && !klass.isInterface() && !klass.isPrimitive() && !klass.isAnonymousClass();
     }
 
     @StaticFactoryMethod
     @NotNull
-    public static <T> ModuleType<T> of(Class<T> klass, Set<ModuleType<? extends T>> lowerTypes) {
+    public static <T> ModuleType<T> of(@NotNull Class<T> klass) {
+        assert klass != null;
+
         return Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
-                new ModuleType<>(klass, lowerTypes)
+                new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
         );
     }
 
     @StaticFactoryMethod
     @NotNull
-    public static <T> ModuleType<T> of(Constructor<T> moduleInitConstructor, Set<ModuleType<? extends T>> lowerTypes) {
+    public static <T> ModuleType<T> of(@NotNull Constructor<T> moduleInitConstructor) {
+        assert moduleInitConstructor != null;
+
+        final var klass = moduleInitConstructor.getDeclaringClass();
         return Nullability.firstOrSecondIfNull(
-                ModuleTypeContainer.getModuleType(moduleInitConstructor.getDeclaringClass()),
+                ModuleTypeContainer.getModuleType(klass),
                 new ModuleType<>(
-                        moduleInitConstructor.getDeclaringClass(),
-                        moduleInitConstructor,
-                        lowerTypes
+                        klass,
+                        ModuleUtils.getModuleSubTypes(klass)
                 )
         );
     }
 
     public void markInit(ModuleType<? extends T> type) {
-        if (this.lowerTypes.contains(type)) {
+        if (this.subTypes.contains(type)) {
             this.initializedLowerModuleTypes++;
         }
     }
