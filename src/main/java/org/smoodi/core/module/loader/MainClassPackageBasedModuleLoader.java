@@ -6,6 +6,7 @@ import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
@@ -30,7 +31,7 @@ public class MainClassPackageBasedModuleLoader implements ModuleLoader {
                 SmoodiFramework.getMainClass().getPackage().getName()
         );
 
-        mi.initialize(moduleClasses);
+        mi.initialize(new HashSet<>(moduleClasses));
 
         return moduleClasses.size();
     }
