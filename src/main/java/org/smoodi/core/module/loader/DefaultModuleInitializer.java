@@ -1,4 +1,4 @@
-package org.smoodi.core.module.loader.initializer;
+package org.smoodi.core.module.loader;
 
 import lombok.SneakyThrows;
 import org.smoodi.core.SmoodiFramework;
@@ -6,6 +6,7 @@ import org.smoodi.core.module.ModuleCreationError;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.container.ModuleContainer;
+import org.smoodi.core.util.ModuleUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,13 +27,17 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
         while (true) {
             if (lastTurnListSize == moduleTypes.size()) {
-                CircularDependencySearch.search(moduleTypes);
+                ModuleUtils.search(moduleTypes);
             }
             lastTurnListSize = moduleTypes.size();
 
             final Set<ModuleType<?>> initializedModuleTypes = new HashSet<>();
 
             for (ModuleType<?> moduleType : moduleTypes) {
+                if (moduleType.getModuleInitConstructor() == null) {
+                    throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass());
+                }
+
                 final List<Object> readyParameters =
                         new ArrayList<>(
                                 moduleType.getModuleInitConstructor().getParameterCount());
@@ -63,8 +68,9 @@ public class DefaultModuleInitializer implements ModuleInitializer {
                         initializedModuleTypes.add(moduleType);
                     } catch (IllegalArgumentException e) {
                         throw new ModuleCreationError("Invalid parameters entered during constructor call", e);
-                    } catch (InstantiationException e) {
-                        throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass(), e);
+                    } catch (InstantiationException ignored) {
+                        // ModuleType#getModuleInitConstructor가 null이 아닐 경우 인스턴스화 가능한 모듈 타입임을 나타냄.
+                        // 고로 인스턴스화 불가능에 의한 예외는 발생할 수 없음.
                     }
                 }
             }
@@ -103,6 +109,6 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
     private boolean hasUninitializedSubModuleTypes(ModuleType<?> moduleType) {
         return moduleType.getSubTypes().stream()
-                .anyMatch(it -> it.isCreatable() && it.getSingletonInstance() == null);
+                .anyMatch(it -> it.isCreatable() && it.getPrimaryInstance() == null);
     }
 }
