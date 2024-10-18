@@ -27,18 +27,19 @@ public class PrimaryModuleFinder implements ModuleFinder {
             return (Set<T>) Collections.singleton(found.iterator().next());
         }
 
-        var primary = found.stream().filter(
+        var primaryModules = found.stream().filter(
                 it -> Objects.requireNonNull(
                         AnnotationUtils.findIncludeAnnotation(it.getClass(), Module.class)
                 ).isPrimary()
         ).toList();
 
-        if (primary.size() > 1) {
+        if (primaryModules.size() > 1) {
             throw new ModuleDeclareError("Many primary module found. Primary module MUST BE one: " + moduleType.getKlass().getName());
-        } else if (primary.isEmpty() && found.size() > 1) {
+        } else if (primaryModules.isEmpty() && found.size() > 1) {
             throw new ModuleDeclareError("Many modules found BUT the primary module does not exist: " + moduleType.getKlass().getName());
         }
 
-        return Collections.emptySet();
+        //noinspection unchecked
+        return (Set<T>) Set.copyOf(primaryModules);
     }
 }
