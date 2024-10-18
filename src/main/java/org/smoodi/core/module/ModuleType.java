@@ -86,8 +86,8 @@ public final class ModuleType<T> {
         assert klass != null;
 
         if (!canBeModuleTypeKlass(klass)) {
-            throw new IllegalArgumentException(klass.getSimpleName() + " Cannot be " + ModuleType.class.getSimpleName() + ". Maybe it doesn't have annotation "
-                    + Module.class.getSimpleName());
+            throw new IllegalArgumentException(klass.getName() + " Cannot be " + ModuleType.class.getName() + ". Maybe it doesn't have annotation "
+                    + Module.class.getName());
         }
 
         return Nullability.firstOrSecondIfNull(
