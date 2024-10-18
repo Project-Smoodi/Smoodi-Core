@@ -34,6 +34,10 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             final Set<ModuleType<?>> initializedModuleTypes = new HashSet<>();
 
             for (ModuleType<?> moduleType : moduleTypes) {
+                if (moduleType.getModuleInitConstructor() == null) {
+                    throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass());
+                }
+
                 final List<Object> readyParameters =
                         new ArrayList<>(
                                 moduleType.getModuleInitConstructor().getParameterCount());
@@ -64,8 +68,9 @@ public class DefaultModuleInitializer implements ModuleInitializer {
                         initializedModuleTypes.add(moduleType);
                     } catch (IllegalArgumentException e) {
                         throw new ModuleCreationError("Invalid parameters entered during constructor call", e);
-                    } catch (InstantiationException e) {
-                        throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass(), e);
+                    } catch (InstantiationException ignored) {
+                        // ModuleType#getModuleInitConstructor가 null이 아닐 경우 인스턴스화 가능한 모듈 타입임을 나타냄.
+                        // 고로 인스턴스화 불가능에 의한 예외는 발생할 수 없음.
                     }
                 }
             }
