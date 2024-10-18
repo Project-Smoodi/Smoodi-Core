@@ -103,6 +103,6 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
     private boolean hasUninitializedSubModuleTypes(ModuleType<?> moduleType) {
         return moduleType.getSubTypes().stream()
-                .anyMatch(it -> it.isCreatable() && it.getSingletonInstance() == null);
+                .anyMatch(it -> it.isCreatable() && it.getPrimaryInstance() == null);
     }
 }

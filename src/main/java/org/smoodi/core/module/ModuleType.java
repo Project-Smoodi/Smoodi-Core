@@ -31,11 +31,15 @@ public final class ModuleType<T> {
     private final boolean isCreatable;
 
     @Getter
-    private T singletonInstance;
+    private T primaryInstance;
 
     private Constructor<T> moduleInitConstructor;
 
     public Constructor<T> getModuleInitConstructor() {
+        if (!this.isCreatable) {
+            return null;
+        }
+
         if (moduleInitConstructor == null) {
             this.moduleInitConstructor =
                     ModuleInitConstructorSearcher.findModuleInitConstructor(this);
@@ -98,20 +102,9 @@ public final class ModuleType<T> {
     public static <T> ModuleType<T> of(@NotNull T o) {
         assert o != null;
 
-        if (!canBeModuleTypeKlass(o.getClass())) {
-            throw new IllegalArgumentException(o.getClass().getSimpleName() + " Cannot be " + ModuleType.class.getSimpleName() + ". Maybe it doesn't have annotation @"
-                    + Module.class.getSimpleName());
-        }
-
-        @SuppressWarnings("unchecked")
-        var klass = (Class<T>) o.getClass();
-
-        var moduleType = Nullability.firstOrSecondIfNull(
-                ModuleTypeContainer.getModuleType(klass),
-                () -> new ModuleType<>(klass, ModuleUtils.getModuleSubTypes(klass))
-        );
+        //noinspection unchecked
+        var moduleType = ModuleType.of((Class<T>) o.getClass());
         moduleType.markAsInstanceCreated(o);
-
         return moduleType;
     }
 
@@ -125,7 +118,7 @@ public final class ModuleType<T> {
 
     public void markAsInstanceCreated(T primaryInstance) {
         if (this.klass.isInstance(primaryInstance)) {
-            this.singletonInstance = primaryInstance;
+            this.primaryInstance = primaryInstance;
         } else {
             throw new IllegalStateException("Cannot mark as instance created of " + this.klass);
         }
