@@ -12,6 +12,7 @@ import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 /**
@@ -70,7 +71,10 @@ public final class ModuleType<T> {
     }
 
     private static boolean isCreatableKlass(@NotNull Class<?> klass) {
-        return !klass.isAnnotation() && !klass.isEnum() && !klass.isInterface() && !klass.isPrimitive() && !klass.isAnonymousClass();
+        return !klass.isAnnotation() &&
+                !klass.isEnum() && !klass.isInterface() &&
+                !klass.isPrimitive() && !klass.isAnonymousClass() &&
+                !Modifier.toString(klass.getModifiers()).contains("abstract");
     }
 
     @StaticFactoryMethod
