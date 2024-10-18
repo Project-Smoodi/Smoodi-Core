@@ -6,6 +6,7 @@ import org.smoodi.core.module.ModuleCreationError;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.container.ModuleContainer;
+import org.smoodi.core.util.ModuleUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
         while (true) {
             if (lastTurnListSize == moduleTypes.size()) {
-                CircularDependencySearch.search(moduleTypes);
+                ModuleUtils.search(moduleTypes);
             }
             lastTurnListSize = moduleTypes.size();
 

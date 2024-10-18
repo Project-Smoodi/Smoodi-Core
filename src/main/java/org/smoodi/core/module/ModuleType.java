@@ -6,7 +6,6 @@ import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
 import org.smoodi.core.annotation.IoC;
 import org.smoodi.core.annotation.Module;
-import org.smoodi.core.module.loader.initializer.ModuleInitConstructorSearcher;
 import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
@@ -42,7 +41,7 @@ public final class ModuleType<T> {
 
         if (moduleInitConstructor == null) {
             this.moduleInitConstructor =
-                    ModuleInitConstructorSearcher.findModuleInitConstructor(this);
+                    ModuleUtils.findModuleInitConstructor(this);
         }
 
         return this.moduleInitConstructor;
