@@ -2,8 +2,6 @@ package org.smoodi.core.module.loader;
 
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
-import org.smoodi.core.module.loader.initializer.DefaultModuleInitializer;
-import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.time.LocalDateTime;
 

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleType;
-import org.smoodi.core.module.loader.initializer.ModuleInitializer;
 
 import java.util.HashSet;
 import java.util.Set;

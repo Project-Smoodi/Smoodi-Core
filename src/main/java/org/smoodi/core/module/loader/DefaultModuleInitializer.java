@@ -1,4 +1,4 @@
-package org.smoodi.core.module.loader.initializer;
+package org.smoodi.core.module.loader;
 
 import lombok.SneakyThrows;
 import org.smoodi.core.SmoodiFramework;
