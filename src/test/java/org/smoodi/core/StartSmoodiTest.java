@@ -1,9 +1,7 @@
-package com.smoodi.core;
+package org.smoodi.core;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.smoodi.core.SmoodiBootStrap;
-import org.smoodi.core.SmoodiState;
 
 public class StartSmoodiTest {
 
