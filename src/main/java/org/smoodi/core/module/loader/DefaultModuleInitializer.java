@@ -1,6 +1,7 @@
 package org.smoodi.core.module.loader;
 
 import lombok.SneakyThrows;
+import org.smoodi.annotation.UseCopy;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleCreationError;
 import org.smoodi.core.module.ModuleDeclareError;
@@ -18,9 +19,12 @@ public class DefaultModuleInitializer implements ModuleInitializer {
     // Module Container
     private final ModuleContainer mc = SmoodiFramework.getInstance().getModuleContainer();
 
+    @UseCopy
     @SneakyThrows
     @Override
     public void initialize(Set<ModuleType<?>> moduleTypes) {
+        moduleTypes = new HashSet<>(moduleTypes);
+
         initDefaultConstructors(moduleTypes);
 
         int lastTurnListSize = moduleTypes.size() + 1;
