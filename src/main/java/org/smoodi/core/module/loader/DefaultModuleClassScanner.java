@@ -21,14 +21,14 @@ public class DefaultModuleClassScanner implements ModuleClassScanner {
     private static final Class<? extends Annotation> MODULE_ANNOTATION =
             Module.class;
 
-    private final Scanner classScanner = new AnnotatedClassScanner();
+    private final AnnotatedClassScanner classScanner = new AnnotatedClassScanner();
 
     @SneakyThrows(ClassNotFoundException.class)
     @Override
     public Set<ModuleType<?>> getModuleClasses(String basePackage) {
         final Set<ModuleType<?>> moduleClasses = new HashSet<>();
 
-        for (String s : new Reflections(basePackage, classScanner).getAll(classScanner)) {
+        for (String s : new Reflections(basePackage, classScanner.setPackagePrefix(basePackage)).getAll(classScanner)) {
 
             Class<?> it = Class.forName(s);
 
@@ -44,12 +44,25 @@ public class DefaultModuleClassScanner implements ModuleClassScanner {
 
     private static final class AnnotatedClassScanner implements Scanner {
 
+        private String packagePrefix = "";
+
+        public AnnotatedClassScanner setPackagePrefix(String packagePrefix) {
+            this.packagePrefix = packagePrefix;
+            return this;
+        }
+
         @SneakyThrows(ClassNotFoundException.class)
         @Override
         public List<Map.Entry<String, String>> scan(ClassFile classFile) {
 
+            final var klass = Class.forName(classFile.getName());
+
+            if (!klass.getPackageName().startsWith(packagePrefix)) {
+                return List.of();
+            }
+
             final var annotation = AnnotationUtils.findIncludeAnnotation(
-                    Class.forName(classFile.getName()),
+                    klass,
                     MODULE_ANNOTATION
             );
 

@@ -45,10 +45,22 @@ dependencies {
     // Test
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")
 }
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags("forked")
+    }
+
+    finalizedBy(tasks.named("forkedTests"))
+}
+
+tasks.register<Test>("forkedTests") {
+    useJUnitPlatform {
+        includeTags("forked")
+    }
+    forkEvery = 1
 }
 
 tasks.withType<JavaCompile> {
@@ -75,7 +87,7 @@ publishing {
 
             groupId = "org.smoodi.framework"
             artifactId = "smoodi-core"
-            version = "0.1.2"
+            version = "0.1.3-SNAPSHOT"
 
             artifact(tasks["sourcesJar"])
 

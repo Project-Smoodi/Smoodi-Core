@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.reflections.Reflections;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.annotation.IoC;
 import org.smoodi.core.annotation.ModuleInitConstructor;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
@@ -24,7 +25,11 @@ public final class ModuleUtils {
         return ModuleInitConstructorSearcher.findModuleInitConstructor(moduleType);
     }
 
-    public static void search(Set<ModuleType<?>> moduleTypes) {
+    public static void searchNonModuleDependency(Set<ModuleType<?>> moduleTypes) {
+        NonModuleDependencySearch.search(moduleTypes);
+    }
+
+    public static void searchCircularDependency(Set<ModuleType<?>> moduleTypes) {
         CircularDependencySearch.search(moduleTypes);
     }
 
@@ -93,6 +98,23 @@ public final class ModuleUtils {
                             + " with searcher: "
                             + ModuleInitConstructorSearcher.class.getName()
             );
+        }
+    }
+
+    private static final class NonModuleDependencySearch {
+
+        private static void search(Set<ModuleType<?>> moduleTypes) {
+            for (ModuleType<?> moduleType : moduleTypes) {
+                if (moduleType.getModuleInitConstructor() == null) {
+                    continue;
+                }
+
+                for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
+                    if (AnnotationUtils.findIncludeAnnotation(parameterType, IoC.class) == null) {
+                        throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + parameterType.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
+                    }
+                }
+            }
         }
     }
 

@@ -27,7 +27,8 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
         while (true) {
             if (lastTurnListSize == moduleTypes.size()) {
-                ModuleUtils.search(moduleTypes);
+                ModuleUtils.searchNonModuleDependency(moduleTypes);
+                ModuleUtils.searchCircularDependency(moduleTypes);
             }
             lastTurnListSize = moduleTypes.size();
 

@@ -16,9 +16,17 @@ public final class LoggerInitializer {
 
     private static final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
+    private static boolean initialized = false;
+
     public static void configureLogback() {
+        if (!initialized) {
+            return;
+        }
+
         configureDefault();
         configureExternalLogger();
+
+        initialized = true;
     }
 
     private static void configureDefault() {
