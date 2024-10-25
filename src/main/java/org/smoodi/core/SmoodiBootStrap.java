@@ -32,7 +32,7 @@ public final class SmoodiBootStrap {
         initialized = true;
     }
 
-    public static void startSmoodi(Class<?> mainClass) {
+    public synchronized static void startSmoodi(Class<?> mainClass) {
         final LocalDateTime startedAt = LocalDateTime.now();
 
         try {
@@ -58,6 +58,12 @@ public final class SmoodiBootStrap {
         );
 
         finishBootStrap();
+
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            SmoodiFramework.kill();
+        }
     }
 
     private static final class SubprojectBootStrapRunner {

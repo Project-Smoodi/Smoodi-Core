@@ -29,7 +29,7 @@ public final class SmoodiFramework {
 
     private SmoodiBootStrap starter = null;
 
-    public SmoodiBootStrap getStarter() {
+    SmoodiBootStrap getStarter() {
         if (starter == null) {
             starter = new SmoodiBootStrap();
             log.info("{} was initialized", SmoodiBootStrap.class.getName());
@@ -50,10 +50,11 @@ public final class SmoodiFramework {
         return instance;
     }
 
-    public static void initSmoodiFramework(@NotNull Class<?> mainClass) {
+    synchronized static void initSmoodiFramework(@NotNull Class<?> mainClass) {
         assert mainClass != null;
 
         if (instance != null) {
+            log.warn("Smoodi framework already initialized BUT call init method again.");
             return;
         }
 
@@ -63,8 +64,22 @@ public final class SmoodiFramework {
         SmoodiFramework.mainClass = mainClass;
     }
 
-    public static void finishBootStrap() {
+    synchronized static void finishBootStrap() {
+        if (SmoodiState.getState().equals(SmoodiState.RUNNING)) {
+            log.warn("Smoodi framework already initialized BUT call init method again.");
+            return;
+        }
+
         getInstance().starter = null;
         SmoodiState.setState(SmoodiState.RUNNING);
+    }
+
+    synchronized static void kill() {
+        if (SmoodiState.getState().equals(SmoodiState.STOPPED)) {
+            log.warn("Smoodi framework already stopped BUT call kill method again.");
+            return;
+        }
+
+        SmoodiInterrupter.interrupt();
     }
 }
