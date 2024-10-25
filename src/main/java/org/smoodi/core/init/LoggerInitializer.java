@@ -19,7 +19,7 @@ public final class LoggerInitializer {
     private static boolean initialized = false;
 
     public static void configureLogback() {
-        if (!initialized) {
+        if (initialized) {
             return;
         }
 

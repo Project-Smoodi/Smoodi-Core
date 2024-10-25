@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleType;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
@@ -30,7 +29,7 @@ public class MainClassPackageBasedModuleLoader implements ModuleLoader {
                 SmoodiFramework.getMainClass().getPackage().getName()
         );
 
-        mi.initialize(new HashSet<>(moduleClasses));
+        mi.initialize(moduleClasses);
 
         return moduleClasses.size();
     }
