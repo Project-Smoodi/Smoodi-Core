@@ -62,7 +62,7 @@ public final class SmoodiBootStrap {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            SmoodiInterrupter.interrupt();
+            SmoodiFramework.kill();
         }
     }
 
