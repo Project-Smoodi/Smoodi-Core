@@ -64,6 +64,8 @@ public final class SmoodiFramework {
         SmoodiBootStrap.startBootStrap();
 
         SmoodiState.setState(SmoodiState.RUNNING);
+
+        SubprojectPostBootStrapRunner.run();
     }
 
     synchronized static void kill() {
@@ -116,6 +118,15 @@ public final class SmoodiFramework {
             SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
                     SubprojectBootStrap.class
             ).forEach(SubprojectBootStrap::start);
+        }
+    }
+
+    private static class SubprojectPostBootStrapRunner {
+
+        private synchronized static void run() {
+            SmoodiFramework.getInstance().getModuleContainer()
+                    .getModulesByClass(SubprojectPostBootStrap.class)
+                    .forEach(SubprojectPostBootStrap::post);
         }
     }
 
