@@ -10,10 +10,12 @@ import org.smoodi.core.init.LoggerInitializer;
 import org.smoodi.core.module.container.DefaultModuleContainer;
 import org.smoodi.core.module.container.ModuleContainer;
 import org.smoodi.core.module.loader.ModuleLoaderComposite;
+import org.smoodi.core.util.LazyInitUnmodifiableCollection;
 import org.smoodi.core.util.PackageVerify;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,16 +32,6 @@ public final class SmoodiFramework {
             log.info("{} was initialized", ModuleContainer.class.getName());
         }
         return moduleContainer;
-    }
-
-    private SmoodiBootStrap starter = null;
-
-    SmoodiBootStrap getStarter() {
-        if (starter == null) {
-            starter = new SmoodiBootStrap();
-            log.info("{} was initialized", SmoodiBootStrap.class.getName());
-        }
-        return starter;
     }
 
     @Getter
@@ -124,6 +116,23 @@ public final class SmoodiFramework {
             SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
                     SubprojectBootStrap.class
             ).forEach(SubprojectBootStrap::start);
+        }
+    }
+
+    @Slf4j
+    private static class SmoodiInterrupter {
+
+        private static final LazyInitUnmodifiableCollection<Set<SubprojectInterrupt>> subprojects =
+                new LazyInitUnmodifiableCollection<>();
+
+        synchronized static void interrupt() {
+            SmoodiState.setState(SmoodiState.STOPPING);
+            log.info("Stopping smoodi framework...");
+
+            subprojects.initWith(
+                    SmoodiFramework.getInstance().getModuleContainer()
+                            .getModulesByClass(SubprojectInterrupt.class)
+            ).get().forEach(SubprojectInterrupt::interrupt);
         }
     }
 }
