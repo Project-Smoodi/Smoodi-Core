@@ -7,7 +7,7 @@ public class StartSmoodiTest {
 
     @Test
     public void test() {
-        SmoodiBootStrap.startSmoodi(StartSmoodiTest.class);
+        SmoodiFramework.startSmoodi(StartSmoodiTest.class);
 
         //noinspection StatementWithEmptyBody
         while (SmoodiState.getState().equals(SmoodiState.SLEEPING) || SmoodiState.getState().equals(SmoodiState.INITIALIZING)) {
