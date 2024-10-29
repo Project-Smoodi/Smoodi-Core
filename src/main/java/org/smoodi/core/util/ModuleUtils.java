@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.reflections.Reflections;
 import org.smoodi.core.SmoodiFramework;
-import org.smoodi.core.annotation.IoC;
+import org.smoodi.core.annotation.Module;
 import org.smoodi.core.annotation.ModuleInitConstructor;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
@@ -110,7 +110,7 @@ public final class ModuleUtils {
                 }
 
                 for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
-                    if (AnnotationUtils.findIncludeAnnotation(parameterType, IoC.class) == null) {
+                    if (AnnotationUtils.findIncludeAnnotation(parameterType, Module.class) == null) {
                         throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + parameterType.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
                     }
                 }

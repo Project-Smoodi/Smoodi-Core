@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
-import org.smoodi.core.annotation.IoC;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.util.AnnotationUtils;
 import org.smoodi.core.util.ModuleUtils;
@@ -109,7 +108,7 @@ public final class ModuleType<T> {
 
     private static boolean canBeModuleTypeKlass(@NotNull Class<?> klass) {
         if (isCreatableKlass(klass)) {
-            return AnnotationUtils.findIncludeAnnotation(klass, IoC.class) != null;
+            return AnnotationUtils.findIncludeAnnotation(klass, Module.class) != null;
         } else {
             return true;
         }

@@ -5,6 +5,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@IoC
+@Module(IoC = false, order = Byte.MAX_VALUE)
 public @interface StaticModule {
 }
