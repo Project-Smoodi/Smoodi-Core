@@ -37,8 +37,8 @@ public class PrimaryModuleFinder implements ModuleFinder {
             throw new ModuleDeclareError("Many primary module found. Primary module MUST BE one: " + moduleType.getKlass().getName());
         } else if (primary.isEmpty() && found.size() > 1) {
             throw new ModuleDeclareError("Many modules found BUT the primary module does not exist: " + moduleType.getKlass().getName());
-        } else if (primary.isEmpty() /* && found.isEmpty() => true */ ) {
-            throw new ModuleDeclareError("Unknown type was expected: " + moduleType.getKlass().getName());
+        } else if (primary.isEmpty() /* && found.isEmpty() => true */) {
+            return Collections.emptySet();
         }
 
         //noinspection unchecked
