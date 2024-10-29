@@ -1,10 +1,12 @@
 package org.smoodi.core.module.container;
 
 import org.smoodi.core.module.ModuleType;
+import org.smoodi.core.util.ModuleUtils;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ModuleListFinder implements ModuleFinder {
 
@@ -22,6 +24,9 @@ public class ModuleListFinder implements ModuleFinder {
             }
         });
 
-        return found;
+        var toReturn = new TreeSet<>(ModuleUtils.comparator(moduleType.getKlass()));
+        toReturn.addAll(found);
+
+        return toReturn;
     }
 }

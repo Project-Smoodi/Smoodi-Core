@@ -9,7 +9,6 @@ import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.AnnotationUtils;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,7 @@ import java.util.Set;
 @Slf4j
 public class DefaultModuleClassScanner implements ModuleClassScanner {
 
-    private static final Class<? extends Annotation> MODULE_ANNOTATION =
+    private static final Class<Module> MODULE_ANNOTATION =
             Module.class;
 
     private final AnnotatedClassScanner classScanner = new AnnotatedClassScanner();
@@ -66,7 +65,7 @@ public class DefaultModuleClassScanner implements ModuleClassScanner {
                     MODULE_ANNOTATION
             );
 
-            if (annotation != null) {
+            if (annotation != null && annotation.IoC()) {
                 return List.of(
                         Map.entry(
                                 classFile.getName(),
