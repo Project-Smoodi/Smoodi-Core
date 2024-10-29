@@ -101,12 +101,6 @@ public final class SmoodiFramework {
                     (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000.0),
                     startedAt, finishedAt
             );
-
-            try {
-                Thread.currentThread().join();
-            } catch (InterruptedException e) {
-                SmoodiFramework.kill();
-            }
         }
 
         private static void loadModules() {
