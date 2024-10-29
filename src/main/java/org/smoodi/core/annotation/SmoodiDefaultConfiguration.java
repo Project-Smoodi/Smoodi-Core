@@ -5,6 +5,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Module(isPrimary = false)
+@Module(IoC = true, isPrimary = false, order = Byte.MAX_VALUE)
 public @interface SmoodiDefaultConfiguration {
 }

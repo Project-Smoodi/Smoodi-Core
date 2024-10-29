@@ -47,7 +47,7 @@ public final class SmoodiFramework {
         return instance;
     }
 
-    synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
+    public synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
         assert mainClass != null;
 
         if (!SmoodiState.getState().equals(SmoodiState.SLEEPING)) {
@@ -101,12 +101,6 @@ public final class SmoodiFramework {
                     (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000.0),
                     startedAt, finishedAt
             );
-
-            try {
-                Thread.currentThread().join();
-            } catch (InterruptedException e) {
-                SmoodiFramework.kill();
-            }
         }
 
         private static void loadModules() {
