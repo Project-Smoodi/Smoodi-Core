@@ -33,6 +33,10 @@ public final class ModuleUtils {
         CircularDependencySearch.search(moduleTypes);
     }
 
+    public static <T> Comparator<T> comparator(Class<T> klass) {
+        return new CircularDependencySearch.ComparatorModule<T>();
+    }
+
     private static final class SubTypeUtils {
         private static final List<Reflections> reflections;
 
@@ -215,6 +219,24 @@ public final class ModuleUtils {
             @Override
             public synchronized Throwable fillInStackTrace() {
                 return null;
+            }
+        }
+
+        private static class ComparatorModule<T> implements Comparator<T> {
+
+            @Override
+            public int compare(final T o1, final T o2) {
+
+                assert o1 != null;
+                assert o2 != null;
+
+                var o1Anno = AnnotationUtils.findIncludeAnnotation(o1, Module.class);
+                var o2Anno = AnnotationUtils.findIncludeAnnotation(o2, Module.class);
+
+                assert o1Anno != null;
+                assert o2Anno != null;
+
+                return Byte.compare(o1Anno.order(), o2Anno.order());
             }
         }
     }
