@@ -3,10 +3,9 @@ package org.smoodi.core.annotation;
 import java.lang.annotation.*;
 
 /**
- * <p>{@link org.smoodi.core.module.loader.ModuleLoader ModuleLoader}에 의해 자동으로 {@link org.smoodi.core.module.container.ModuleContainer IoC 컨테이너}에 등록될 {@link IoC} 객체.</p>
+ * <p>{@link org.smoodi.core.module.loader.ModuleLoader ModuleLoader}에 의해 자동으로 {@link org.smoodi.core.module.container.ModuleContainer IoC 컨테이너}에 등록될 자바 객체.</p>
  *
  * @author Daybreak312
- * @see IoC
  * @see org.smoodi.core.module.container.ModuleContainer
  * @see org.smoodi.core.module.loader.ModuleLoader
  * @see StaticModule
@@ -16,7 +15,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@IoC
 public @interface Module {
 
     /**
