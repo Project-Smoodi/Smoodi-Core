@@ -47,7 +47,7 @@ public final class SmoodiFramework {
         return instance;
     }
 
-    synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
+    public synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
         assert mainClass != null;
 
         if (!SmoodiState.getState().equals(SmoodiState.SLEEPING)) {
