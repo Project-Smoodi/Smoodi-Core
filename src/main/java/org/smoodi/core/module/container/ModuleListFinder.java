@@ -1,5 +1,7 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.ModuleUtils;
 
@@ -8,10 +10,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class ModuleListFinder implements ModuleFinder {
+class ModuleListFinder implements ModuleFinder {
 
+    @EmptyableArray
+    @NotNull
     @Override
-    public <T> Set<T> find(Map<ModuleType<?>, Set<Object>> objects, ModuleType<T> moduleType) {
+    public <T> Set<T> find(@NotNull Map<ModuleType<?>, Set<Object>> objects, @NotNull ModuleType<T> moduleType) {
 
         final Set<T> found = new HashSet<>();
 

@@ -1,5 +1,7 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
@@ -7,10 +9,12 @@ import org.smoodi.core.util.AnnotationUtils;
 
 import java.util.*;
 
-public class PrimaryModuleFinder implements ModuleFinder {
+class PrimaryModuleFinder implements ModuleFinder {
 
+    @EmptyableArray
+    @NotNull
     @Override
-    public <T> Set<T> find(Map<ModuleType<?>, Set<Object>> objects, ModuleType<T> moduleType) {
+    public <T> Set<T> find(@NotNull Map<ModuleType<?>, Set<Object>> objects, @NotNull ModuleType<T> moduleType) {
 
         final Set<Object> found = new HashSet<>();
 

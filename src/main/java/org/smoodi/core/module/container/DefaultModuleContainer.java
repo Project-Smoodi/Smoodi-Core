@@ -2,6 +2,9 @@ package org.smoodi.core.module.container;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.Nullable;
+import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.module.ModuleType;
 
@@ -20,7 +23,9 @@ public class DefaultModuleContainer extends CachedProxyModuleContainer {
     private final ModuleListFinder lf = new ModuleListFinder();
 
     @Override
-    public void save(Object module) {
+    public void save(@NotNull Object module) {
+        assert module != null;
+
         modules.computeIfAbsent(ModuleType.of(module.getClass()), k -> new HashSet<>());
 
         modules.get(ModuleType.of(module.getClass())).add(module);
@@ -29,6 +34,7 @@ public class DefaultModuleContainer extends CachedProxyModuleContainer {
         ModuleType.of((Class<Object>) module.getClass()).markAsInstanceCreated(module);
     }
 
+    @Nullable
     @Override
     protected <T> T getPrimaryModuleByClassImpl(Class<T> klass) {
         final var found = pf.find(modules, ModuleType.of(klass));
@@ -39,6 +45,8 @@ public class DefaultModuleContainer extends CachedProxyModuleContainer {
         return found.iterator().next();
     }
 
+    @EmptyableArray
+    @NotNull
     @Override
     protected <T> Set<T> getModulesByClassImpl(Class<T> klass) {
         return lf.find(modules, ModuleType.of(klass));
