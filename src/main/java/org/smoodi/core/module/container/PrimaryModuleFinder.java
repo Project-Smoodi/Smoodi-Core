@@ -18,6 +18,9 @@ class PrimaryModuleFinder implements ModuleFinder {
 
         final Set<Object> found = new HashSet<>();
 
+        final var subTypes = new ArrayList<>(moduleType.getSubTypes());
+        subTypes.add(moduleType);
+
         moduleType.getSubTypes().forEach(subType -> {
             if (objects.get(subType) != null) {
                 found.addAll(
