@@ -21,7 +21,7 @@ class PrimaryModuleFinder implements ModuleFinder {
         final var subTypes = new ArrayList<>(moduleType.getSubTypes());
         subTypes.add(moduleType);
 
-        moduleType.getSubTypes().forEach(subType -> {
+        subTypes.forEach(subType -> {
             if (objects.get(subType) != null) {
                 found.addAll(
                         objects.get(subType)
