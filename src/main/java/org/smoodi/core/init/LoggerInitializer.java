@@ -38,8 +38,8 @@ public final class LoggerInitializer {
         encoder.setPattern(
                 "%d{yyyy-MM-dd HH:mm:ss.SSS} " +
                         "%highlight(%-5level) " +
-                        "[%-15thread{15}] " +
-                        "%cyan(%-38logger{36}) " +
+                        "[%-20thread{20}] " +
+                        "%cyan(%-38logger{38}) " +
                         ":: " +
                         "%msg%n"
         );
