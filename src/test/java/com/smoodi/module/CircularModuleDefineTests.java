@@ -10,8 +10,8 @@ import org.smoodi.core.module.loader.DefaultModuleInitializer;
 import org.smoodi.core.module.loader.MainClassPackageBasedModuleLoader;
 import org.smoodi.core.module.loader.ModuleLoader;
 
-@Tag("forked")
 @SuppressWarnings("NonAsciiCharacters")
+@Tag("fork")
 public class CircularModuleDefineTests {
 
     private ModuleLoader createModuleLoader() {
