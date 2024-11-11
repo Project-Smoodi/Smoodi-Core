@@ -54,6 +54,8 @@ public class LazyInitUnmodifiableCollection<T extends Collection<?>> {
         } catch (UnsupportedOperationException e) {
             this.collection = collection;
             return this;
+        } catch (Throwable e) {
+            throw new IllegalArgumentException("Only unmodifiable collections are supported");
         }
 
         throw new IllegalArgumentException("Only unmodifiable collections are supported");
