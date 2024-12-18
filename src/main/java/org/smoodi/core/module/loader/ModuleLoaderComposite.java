@@ -36,7 +36,7 @@ public class ModuleLoaderComposite implements ModuleLoader {
         final int moduleContainerModules = SmoodiFramework.getInstance().getModuleContainer().getModuleCount();
 
         if (userDefinedModules == 0) {
-            log.warn("The number of modules other than smoodi driven module is \"0\". The classes in your project may be \"Module-Private\". If so, smoodi cannot scan your modules.");
+            log.warn("Modules declared by user are not scanned. The classes in your project may be \"Module-Private\". If so, smoodi cannot scan your modules.");
         }
 
         if (log.isDebugEnabled() && totalLoadedModules != moduleContainerModules) {

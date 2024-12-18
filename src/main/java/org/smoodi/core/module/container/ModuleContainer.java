@@ -1,14 +1,20 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.Nullable;
+
 import java.util.Set;
 
 public interface ModuleContainer {
 
-    void save(Object module);
+    void save(@NotNull Object module);
 
-    <T> T getPrimaryModuleByClass(Class<T> klass);
+    @Nullable
+    <T> T getPrimaryModuleByClass(@NotNull Class<T> klass);
 
-    <T> Set<T> getModulesByClass(Class<T> klass);
+    @NotNull
+    <T> Set<T> getModulesByClass(@NotNull Class<T> klass);
 
+    @NotNull
     int getModuleCount();
 }

@@ -10,8 +10,8 @@ import org.smoodi.core.SmoodiFramework;
 
 import java.util.List;
 
-@Tag("forked")
 @SuppressWarnings("NonAsciiCharacters")
+@Tag("fork")
 public class OrderedModuleDefineTests {
 
     private static final Logger log = LoggerFactory.getLogger(OrderedModuleDefineTests.class);

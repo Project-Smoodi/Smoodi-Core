@@ -11,7 +11,7 @@ import org.smoodi.core.module.loader.MainClassPackageBasedModuleLoader;
 import org.smoodi.core.module.loader.ModuleLoader;
 
 @SuppressWarnings("NonAsciiCharacters")
-@Tag("forked")
+@Tag("fork")
 public class GeneralPrimaryModuleDefineTests {
 
     private ModuleLoader createModuleLoader() {

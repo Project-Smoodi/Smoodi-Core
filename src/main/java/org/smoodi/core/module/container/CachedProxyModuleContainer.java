@@ -1,5 +1,9 @@
 package org.smoodi.core.module.container;
 
+import org.smoodi.annotation.NotNull;
+import org.smoodi.annotation.Nullable;
+import org.smoodi.annotation.array.EmptyableArray;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -11,9 +15,11 @@ public abstract class CachedProxyModuleContainer
 
     private final HashMap<Class<?>, Object> primaryCache = new HashMap<>();
 
-
+    @Nullable
     @Override
-    public final <T> T getPrimaryModuleByClass(Class<T> klass) {
+    public final <T> T getPrimaryModuleByClass(@NotNull Class<T> klass) {
+        assert klass != null;
+
         if (primaryCache.get(klass) != null) {
             return (T) primaryCache.get(klass);
         }
@@ -24,10 +30,15 @@ public abstract class CachedProxyModuleContainer
         return found;
     }
 
-    protected abstract <T> T getPrimaryModuleByClassImpl(Class<T> klass);
+    @Nullable
+    protected abstract <T> T getPrimaryModuleByClassImpl(@NotNull Class<T> klass);
 
+    @EmptyableArray
+    @NotNull
     @Override
-    public final <T> Set<T> getModulesByClass(Class<T> klass) {
+    public final <T> Set<T> getModulesByClass(@NotNull Class<T> klass) {
+        assert klass != null;
+
         if (listCache.get(klass) != null) {
             return (Set<T>) listCache.get(klass);
         }
@@ -38,5 +49,7 @@ public abstract class CachedProxyModuleContainer
         return found;
     }
 
-    protected abstract <T> Set<T> getModulesByClassImpl(Class<T> klass);
+    @EmptyableArray
+    @NotNull
+    protected abstract <T> Set<T> getModulesByClassImpl(@NotNull Class<T> klass);
 }

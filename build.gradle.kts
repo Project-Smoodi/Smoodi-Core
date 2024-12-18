@@ -31,7 +31,7 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
 
     // Jackson
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.5")
 
     // Logger
     api("org.slf4j:slf4j-api:2.0.9")
@@ -58,7 +58,7 @@ tasks.test {
 
 tasks.register<Test>("forkedTests") {
     useJUnitPlatform {
-        includeTags("forked")
+        includeTags("fork")
     }
     forkEvery = 1
 }
