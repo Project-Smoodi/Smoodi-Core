@@ -109,9 +109,7 @@ public final class ModuleType<T> {
     private static boolean canBeModuleTypeKlass(@NotNull Class<?> klass) {
         if (isCreatableKlass(klass)) {
             return AnnotationUtils.findIncludeAnnotation(klass, Module.class) != null;
-        } else {
-            return true;
-        }
+        } else return klass.isInterface() || Modifier.toString(klass.getModifiers()).contains("abstract");
     }
 
     public void markAsInstanceCreated(T primaryInstance) {
