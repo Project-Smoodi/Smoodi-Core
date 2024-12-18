@@ -23,5 +23,16 @@ public class CommonModuleDefine {
 
     @Module
     public static class ModuleC {
+        public ModuleC(
+                Interface inter
+        ) {
+        }
+    }
+
+    public interface Interface {
+    }
+
+    @Module
+    public static class Impl implements Interface {
     }
 }
