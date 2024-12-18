@@ -17,18 +17,30 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ModuleUtils {
 
+    /**
+     * @see SubTypeUtils#getModuleSubTypes
+     */
     public static <T> Set<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
         return SubTypeUtils.getModuleSubTypes(klass);
     }
 
-    public static <T> Constructor<T> findModuleInitConstructor(ModuleType<T> moduleType) {
+    /**
+     * @see ModuleInitConstructorSearcher#findModuleInitConstructor
+     */
+    public static <T> Constructor<T> findModuleInitConstructor(ModuleType<T> moduleType) {  
         return ModuleInitConstructorSearcher.findModuleInitConstructor(moduleType);
     }
 
+    /**
+     * @see NonModuleDependencySearch#search
+     */
     public static void searchNonModuleDependency(Set<ModuleType<?>> moduleTypes) {
         NonModuleDependencySearch.search(moduleTypes);
     }
 
+    /**
+     * @see CircularDependencySearch#search
+     */
     public static void searchCircularDependency(Set<ModuleType<?>> moduleTypes) {
         CircularDependencySearch.search(moduleTypes);
     }
@@ -105,6 +117,9 @@ public final class ModuleUtils {
         }
     }
 
+    /**
+     * <p>모듈이 의존하는 대상 중 모듈이 아닌 대상을 </p>
+     */
     private static final class NonModuleDependencySearch {
 
         private static void search(Set<ModuleType<?>> moduleTypes) {
