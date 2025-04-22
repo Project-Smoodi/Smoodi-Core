@@ -2,6 +2,8 @@ package org.smoodi.core.lifecycle;
 
 public interface Lifecycle {
 
+    State getState();
+
     enum State {
         NONE,
         SLEEPING,
