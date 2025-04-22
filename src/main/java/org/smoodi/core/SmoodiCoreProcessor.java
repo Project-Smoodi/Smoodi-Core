@@ -1,12 +1,14 @@
 package org.smoodi.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.module.loader.ModuleLoaderComposite;
 import org.smoodi.core.util.LazyInitUnmodifiableCollection;
 
 import java.util.Set;
 
 @Slf4j
+@StaticModule
 public final class SmoodiCoreProcessor implements Processor {
 
     private final LazyInitUnmodifiableCollection<Set<Processor>> processors = new LazyInitUnmodifiableCollection<>();
@@ -29,8 +31,8 @@ public final class SmoodiCoreProcessor implements Processor {
     }
 
     private void loadProcessors() {
-        processors.initWith(SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
+        processors.initWith(Set.copyOf(SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
                 Processor.class
-        ));
+        )));
     }
 }
