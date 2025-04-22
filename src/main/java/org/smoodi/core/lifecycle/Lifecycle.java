@@ -5,19 +5,19 @@ public interface Lifecycle {
     State getState();
 
     enum State {
-        NONE,
         SLEEPING,
 
         INITIALIZING,
         INITIALIZED,
 
         STARTING,
-        STARTED,
-
         RUNNING,
 
         STOPPING,
         STOPPED,
+
+        DESTROYING,
+        DESTROYED,
 
         ERROR
     }

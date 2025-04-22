@@ -1,6 +1,8 @@
 package org.smoodi.core;
 
-public interface SubprojectBootStrap {
+public interface Processor {
 
     void start();
+
+    void stop();
 }
