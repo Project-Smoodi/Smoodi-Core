@@ -62,11 +62,18 @@ public final class SmoodiFramework implements Lifecycle {
     }
 
     public synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
-        assert mainClass != null;
+        try {
 
-        SmoodiFramework.mainClass = mainClass;
+            assert mainClass != null;
 
-        getInstance().startSmoodiLocal();
+            SmoodiFramework.mainClass = mainClass;
+
+            getInstance().startSmoodiLocal();
+
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
     private void startSmoodiLocal() {
