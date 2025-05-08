@@ -27,7 +27,7 @@ public final class ModuleUtils {
     /**
      * @see ModuleInitConstructorSearcher#findModuleInitConstructor
      */
-    public static <T> Constructor<T> findModuleInitConstructor(ModuleType<T> moduleType) {  
+    public static <T> Constructor<T> findModuleInitConstructor(ModuleType<T> moduleType) {
         return ModuleInitConstructorSearcher.findModuleInitConstructor(moduleType);
     }
 
@@ -129,7 +129,7 @@ public final class ModuleUtils {
                 }
 
                 for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
-                    if (AnnotationUtils.findIncludeAnnotation(parameterType, Module.class) == null) {
+                    if (!ModuleType.isKlassModule(parameterType)) {
                         throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + parameterType.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
                     }
                 }
