@@ -24,8 +24,7 @@ public class DuplicatePrimaryModuleDefineTests {
 
     @Test
     public void 기본_모듈_다수_정의_상황() {
-        TestBase.initTest();
-        TestBase.setMainClass(DuplicatePrimaryModuleDefine.class);
+        TestBase.initWith(DuplicatePrimaryModuleDefine.class);
         final ModuleLoader moduleLoader = createModuleLoader();
 
         Assertions.assertThrows(ModuleDeclareError.class, moduleLoader::loadModules);

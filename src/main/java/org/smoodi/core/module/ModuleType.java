@@ -65,14 +65,16 @@ public final class ModuleType<T> {
         assert subTypes != null;
 
         this.klass = klass;
-        this.isCreatable = isCreatableKlass(klass);
+        this.isCreatable = isInstantiableKlass(klass);
         this.moduleInitConstructor = moduleInitConstructor;
         this.subTypes = subTypes;
 
         ModuleTypeContainer.addModuleType(this);
     }
 
-    private static boolean isCreatableKlass(@NotNull Class<?> klass) {
+    private static boolean isInstantiableKlass(@NotNull Class<?> klass) {
+        assert klass != null;
+
         return !klass.isAnnotation() &&
                 !klass.isEnum() && !klass.isInterface() &&
                 !klass.isPrimitive() && !klass.isAnonymousClass() &&
@@ -84,7 +86,7 @@ public final class ModuleType<T> {
     public static <T> ModuleType<T> of(@NotNull Class<T> klass) {
         assert klass != null;
 
-        if (!canBeModuleTypeKlass(klass)) {
+        if (!isKlassModule(klass)) {
             throw new IllegalArgumentException(klass.getName() + " Cannot be " + ModuleType.class.getName() + ". Maybe it doesn't have annotation "
                     + Module.class.getName());
         }
@@ -106,8 +108,8 @@ public final class ModuleType<T> {
         return moduleType;
     }
 
-    private static boolean canBeModuleTypeKlass(@NotNull Class<?> klass) {
-        if (isCreatableKlass(klass)) {
+    public static boolean isKlassModule(@NotNull Class<?> klass) {
+        if (isInstantiableKlass(klass)) {
             return AnnotationUtils.findIncludeAnnotation(klass, Module.class) != null;
         } else return klass.isInterface() || Modifier.toString(klass.getModifiers()).contains("abstract");
     }

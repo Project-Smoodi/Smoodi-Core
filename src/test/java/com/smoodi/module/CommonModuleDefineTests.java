@@ -23,8 +23,7 @@ public class CommonModuleDefineTests {
 
     @Test
     public void 일반적인_모듈_정의_상황() {
-        TestBase.initTest();
-        TestBase.setMainClass(CommonModuleDefine.class);
+        TestBase.initWith(CommonModuleDefine.class);
         final ModuleLoader moduleLoader = createModuleLoader();
 
         Assertions.assertDoesNotThrow(moduleLoader::loadModules);

@@ -51,11 +51,12 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
 
     // Jackson
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.5")
+    api("com.fasterxml.jackson.core:jackson-databind:2.13.5")
 
     // Logger
     api("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Lombok
     api("org.projectlombok:lombok:$lombokVersion")
@@ -68,6 +69,13 @@ dependencies {
 }
 
 tasks.test {
+    testLogging {
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showStackTraces = true
+        showCauses = true
+        events("failed", "skipped")
+    }
+
     useJUnitPlatform {
         excludeTags("forked")
     }

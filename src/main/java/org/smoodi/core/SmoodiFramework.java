@@ -62,11 +62,18 @@ public final class SmoodiFramework implements Lifecycle {
     }
 
     public synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
-        assert mainClass != null;
+        try {
 
-        SmoodiFramework.mainClass = mainClass;
+            assert mainClass != null;
 
-        getInstance().startSmoodiLocal();
+            SmoodiFramework.mainClass = mainClass;
+
+            getInstance().startSmoodiLocal();
+
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
     private void startSmoodiLocal() {
@@ -107,14 +114,20 @@ public final class SmoodiFramework implements Lifecycle {
     synchronized static void kill() {
         switch (getInstance().getState()) {
             case RUNNING: {
+                getInstance().setState(State.STOPPING);
+
                 getInstance().getSmoodiCoreProcessor().stop();
+
+                getInstance().setState(State.STOPPED);
                 break;
             }
             case SLEEPING, INITIALIZING, INITIALIZED, STARTING:
                 log.warn("Smoodi framework was not started BUT kill method called.");
+                getInstance().setState(State.STOPPED);
                 break;
             default:
                 log.warn("Smoodi framework already stopped BUT call kill method again.");
+                getInstance().setState(State.STOPPED);
         }
     }
 }

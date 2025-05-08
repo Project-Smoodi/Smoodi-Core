@@ -23,8 +23,7 @@ public class CircularModuleDefineTests {
 
     @Test
     public void 순환_참조_모듈_정의_상황() {
-        TestBase.initTest();
-        TestBase.setMainClass(CircularModuleDefine.class);
+        TestBase.initWith(CircularModuleDefine.class);
         final ModuleLoader moduleLoader = createModuleLoader();
 
         Assertions.assertThrows(IllegalArgumentException.class, moduleLoader::loadModules);

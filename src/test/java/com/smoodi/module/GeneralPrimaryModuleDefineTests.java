@@ -23,8 +23,7 @@ public class GeneralPrimaryModuleDefineTests {
 
     @Test
     public void 정상적인_기본_모듈_정의_상황() {
-        TestBase.initTest();
-        TestBase.setMainClass(GeneralPrimaryModuleDefine.class);
+        TestBase.initWith(GeneralPrimaryModuleDefine.class);
         final ModuleLoader moduleLoader = createModuleLoader();
 
         Assertions.assertDoesNotThrow(moduleLoader::loadModules);
