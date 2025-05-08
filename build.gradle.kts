@@ -51,11 +51,11 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
 
     // Jackson
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.5")
+    api("com.fasterxml.jackson.core:jackson-databind:2.13.5")
 
     // Logger
     api("org.slf4j:slf4j-api:$slf4jVersion")
-    implementation("ch.qos.logback:logback-core:$logbackVersion")
+    runtimeOnly("ch.qos.logback:logback-core:$logbackVersion")
 
     // Lombok
     api("org.projectlombok:lombok:$lombokVersion")
