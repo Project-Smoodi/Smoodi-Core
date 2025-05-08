@@ -55,7 +55,7 @@ dependencies {
 
     // Logger
     api("org.slf4j:slf4j-api:$slf4jVersion")
-    runtimeOnly("ch.qos.logback:logback-core:$logbackVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
 
     // Lombok
     api("org.projectlombok:lombok:$lombokVersion")
