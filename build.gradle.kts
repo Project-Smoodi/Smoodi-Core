@@ -22,6 +22,26 @@ java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
 
+val slf4jVersion = "2.0.13"
+val logbackVersion = "1.5.13"
+val lombokVersion = "1.18.30"
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            if (requested.group == "org.slf4j" && requested.name == "slf4j-api") {
+                useVersion(slf4jVersion)
+            }
+            if (requested.group == "ch.qos.logback" && requested.name.startsWith("logback-")) {
+                useVersion(logbackVersion)
+            }
+            if (requested.group == "org.projectlombok" && requested.name.startsWith("lombok")) {
+                useVersion(lombokVersion)
+            }
+        }
+    }
+}
+
 dependencies {
 
     // Smoodi
@@ -34,13 +54,12 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.5")
 
     // Logger
-    api("org.slf4j:slf4j-api:2.0.9")
-    implementation("ch.qos.logback:logback-core:1.4.14")
-    implementation("ch.qos.logback:logback-classic:1.4.14")
+    api("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
 
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    api("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
 
     // Test
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
@@ -87,7 +106,7 @@ publishing {
 
             groupId = "org.smoodi.framework"
             artifactId = "smoodi-core"
-            version = "0.1.3-SNAPSHOT"
+            version = "0.1.4-SNAPSHOT"
 
             artifact(tasks["sourcesJar"])
 
@@ -107,7 +126,7 @@ publishing {
                     developer {
                         id.set("Daybreak312")
                         name.set("Daybreak312")
-                        email.set("ty82afg12@gmail.com")
+                        email.set("leetyxodud312@gmail.com")
                     }
                 }
 

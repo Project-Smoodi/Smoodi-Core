@@ -3,26 +3,33 @@ package org.smoodi.core;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.init.LoggerInitializer;
+import org.smoodi.core.lifecycle.Lifecycle;
+import org.smoodi.core.lifecycle.LifecycleDefineError;
 import org.smoodi.core.module.container.DefaultModuleContainer;
 import org.smoodi.core.module.container.ModuleContainer;
-import org.smoodi.core.module.loader.ModuleLoaderComposite;
-import org.smoodi.core.util.LazyInitUnmodifiableCollection;
 import org.smoodi.core.util.PackageVerify;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @StaticModule
-public final class SmoodiFramework {
+public final class SmoodiFramework implements Lifecycle {
 
     public static final String SMOODI_PACKAGE_PREFIX = "org.smoodi";
+
+    @Getter
+    @Setter
+    private Lifecycle.State state = State.SLEEPING;
+
+    @Getter
+    private static Class<?> mainClass = null;
 
     private ModuleContainer moduleContainer = null;
 
@@ -34,8 +41,15 @@ public final class SmoodiFramework {
         return moduleContainer;
     }
 
-    @Getter
-    private static Class<?> mainClass = null;
+    private Processor smoodiCoreProcessor = null;
+
+    public Processor getSmoodiCoreProcessor() {
+        if (smoodiCoreProcessor == null) {
+            smoodiCoreProcessor = new SmoodiCoreProcessor();
+            log.info("{} was initialized", SmoodiCoreProcessor.class.getName());
+        }
+        return smoodiCoreProcessor;
+    }
 
     private static SmoodiFramework instance = null;
 
@@ -50,94 +64,57 @@ public final class SmoodiFramework {
     public synchronized static void startSmoodi(@NotNull final Class<?> mainClass) {
         assert mainClass != null;
 
-        if (!SmoodiState.getState().equals(SmoodiState.SLEEPING)) {
-            log.error("Smoodi framework already started (or initializing)");
-            return;
-        }
-
-        SmoodiState.setState(SmoodiState.INITIALIZING);
-
-        PackageVerify.verify(mainClass.getPackageName());
-        getInstance();
         SmoodiFramework.mainClass = mainClass;
 
-        SmoodiBootStrap.startBootStrap();
+        getInstance().startSmoodiLocal();
+    }
 
-        SmoodiState.setState(SmoodiState.RUNNING);
+    private void startSmoodiLocal() {
+        if (getState() != State.SLEEPING) {
+            throw new LifecycleDefineError();
+        }
 
-        SubprojectPostBootStrapRunner.run();
+        initialize();
+        start();
+    }
+
+    private synchronized void initialize() {
+        setState(State.INITIALIZING);
+
+        LoggerInitializer.configureLogback();
+        PackageVerify.verify(mainClass.getPackageName());
+
+        setState(State.INITIALIZED);
+
+        log.debug("{} was initialized", SmoodiFramework.class.getName());
+    }
+
+    private synchronized void start() {
+        final LocalDateTime calledAt = LocalDateTime.now();
+        setState(State.STARTING);
+
+        getSmoodiCoreProcessor().start();
+
+        setState(State.RUNNING);
+        final LocalDateTime finishedAt = LocalDateTime.now();
+        log.info(
+                "Smoodi started on {} seconds. Started at : {}, Initialize finished at : {}",
+                (Duration.between(calledAt, finishedAt).getNano() / 1_000_000_000.0),
+                calledAt, finishedAt
+        );
     }
 
     synchronized static void kill() {
-        if (SmoodiState.getState().equals(SmoodiState.STOPPED)) {
-            log.warn("Smoodi framework already stopped BUT call kill method again.");
-            return;
-        }
-
-        SmoodiInterrupter.interrupt();
-    }
-
-    private static class SmoodiBootStrap {
-
-        private synchronized static void startBootStrap() {
-            final LocalDateTime startedAt = LocalDateTime.now();
-
-            LoggerInitializer.configureLogback();
-
-            try {
-                loadModules();
-
-                runSubprojectBootStraps();
-
-            } catch (Throwable error) {
-                log.error(error.getMessage(), error);
-                SmoodiState.setState(SmoodiState.ERRORED);
-                return;
+        switch (getInstance().getState()) {
+            case RUNNING: {
+                getInstance().getSmoodiCoreProcessor().stop();
+                break;
             }
-
-            final LocalDateTime finishedAt = LocalDateTime.now();
-            log.info(
-                    "Smoodi started on {} seconds. Started at : {}, Initialize finished at : {}",
-                    (Duration.between(startedAt, finishedAt).getNano() / 1_000_000_000.0),
-                    startedAt, finishedAt
-            );
-        }
-
-        private static void loadModules() {
-            new ModuleLoaderComposite().loadModules();
-        }
-
-        private static void runSubprojectBootStraps() {
-            log.debug("Smoodi subprojects bootstrap started.");
-            SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
-                    SubprojectBootStrap.class
-            ).forEach(SubprojectBootStrap::start);
-        }
-    }
-
-    private static class SubprojectPostBootStrapRunner {
-
-        private synchronized static void run() {
-            SmoodiFramework.getInstance().getModuleContainer()
-                    .getModulesByClass(SubprojectPostBootStrap.class)
-                    .forEach(SubprojectPostBootStrap::post);
-        }
-    }
-
-    @Slf4j
-    private static class SmoodiInterrupter {
-
-        private static final LazyInitUnmodifiableCollection<Set<SubprojectInterrupt>> subprojects =
-                new LazyInitUnmodifiableCollection<>();
-
-        synchronized static void interrupt() {
-            SmoodiState.setState(SmoodiState.STOPPING);
-            log.info("Stopping smoodi framework...");
-
-            subprojects.initWith(
-                    SmoodiFramework.getInstance().getModuleContainer()
-                            .getModulesByClass(SubprojectInterrupt.class)
-            ).get().forEach(SubprojectInterrupt::interrupt);
+            case SLEEPING, INITIALIZING, INITIALIZED, STARTING:
+                log.warn("Smoodi framework was not started BUT kill method called.");
+                break;
+            default:
+                log.warn("Smoodi framework already stopped BUT call kill method again.");
         }
     }
 }
