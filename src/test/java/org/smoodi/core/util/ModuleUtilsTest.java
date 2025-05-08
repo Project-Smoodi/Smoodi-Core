@@ -31,7 +31,7 @@ public class ModuleUtilsTest {
         }
 
         void doTest(Class<?> klass) {
-            TestBase.setMainClass(ModuleUtilsTest.class);
+            TestBase.initWith(ModuleUtilsTest.class);
 
             log.info("{}", ModuleUtils.findModuleInitConstructor(ModuleType.of(klass)));
 

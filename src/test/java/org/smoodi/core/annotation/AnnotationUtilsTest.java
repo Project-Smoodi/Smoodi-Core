@@ -104,7 +104,7 @@ public class AnnotationUtilsTest {
                 AnnotationUtils.findRepeatableAnnotation(RepeatAnnotatedClass.class, RepeatableTestAnnotations.class);
 
         Assertions.assertNotNull(annotations);
-        var it = annotations.get(0).value();
+        var it = annotations.getFirst().value();
         Assertions.assertEquals(1, annotations.getFirst().value()[0].value());
         Assertions.assertEquals(2, annotations.getFirst().value()[1].value());
         Assertions.assertEquals(3, annotations.getFirst().value()[2].value());

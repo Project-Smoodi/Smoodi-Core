@@ -14,5 +14,12 @@ public class StartSmoodiTest {
                 Lifecycle.State.RUNNING,
                 SmoodiFramework.getInstance().getState()
         );
+
+        Assertions.assertDoesNotThrow(SmoodiFramework::kill);
+
+        Assertions.assertEquals(
+                Lifecycle.State.STOPPED,
+                SmoodiFramework.getInstance().getState()
+        );
     }
 }
