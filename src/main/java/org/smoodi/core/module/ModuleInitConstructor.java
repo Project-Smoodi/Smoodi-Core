@@ -5,7 +5,7 @@ import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.annotation.array.UnmodifiableArray;
 
 import java.lang.reflect.Constructor;
-import java.util.Set;
+import java.util.List;
 
 /**
  * <p>특정 모듈을 초기화하기 위한 생성자</p>
@@ -26,5 +26,9 @@ public interface ModuleInitConstructor<T, M extends ModuleType<T>> {
     @NotNull
     @EmptyableArray
     @UnmodifiableArray
-    Set<ModuleDependency<M, ?>> getDependencies();
+    List<ModuleDependency<M, ?>> getDependencies();
+
+    static <T, M extends ModuleType<T>> ModuleInitConstructor<T, M> of(M moduleType) {
+        return ModuleInitConstructorImpl.of(moduleType);
+    }
 }
