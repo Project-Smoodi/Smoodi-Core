@@ -11,7 +11,7 @@ import org.smoodi.annotation.Nullable;
  * @author Daybreak312
  * @see ModuleType
  * @see ModuleInitConstructor
- * @since 0.0.5-SNAPSHOT
+ * @since 0.1.5-SNAPSHOT
  */
 public interface ModuleDependency<T extends ModuleType<?>, D> {
 

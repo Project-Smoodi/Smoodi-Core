@@ -10,6 +10,14 @@ import org.smoodi.core.util.AnnotationUtils;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
+/**
+ * <p>{@link org.smoodi.core.annotation.Module 모듈} 초기화에서 요구되는 {@link Class 클래스 정보}와 기타 추가적인 정보를 묶은 클래스.</p>
+ *
+ * @author Daybreak312
+ * @see org.smoodi.core.annotation.Module
+ * @see Class
+ * @since 0.1.5-SNAPSHOT
+ */
 public interface ModuleType<T> {
 
     @NotNull

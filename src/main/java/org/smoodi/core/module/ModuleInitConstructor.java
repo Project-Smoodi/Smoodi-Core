@@ -14,6 +14,8 @@ import java.util.List;
  *
  * @param <T>이 생성자를 갖고 있는 자바 클래스 타입
  * @param <M>  {@link T}의 {@link ModuleType}
+ * @author Daybreak312
+ * @since 0.1.5-SNAPSHOT
  */
 public interface ModuleInitConstructor<T, M extends ModuleType<T>> {
 

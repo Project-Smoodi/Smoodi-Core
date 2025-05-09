@@ -114,7 +114,7 @@ publishing {
 
             groupId = "org.smoodi.framework"
             artifactId = "smoodi-core"
-            version = "0.1.4-SNAPSHOT"
+            version = "0.1.5-SNAPSHOT"
 
             artifact(tasks["sourcesJar"])
 
