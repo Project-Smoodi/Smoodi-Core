@@ -9,10 +9,7 @@ import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.container.ModuleContainer;
 import org.smoodi.core.util.ModuleUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DefaultModuleInitializer implements ModuleInitializer {
 
@@ -94,9 +91,11 @@ public class DefaultModuleInitializer implements ModuleInitializer {
         List<ModuleType<?>> defaultConstructorModuleTypes = new ArrayList<>();
 
         for (ModuleType<?> moduleType : moduleTypes) {
+            if (moduleType.getModuleInitConstructor() == null) {
+                continue;
+            }
             if (moduleType.getModuleInitConstructor().getParameterCount() == 0) {
                 defaultConstructorModuleTypes.add(moduleType);
-
             }
         }
 
@@ -104,7 +103,9 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             moduleTypes.remove(moduleType);
             try {
                 mc.save(
-                        moduleType.getModuleInitConstructor().newInstance()
+                        Objects.requireNonNull(
+                                moduleType.getModuleInitConstructor()
+                        ).newInstance()
                 );
             } catch (InstantiationException e) {
                 throw new ModuleCreationError("Abstract class or Interface or Enum cannot annotated with " + Module.class + ": " + moduleType.getKlass(), e);
@@ -114,6 +115,6 @@ public class DefaultModuleInitializer implements ModuleInitializer {
 
     private boolean hasUninitializedSubModuleTypes(ModuleType<?> moduleType) {
         return moduleType.getSubTypes().stream()
-                .anyMatch(it -> it.isCreatable() && it.getPrimaryInstance() == null);
+                .anyMatch(it -> moduleType.isInstantiableKlass() && it.getPrimaryInstance() == null);
     }
 }
