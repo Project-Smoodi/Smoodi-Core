@@ -8,6 +8,7 @@ import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.annotation.ModuleInitConstructor;
 import org.smoodi.core.module.ModuleDeclareError;
+import org.smoodi.core.module.ModuleDependency;
 import org.smoodi.core.module.ModuleType;
 
 import java.lang.reflect.Constructor;
@@ -22,6 +23,13 @@ public final class ModuleUtils {
      */
     public static <T> Set<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
         return SubTypeUtils.getModuleSubTypes(klass);
+    }
+
+    /**
+     * @see ModuleUtils.SubTypeUtils#findPrimaryModuleType
+     */
+    public static <T> ModuleType<? extends T> findPrimaryModuleType(ModuleType<T> moduleType) {
+        return SubTypeUtils.findPrimaryModuleType(moduleType);
     }
 
     /**
@@ -79,14 +87,42 @@ public final class ModuleUtils {
                     .map(ModuleType::of)
                     .collect(Collectors.toSet());
         }
+
+        private static <T> ModuleType<? extends T> findPrimaryModuleType(ModuleType<T> moduleType) {
+            final var instantiableSubTypes = moduleType.getSubTypes().stream()
+                    .filter(ModuleType::isInstantiableKlass).collect(Collectors.toList());
+            if (moduleType.isInstantiableKlass()) instantiableSubTypes.add(moduleType);
+
+            if (instantiableSubTypes.isEmpty()) return null;
+            if (instantiableSubTypes.size() == 1) {
+                return instantiableSubTypes.getFirst();
+            }
+
+            var primary = instantiableSubTypes.stream().filter(
+                    it -> Objects.requireNonNull(
+                            AnnotationUtils.findIncludeAnnotation(it.getClass(), Module.class)
+                    ).isPrimary()
+            ).toList();
+
+            if (primary.size() > 1) {
+                throw new ModuleDeclareError("Many primary module found. Primary module MUST BE one: " + moduleType.getKlass().getName());
+            } else if (primary.isEmpty()) {
+                throw new ModuleDeclareError("Many modules found BUT the primary module does not exist: " + moduleType.getKlass().getName());
+            }
+
+            return primary.getFirst();
+        }
     }
 
     private static final class ModuleInitConstructorSearcher {
 
         @SuppressWarnings("unchecked")
         private static <T> Constructor<T> findModuleInitConstructor(ModuleType<T> moduleType) {
-            Constructor<T> emptyConstructor = null;
+            if (!moduleType.isInstantiableKlass()) {
+                throw new IllegalArgumentException("Module type is not instantiable, cannot have module init constructor.");
+            }
 
+            Constructor<T> emptyConstructor = null;
             Constructor<T>[] constructors =
                     (Constructor<T>[]) moduleType.getKlass().getConstructors();
 
@@ -128,9 +164,9 @@ public final class ModuleUtils {
                     continue;
                 }
 
-                for (Class<?> parameterType : moduleType.getModuleInitConstructor().getParameterTypes()) {
-                    if (!ModuleType.isKlassModule(parameterType)) {
-                        throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + parameterType.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
+                for (ModuleDependency<?, ?> dependency : moduleType.getModuleInitConstructor().getDependencies()) {
+                    if (!ModuleType.isKlassModule(dependency)) {
+                        throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + dependency.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
                     }
                 }
             }
