@@ -22,6 +22,7 @@ public final class ModuleTypeContainer {
     @Nullable
     static <T> ModuleType<T> getModuleType(@NotNull final Class<T> klass) {
         assert klass != null;
+
         //noinspection unchecked
         return (ModuleType<T>) moduleTypeMap.get(klass);
     }
