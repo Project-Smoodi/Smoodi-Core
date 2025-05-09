@@ -17,8 +17,19 @@ public class ModuleDependencyImpl<T, M extends ModuleType<? extends T>, D>
     @Getter(onMethod_ = {@Override})
     private final Class<D> dependencyType;
 
-    @Getter(onMethod_ = {@Override})
-    private final ModuleType<? extends D> moduleTypeForInjection;
+    private ModuleType<? extends D> moduleTypeForInjection;
+
+    public ModuleType<? extends D> getModuleTypeForInjection() {
+        if (moduleTypeForInjection == null) {
+            moduleTypeForInjection = ModuleUtils.findPrimaryModuleType(ModuleType.of(dependencyType));
+
+            if (this.moduleTypeForInjection == null) {
+                throw new ModuleDeclareError("Super type \"" + dependencyType.getName() + " doesnt have any instantiable class.");
+            }
+        }
+
+        return this.moduleTypeForInjection;
+    }
 
     /**
      * @param moduleType     이 의존성을 갖고 있는 {@link ModuleType}
@@ -40,6 +51,5 @@ public class ModuleDependencyImpl<T, M extends ModuleType<? extends T>, D>
         if (!ModuleType.isKlassModule(dependencyType))
             throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + dependencyType.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
         this.dependencyType = dependencyType;
-        this.moduleTypeForInjection = ModuleUtils.findPrimaryModuleType(ModuleType.of(dependencyType));
     }
 }

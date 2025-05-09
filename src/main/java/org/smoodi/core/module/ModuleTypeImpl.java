@@ -2,13 +2,11 @@ package org.smoodi.core.module;
 
 import lombok.Getter;
 import org.smoodi.annotation.NotNull;
-import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.StaticFactoryMethod;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 
 /**
@@ -20,49 +18,50 @@ import java.util.Set;
  */
 public final class ModuleTypeImpl<T> implements ModuleType<T> {
 
-    @Getter
+    @Getter(onMethod_ = {@Override})
     private final Class<T> klass;
 
-    @Getter
+    @Getter(onMethod_ = {@Override})
     private T primaryInstance;
 
-    private Constructor<T> moduleInitConstructor;
+    private ModuleInitConstructor<T, ModuleType<T>> moduleInitConstructor = null;
 
     @Override
-    public Constructor<T> getModuleInitConstructor() {
-        if (!isInstantiableKlass()) {
-            return null;
-        }
-
-        if (moduleInitConstructor == null) {
-            this.moduleInitConstructor =
-                    ModuleUtils.findModuleInitConstructor(this);
-        }
-
+    public ModuleInitConstructor<T, ModuleType<T>> getModuleInitConstructor() {
+        init();
         return this.moduleInitConstructor;
     }
 
-    @Getter
-    private final Set<ModuleType<? extends T>> subTypes;
+    private Set<ModuleType<? extends T>> subTypes = null;
 
-    private ModuleTypeImpl(
-            @NotNull Class<T> klass,
-            @NotNull Set<ModuleType<? extends T>> subTypes
-    ) {
-        this(klass, null, subTypes);
+    @Override
+    public Set<ModuleType<? extends T>> getSubTypes() {
+        init();
+        return this.subTypes;
+    }
+
+    private boolean initialized = false;
+
+    private synchronized void init() {
+        if (initialized) {
+            return;
+        }
+
+        if (this.moduleInitConstructor == null && this.isInstantiableKlass()) {
+            this.moduleInitConstructor = ModuleInitConstructor.of(this);
+        }
+
+        this.subTypes = ModuleUtils.getModuleSubTypes(klass);
+
+        initialized = true;
     }
 
     private ModuleTypeImpl(
-            @NotNull Class<T> klass,
-            @Nullable Constructor<T> moduleInitConstructor,
-            @NotNull Set<ModuleType<? extends T>> subTypes
+            @NotNull Class<T> klass
     ) {
         assert klass != null;
-        assert subTypes != null;
 
         this.klass = klass;
-        this.moduleInitConstructor = moduleInitConstructor;
-        this.subTypes = subTypes;
 
         ModuleTypeContainer.addModuleType(this);
     }
@@ -79,19 +78,8 @@ public final class ModuleTypeImpl<T> implements ModuleType<T> {
 
         return Nullability.firstOrSecondIfNull(
                 ModuleTypeContainer.getModuleType(klass),
-                () -> new ModuleTypeImpl<>(klass, ModuleUtils.getModuleSubTypes(klass))
+                () -> new ModuleTypeImpl<>(klass)
         );
-    }
-
-    @StaticFactoryMethod
-    @NotNull
-    public static <T> ModuleType<T> of(@NotNull T o) {
-        assert o != null;
-
-        //noinspection unchecked
-        var moduleType = ModuleTypeImpl.of((Class<T>) o.getClass());
-        moduleType.markAsInstanceCreated(o);
-        return moduleType;
     }
 
     @Override

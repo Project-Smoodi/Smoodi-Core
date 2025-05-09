@@ -7,7 +7,6 @@ import org.smoodi.annotation.array.UnmodifiableArray;
 import org.smoodi.core.annotation.Module;
 import org.smoodi.core.util.AnnotationUtils;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
@@ -16,9 +15,8 @@ public interface ModuleType<T> {
     @NotNull
     Class<T> getKlass();
 
-    @javax.annotation.Nullable
     @Nullable
-    Constructor<T> getModuleInitConstructor();
+    ModuleInitConstructor<T, ModuleType<T>> getModuleInitConstructor();
 
     void markAsInstanceCreated(T primaryInstance);
 
@@ -46,7 +44,7 @@ public interface ModuleType<T> {
     }
 
     default boolean isInstantiableKlass() {
-        return isInstantiableKlass(getClass());
+        return isInstantiableKlass(getKlass());
     }
 
     @NotNull

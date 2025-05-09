@@ -72,6 +72,7 @@ public class CircularModuleDefine {
         }
     }
 
+    @Module
     public static class ModuleD {
         public ModuleD(
                 InterfaceD interfaceD

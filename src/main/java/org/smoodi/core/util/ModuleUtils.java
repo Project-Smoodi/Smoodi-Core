@@ -40,13 +40,6 @@ public final class ModuleUtils {
     }
 
     /**
-     * @see NonModuleDependencySearch#search
-     */
-    public static void searchNonModuleDependency(Set<ModuleType<?>> moduleTypes) {
-        NonModuleDependencySearch.search(moduleTypes);
-    }
-
-    /**
      * @see CircularDependencySearch#search
      */
     public static void searchCircularDependency(Set<ModuleType<?>> moduleTypes) {
@@ -90,7 +83,8 @@ public final class ModuleUtils {
 
         private static <T> ModuleType<? extends T> findPrimaryModuleType(ModuleType<T> moduleType) {
             final var instantiableSubTypes = moduleType.getSubTypes().stream()
-                    .filter(ModuleType::isInstantiableKlass).collect(Collectors.toList());
+                    .filter(it -> it.isInstantiableKlass() && AnnotationUtils.findIncludeAnnotation(it.getKlass(), Module.class) != null)
+                    .collect(Collectors.toList());
             if (moduleType.isInstantiableKlass()) instantiableSubTypes.add(moduleType);
 
             if (instantiableSubTypes.isEmpty()) return null;
@@ -100,7 +94,7 @@ public final class ModuleUtils {
 
             var primary = instantiableSubTypes.stream().filter(
                     it -> Objects.requireNonNull(
-                            AnnotationUtils.findIncludeAnnotation(it.getClass(), Module.class)
+                            AnnotationUtils.findIncludeAnnotation(it.getKlass(), Module.class)
                     ).isPrimary()
             ).toList();
 
@@ -130,6 +124,7 @@ public final class ModuleUtils {
                 return constructors[0];
             }
 
+            // TODO("ModuleInitConstructor가 여러 개 할당된 경우 에러 표시")
             for (Constructor<T> constructor : constructors) {
                 if (AnnotationUtils.findIncludeAnnotation(constructor, ModuleInitConstructor.class) != null) {
                     return constructor;
@@ -153,34 +148,14 @@ public final class ModuleUtils {
         }
     }
 
-    /**
-     * <p>모듈이 의존하는 대상 중 모듈이 아닌 대상을 </p>
-     */
-    private static final class NonModuleDependencySearch {
-
-        private static void search(Set<ModuleType<?>> moduleTypes) {
-            for (ModuleType<?> moduleType : moduleTypes) {
-                if (moduleType.getModuleInitConstructor() == null) {
-                    continue;
-                }
-
-                for (ModuleDependency<?, ?> dependency : moduleType.getModuleInitConstructor().getDependencies()) {
-                    if (!ModuleType.isKlassModule(dependency)) {
-                        throw new ModuleDeclareError("Module cannot depend non-module type: dependency type \"" + dependency.getName() + "\" of module type \"" + moduleType.getKlass().getName() + "\"");
-                    }
-                }
-            }
-        }
-    }
-
     private static final class CircularDependencySearch {
 
         private static void search(Set<ModuleType<?>> moduleTypes) {
-            final Map<Class<?>, Node> nodes = new HashMap<>();
+            final Map<ModuleType<?>, Node> nodes = new HashMap<>();
 
             for (final ModuleType<?> moduleType : moduleTypes) {
                 nodes.put(
-                        moduleType.getKlass(),
+                        moduleType,
                         Node.of(moduleType));
             }
 
@@ -198,20 +173,20 @@ public final class ModuleUtils {
             }
         }
 
-        private static void dfsSearch(Map<Class<?>, Node> nodes, Node currentNode) {
+        private static void dfsSearch(Map<ModuleType<?>, Node> nodes, Node currentNode) {
 
             currentNode.visited = true;
 
             try {
-                for (Class<?> parameterType : currentNode.moduleType.getModuleInitConstructor().getParameterTypes()) {
-                    final var node = nodes.get(parameterType);
+                for (ModuleDependency<?, ?> parameterType : currentNode.moduleType.getModuleInitConstructor().getDependencies()) {
+                    final var node = nodes.get(parameterType.getModuleTypeForInjection());
                     if (!node.searchFinished && node.visited) {
                         throw new CircularDependencyStackerException(node.moduleType.getKlass());
                     }
                     if (node.searchFinished && node.visited) {
                         continue;
                     }
-                    dfsSearch(nodes, nodes.get(parameterType));
+                    dfsSearch(nodes, nodes.get(parameterType.getModuleTypeForInjection()));
                 }
             } catch (CircularDependencyStackerException e) {
                 if (e.circularDependencyRoot == currentNode.moduleType.getKlass()) {
