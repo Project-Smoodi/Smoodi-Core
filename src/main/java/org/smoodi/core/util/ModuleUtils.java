@@ -77,6 +77,7 @@ public final class ModuleUtils {
 
             // Set to unmodifiable
             return subTypes.stream()
+                    .filter(ModuleType::isKlassModule)
                     .map(ModuleType::of)
                     .collect(Collectors.toSet());
         }
