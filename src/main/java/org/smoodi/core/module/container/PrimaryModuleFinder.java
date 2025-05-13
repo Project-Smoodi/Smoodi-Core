@@ -6,6 +6,7 @@ import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleDeclareError;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.AnnotationUtils;
+import org.smoodi.core.util.ModuleUtils;
 
 import java.util.*;
 
@@ -30,9 +31,9 @@ class PrimaryModuleFinder implements ModuleFinder {
         });
 
         if (found.size() == 1) {
-            return Collections.unmodifiableSequencedSet(
-                    new TreeSet<>(found)
-            );
+            SequencedSet<T> sequenced = new TreeSet<>(ModuleUtils.comparator());
+            sequenced.addAll(found);
+            return Collections.unmodifiableSequencedSet(sequenced);
         }
 
         var primary = found.stream().filter(
@@ -49,8 +50,9 @@ class PrimaryModuleFinder implements ModuleFinder {
             return Collections.emptySortedSet();
         }
 
-        return  Collections.unmodifiableSequencedSet(
-                new TreeSet<>(found)
-        );
+
+        SequencedSet<T> sequenced = new TreeSet<>(ModuleUtils.comparator());
+        sequenced.addAll(found);
+        return Collections.unmodifiableSequencedSet(sequenced);
     }
 }
