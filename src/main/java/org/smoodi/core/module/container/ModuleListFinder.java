@@ -6,7 +6,7 @@ import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.ModuleUtils;
 
 import java.util.HashSet;
-import java.util.Map;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,20 +15,19 @@ class ModuleListFinder implements ModuleFinder {
     @EmptyableArray
     @NotNull
     @Override
-    public <T> Set<T> find(@NotNull Map<ModuleType<?>, Set<Object>> objects, @NotNull ModuleType<T> moduleType) {
+    public <T> SequencedSet<T> find(@NotNull ModuleSet moduleSet, @NotNull ModuleType<T> moduleType) {
 
         final Set<T> found = new HashSet<>();
 
         moduleType.getSubTypes().forEach(subType -> {
-            if (objects.get(subType) != null) {
-                //noinspection unchecked
+            if (moduleSet.get(subType) != null) {
                 found.addAll(
-                        (Set<? extends T>) objects.get(subType)
+                        moduleSet.get(subType)
                 );
             }
         });
 
-        var toReturn = new TreeSet<>(ModuleUtils.comparator(moduleType.getKlass()));
+        var toReturn = new TreeSet<T>(ModuleUtils.comparator());
         toReturn.addAll(found);
 
         return toReturn;
