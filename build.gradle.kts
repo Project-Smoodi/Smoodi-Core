@@ -77,7 +77,7 @@ tasks.test {
     }
 
     useJUnitPlatform {
-        excludeTags("forked")
+        excludeTags("fork")
     }
 
     finalizedBy(tasks.named("forkedTests"))

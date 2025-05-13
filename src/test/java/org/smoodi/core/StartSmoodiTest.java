@@ -8,6 +8,8 @@ public class StartSmoodiTest {
 
     @Test
     public void test() {
+        TestBase.initWith(StartSmoodiTest.class);
+
         Assertions.assertDoesNotThrow(() -> SmoodiFramework.startSmoodi(StartSmoodiTest.class));
 
         Assertions.assertEquals(

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smoodi.core.SmoodiFramework;
+import org.smoodi.core.StartSmoodiTest;
+import org.smoodi.core.TestBase;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class OrderedModuleDefineTests {
 
     @Test
     public void 순서가_명시된_모듈들의_정렬_확인() {
+        TestBase.initWith(OrderedModuleDefine.class);
         SmoodiFramework.startSmoodi(OrderedModuleDefine.class);
 
         var modules = SmoodiFramework.getInstance().getModuleContainer()
