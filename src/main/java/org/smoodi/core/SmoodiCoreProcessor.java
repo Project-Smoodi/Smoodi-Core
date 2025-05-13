@@ -5,13 +5,11 @@ import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.module.loader.ModuleLoaderComposite;
 import org.smoodi.core.util.LazyInitUnmodifiableCollection;
 
-import java.util.Set;
-
 @Slf4j
 @StaticModule
 public final class SmoodiCoreProcessor implements Processor {
 
-    private final LazyInitUnmodifiableCollection<Set<Processor>> processors = new LazyInitUnmodifiableCollection<>();
+    private final LazyInitUnmodifiableCollection<Processor> processors = new LazyInitUnmodifiableCollection<>();
 
     @Override
     public void start() {
@@ -31,8 +29,10 @@ public final class SmoodiCoreProcessor implements Processor {
     }
 
     private void loadProcessors() {
-        processors.initWith(Set.copyOf(SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
-                Processor.class
-        )));
+        processors.initWith(
+                SmoodiFramework.getInstance().getModuleContainer().getModulesByClass(
+                        Processor.class
+                )
+        );
     }
 }
