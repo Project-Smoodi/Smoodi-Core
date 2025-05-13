@@ -5,6 +5,7 @@ import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.annotation.array.UnmodifiableArray;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * <p>불변 {@link Collection}을 지연 초기화할 수 있도록 감싼 클래스.</p>
@@ -29,18 +30,17 @@ import java.util.Collection;
  * @see java.util.Collections.UnmodifiableCollection
  * @since v0.1.1
  */
-public class LazyInitUnmodifiableCollection<T extends Collection<?>> {
+public class LazyInitUnmodifiableCollection<T> {
 
-    private T collection = null;
+    private Collection<T> collection = null;
 
     @EmptyableArray
     @UnmodifiableArray
     @NotNull
     public LazyInitUnmodifiableCollection<T> initWith(
             @EmptyableArray
-            @UnmodifiableArray
             @NotNull
-            T collection
+            Collection<T> collection
     ) {
         if (collection == null) {
             throw new IllegalArgumentException("Collection is null");
@@ -49,16 +49,8 @@ public class LazyInitUnmodifiableCollection<T extends Collection<?>> {
             throw new IllegalStateException("Collection has already been initialized");
         }
 
-        try {
-            collection.add(null);
-        } catch (UnsupportedOperationException e) {
-            this.collection = collection;
-            return this;
-        } catch (Throwable e) {
-            throw new IllegalArgumentException("Only unmodifiable collections are supported");
-        }
-
-        throw new IllegalArgumentException("Only unmodifiable collections are supported");
+        this.collection = Collections.unmodifiableCollection(collection);
+        return this;
     }
 
     @NotNull
@@ -69,7 +61,7 @@ public class LazyInitUnmodifiableCollection<T extends Collection<?>> {
     @EmptyableArray
     @UnmodifiableArray
     @NotNull
-    public T get() {
+    public Collection<T> get() {
         if (!isInitialized()) {
             throw new IllegalStateException("LazyInitUnmodifiableCollection not initialized");
         }

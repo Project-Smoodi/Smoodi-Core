@@ -5,13 +5,13 @@ import org.smoodi.annotation.Nullable;
 import org.smoodi.annotation.array.EmptyableArray;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.SequencedSet;
 
 @SuppressWarnings("unchecked")
 public abstract class CachedProxyModuleContainer
         implements ModuleContainer {
 
-    private final HashMap<Class<?>, Set<Object>> listCache = new HashMap<>();
+    private final HashMap<Class<?>, SequencedSet<?>>     listCache = new HashMap<>();
 
     private final HashMap<Class<?>, Object> primaryCache = new HashMap<>();
 
@@ -36,20 +36,20 @@ public abstract class CachedProxyModuleContainer
     @EmptyableArray
     @NotNull
     @Override
-    public final <T> Set<T> getModulesByClass(@NotNull Class<T> klass) {
+    public final <T> SequencedSet<T> getModulesByClass(@NotNull Class<T> klass) {
         assert klass != null;
 
         if (listCache.get(klass) != null) {
-            return (Set<T>) listCache.get(klass);
+            return (SequencedSet<T>) listCache.get(klass);
         }
 
         var found = getModulesByClassImpl(klass);
 
-        listCache.put(klass, (Set<Object>) found);
+        listCache.put(klass, found);
         return found;
     }
 
     @EmptyableArray
     @NotNull
-    protected abstract <T> Set<T> getModulesByClassImpl(@NotNull Class<T> klass);
+    protected abstract <T> SequencedSet<T> getModulesByClassImpl(@NotNull Class<T> klass);
 }

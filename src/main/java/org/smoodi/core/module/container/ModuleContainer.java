@@ -3,7 +3,7 @@ package org.smoodi.core.module.container;
 import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.Nullable;
 
-import java.util.Set;
+import java.util.SequencedSet;
 
 public interface ModuleContainer {
 
@@ -13,7 +13,7 @@ public interface ModuleContainer {
     <T> T getPrimaryModuleByClass(@NotNull Class<T> klass);
 
     @NotNull
-    <T> Set<T> getModulesByClass(@NotNull Class<T> klass);
+    <T> SequencedSet<T> getModulesByClass(@NotNull Class<T> klass);
 
     @NotNull
     int getModuleCount();
