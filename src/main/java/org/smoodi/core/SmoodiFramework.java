@@ -72,7 +72,8 @@ public final class SmoodiFramework implements Lifecycle {
 
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
-            throw e;
+
+            kill();
         }
     }
 

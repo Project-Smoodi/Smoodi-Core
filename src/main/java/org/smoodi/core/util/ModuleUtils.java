@@ -46,7 +46,7 @@ public final class ModuleUtils {
         CircularDependencySearch.search(moduleTypes);
     }
 
-    public static <T> Comparator<T> comparator(Class<T> klass) {
+    public static <T> Comparator<T> comparator() {
         return new CircularDependencySearch.ComparatorModule<T>();
     }
 
