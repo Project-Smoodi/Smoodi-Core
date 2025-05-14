@@ -4,6 +4,7 @@ import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.ModuleUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TreeSetModuleSet implements ModuleSet {
 
@@ -15,6 +16,14 @@ public class TreeSetModuleSet implements ModuleSet {
 
         //noinspection unchecked
         return (SequencedSet<T>) Collections.unmodifiableSequencedSet(map.get(moduleType));
+    }
+
+    @Override
+    public Set<Object> getAll() {
+        return map.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 
     @Override

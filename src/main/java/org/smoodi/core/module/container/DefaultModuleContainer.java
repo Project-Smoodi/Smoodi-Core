@@ -7,6 +7,9 @@ import org.smoodi.core.annotation.StaticModule;
 import org.smoodi.core.module.ModuleType;
 
 import java.util.SequencedSet;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @StaticModule
 public class DefaultModuleContainer extends CachedProxyModuleContainer {
@@ -49,5 +52,12 @@ public class DefaultModuleContainer extends CachedProxyModuleContainer {
     @Override
     public int getModuleCount() {
         return moduleSet.size();
+    }
+
+    @EmptyableArray
+    @NotNull
+    @Override
+    public Set<?> filter(Predicate<Object> function) {
+        return moduleSet.getAll().stream().filter(function).collect(Collectors.toSet());
     }
 }
