@@ -171,7 +171,7 @@ public final class AnnotationUtils {
             for (Method method : methods) {
                 final Object returnValue = method.invoke(o);
 
-                if (returnValue instanceof Collection
+                if (returnValue instanceof Collection<?>
                         && !((Collection<?>) returnValue).isEmpty()) {
                     return (Annotation[]) ((Collection<?>) returnValue).toArray();
                 }

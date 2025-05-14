@@ -9,7 +9,9 @@ import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.module.container.ModuleContainer;
 import org.smoodi.core.util.ModuleUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class DefaultModuleInitializer implements ModuleInitializer {
 
@@ -19,9 +21,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
     @UseCopy
     @SneakyThrows
     @Override
-    public void initialize(Set<ModuleType<?>> moduleTypes) {
-        moduleTypes = new HashSet<>(moduleTypes);
-
+    public void initialize(List<ModuleType<?>> moduleTypes) {
         initDefaultConstructors(moduleTypes);
 
         int lastTurnListSize = moduleTypes.size() + 1;
@@ -32,7 +32,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
             }
             lastTurnListSize = moduleTypes.size();
 
-            final Set<ModuleType<?>> initializedModuleTypes = new HashSet<>();
+            final List<ModuleType<?>> initializedModuleTypes = new ArrayList<>();
 
             for (ModuleType<?> moduleType : moduleTypes) {
                 if (moduleType.getModuleInitConstructor() == null) {
@@ -79,7 +79,7 @@ public class DefaultModuleInitializer implements ModuleInitializer {
     }
 
     @SneakyThrows
-    private void initDefaultConstructors(Set<ModuleType<?>> moduleTypes) {
+    private void initDefaultConstructors(List<ModuleType<?>> moduleTypes) {
 
         List<ModuleType<?>> defaultConstructorModuleTypes = new ArrayList<>();
 

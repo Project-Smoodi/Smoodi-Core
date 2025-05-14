@@ -8,7 +8,7 @@ import org.smoodi.core.annotation.Module;
 import org.smoodi.core.util.AnnotationUtils;
 
 import java.lang.reflect.Modifier;
-import java.util.Set;
+import java.util.List;
 
 /**
  * <p>{@link org.smoodi.core.annotation.Module 모듈} 초기화에서 요구되는 {@link Class 클래스 정보}와 기타 추가적인 정보를 묶은 클래스.</p>
@@ -34,7 +34,7 @@ public interface ModuleType<T> {
     @NotNull
     @EmptyableArray
     @UnmodifiableArray
-    Set<ModuleType<? extends T>> getSubTypes();
+    List<ModuleType<? extends T>> getSubTypes();
 
     static boolean isKlassModule(@NotNull Class<?> klass) {
         if (isInstantiableKlass(klass)) {

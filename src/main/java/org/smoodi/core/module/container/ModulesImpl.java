@@ -1,29 +1,29 @@
 package org.smoodi.core.module.container;
 
 import org.smoodi.core.module.ModuleType;
+import org.smoodi.core.util.UtilCollection.SortedList;
 import org.smoodi.core.util.ModuleUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class TreeSetModuleSet implements ModuleSet {
+public class ModulesImpl implements Modules {
 
-    private final Map<ModuleType<?>, SequencedSet<Object>> map = new HashMap<>();
+    private final Map<ModuleType<?>, List<Object>> map = new HashMap<>();
 
     @Override
-    public <T> SequencedSet<T> get(ModuleType<T> moduleType) {
+    public <T> List<T> get(ModuleType<T> moduleType) {
         putIfAbsent(moduleType);
 
         //noinspection unchecked
-        return (SequencedSet<T>) Collections.unmodifiableSequencedSet(map.get(moduleType));
+        return (List<T>) Collections.unmodifiableList(map.get(moduleType));
     }
 
     @Override
-    public Set<Object> getAll() {
+    public List<Object> getAll() {
         return map.values()
                 .stream()
                 .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TreeSetModuleSet implements ModuleSet {
 
     private void putIfAbsent(ModuleType<?> moduleType) {
         if (!map.containsKey(moduleType)) {
-            map.put(moduleType, new TreeSet<>(ModuleUtils.comparator()));
+            map.put(moduleType, new SortedList<>(ModuleUtils.comparator()));
         }
     }
 

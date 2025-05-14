@@ -4,11 +4,11 @@ import org.smoodi.annotation.NotNull;
 import org.smoodi.annotation.array.EmptyableArray;
 import org.smoodi.core.module.ModuleType;
 
-import java.util.SequencedSet;
+import java.util.List;
 
 interface ModuleFinder {
 
     @EmptyableArray
     @NotNull
-    <T> SequencedSet<T> find(@NotNull ModuleSet moduleSet, @NotNull ModuleType<T> moduleType);
+    <T> List<T> find(@NotNull Modules modules, @NotNull ModuleType<T> moduleType);
 }
