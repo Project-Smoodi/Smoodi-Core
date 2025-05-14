@@ -9,10 +9,9 @@ import org.smoodi.core.annotation.Module;
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.AnnotationUtils;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 public class DefaultModuleClassScanner implements ModuleClassScanner {
@@ -24,8 +23,8 @@ public class DefaultModuleClassScanner implements ModuleClassScanner {
 
     @SneakyThrows(ClassNotFoundException.class)
     @Override
-    public Set<ModuleType<?>> getModuleClasses(String basePackage) {
-        final Set<ModuleType<?>> moduleClasses = new HashSet<>();
+    public List<ModuleType<?>> getModuleClasses(String basePackage) {
+        final List<ModuleType<?>> moduleClasses = new ArrayList<>();
 
         for (String s : new Reflections(basePackage, classScanner.setPackagePrefix(basePackage)).getAll(classScanner)) {
 

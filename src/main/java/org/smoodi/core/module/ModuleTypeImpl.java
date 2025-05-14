@@ -7,6 +7,7 @@ import org.smoodi.core.annotation.Module;
 import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
+import java.util.List;
 import java.util.Set;
 
 public final class ModuleTypeImpl<T> implements ModuleType<T> {
@@ -25,10 +26,10 @@ public final class ModuleTypeImpl<T> implements ModuleType<T> {
         return this.moduleInitConstructor;
     }
 
-    private Set<ModuleType<? extends T>> subTypes = null;
+    private List<ModuleType<? extends T>> subTypes = null;
 
     @Override
-    public Set<ModuleType<? extends T>> getSubTypes() {
+    public List<ModuleType<? extends T>> getSubTypes() {
         init();
         return this.subTypes;
     }
