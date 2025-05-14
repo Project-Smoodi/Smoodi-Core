@@ -69,7 +69,7 @@ public final class ModuleUtils {
 
         private static <T> List<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
 
-            final List<Class<? extends T>> subTypes = new UtilCollection.SortedList<>(comparator());
+            final List<Class<? extends T>> subTypes = new ArrayList<>();
 
             for (Reflections reflection : reflections) {
                 subTypes.addAll(reflection.getSubTypesOf(klass));
