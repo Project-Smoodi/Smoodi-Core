@@ -7,29 +7,25 @@ import org.smoodi.core.util.ModuleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SequencedSet;
-import java.util.TreeSet;
 
 class ModuleListFinder implements ModuleFinder {
 
     @EmptyableArray
     @NotNull
     @Override
-    public <T> SequencedSet<T> find(@NotNull ModuleSet moduleSet, @NotNull ModuleType<T> moduleType) {
+    public <T> List<T> find(@NotNull Modules modules, @NotNull ModuleType<T> moduleType) {
 
         final List<T> found = new ArrayList<>();
 
         moduleType.getSubTypes().forEach(subType -> {
-            if (moduleSet.get(subType) != null) {
+            if (modules.get(subType) != null) {
                 found.addAll(
-                        moduleSet.get(subType)
+                        modules.get(subType)
                 );
             }
         });
 
-        TreeSet<T> toReturn = new TreeSet<>(ModuleUtils.comparator());
-        toReturn.addAll(found);
-
-        return toReturn;
+        found.sort(ModuleUtils.comparator());
+        return found;
     }
 }

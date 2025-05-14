@@ -21,7 +21,7 @@ public final class ModuleUtils {
     /**
      * @see SubTypeUtils#getModuleSubTypes
      */
-    public static <T> Set<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
+    public static <T> List<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
         return SubTypeUtils.getModuleSubTypes(klass);
     }
 
@@ -42,7 +42,7 @@ public final class ModuleUtils {
     /**
      * @see CircularDependencySearch#search
      */
-    public static void searchCircularDependency(Set<ModuleType<?>> moduleTypes) {
+    public static void searchCircularDependency(List<ModuleType<?>> moduleTypes) {
         CircularDependencySearch.search(moduleTypes);
     }
 
@@ -67,9 +67,9 @@ public final class ModuleUtils {
             }
         }
 
-        private static <T> Set<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
+        private static <T> List<ModuleType<? extends T>> getModuleSubTypes(Class<T> klass) {
 
-            final Set<Class<? extends T>> subTypes = new HashSet<>();
+            final List<Class<? extends T>> subTypes = new UtilCollection.SortedList<>(comparator());
 
             for (Reflections reflection : reflections) {
                 subTypes.addAll(reflection.getSubTypesOf(klass));
@@ -79,7 +79,7 @@ public final class ModuleUtils {
             return subTypes.stream()
                     .filter(ModuleType::isKlassModule)
                     .map(ModuleType::of)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
 
         private static <T> ModuleType<? extends T> findPrimaryModuleType(ModuleType<T> moduleType) {
@@ -151,7 +151,7 @@ public final class ModuleUtils {
 
     private static final class CircularDependencySearch {
 
-        private static void search(Set<ModuleType<?>> moduleTypes) {
+        private static void search(List<ModuleType<?>> moduleTypes) {
             final Map<ModuleType<?>, Node> nodes = new HashMap<>();
 
             for (final ModuleType<?> moduleType : moduleTypes) {

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.smoodi.core.SmoodiFramework;
 import org.smoodi.core.module.ModuleType;
 
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class MainClassPackageBasedModuleLoader implements ModuleLoader {
             return 0;
         }
 
-        final Set<ModuleType<?>> moduleClasses = ms.getModuleClasses(
+        final List<ModuleType<?>> moduleClasses = ms.getModuleClasses(
                 SmoodiFramework.getMainClass().getPackage().getName()
         );
 
