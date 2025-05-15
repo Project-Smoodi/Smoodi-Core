@@ -2,7 +2,6 @@ package org.smoodi.core.module.container;
 
 import org.smoodi.core.module.ModuleType;
 import org.smoodi.core.util.UtilCollection.SortedList;
-import org.smoodi.core.util.ModuleUtils;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ public class ModulesImpl implements Modules {
 
     private void putIfAbsent(ModuleType<?> moduleType) {
         if (!map.containsKey(moduleType)) {
-            map.put(moduleType, new SortedList<>(ModuleUtils.comparator()));
+            map.put(moduleType, SortedList.ofModule());
         }
     }
 
