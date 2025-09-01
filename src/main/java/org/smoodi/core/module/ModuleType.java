@@ -20,17 +20,42 @@ import java.util.List;
  */
 public interface ModuleType<T> {
 
+    /**
+     * <p>모듈의 실제 Java 런타임 클래스(Klass).</p>
+     *
+     * @return Java 클래스
+     */
     @NotNull
     Class<T> getKlass();
 
+    /**
+     * <p>해당 모듈을 초기화하기 위한 생성자.</p>
+     *
+     * @return 생성자, 만약 인스턴스화할 수 없는 모듈 타입이라면 {@code null}
+     * @see ModuleType#isInstantiableKlass()
+     */
     @Nullable
     ModuleInitConstructor<T, ModuleType<T>> getModuleInitConstructor();
 
+    /**
+     * <p>모듈 컨테이너의 초기화 과정 중에, 해당 모듈 타입을 통해 주입되는 인스턴스 객체가 초기화된 경우, 해당 객체를 이 모듈 타입에 등록하고 초기화되었음을 표시.</p>
+     *
+     * @param primaryInstance 생성자에서 주입될 인스턴스 객체
+     */
     void markAsInstanceCreated(T primaryInstance);
 
+    /**
+     * <p>모듈 컨테이너에 존재하는, 이 모듈 타입의 인스턴스 객체 중 실제로 주입될 객체.</p>
+     *
+     * @return 객체, 만약 없거나 아직 초기화되지 않은 경우 {@code null}
+     */
     @Nullable
     T getPrimaryInstance();
 
+    /**
+     *
+     * @return
+     */
     @NotNull
     @EmptyableArray
     @UnmodifiableArray
