@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
  * 여러 범위에 걸쳐 퍼져 있는 주석과 개념 설명을 한 곳에 통합하기 위해 만들어졌습니다.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DocsCore {
+public class CoreDocs {
 
     /**
-     * 모듈이란, {@link IocContainer IoC 컨테이너}에서 인지하고 있는, 프레임워크에 의해 관리되는 '객체'를 의미합니다.
+     * 모듈이란, {@link IocContainerDocs IoC 컨테이너}에서 인지하고 있는, 프레임워크에 의해 관리되는 '객체'를 의미합니다.
      * <p>
-     * 보다 정확히는 객체의 생성과 사용, 참조 해제에 이르는 {@link IocContainer.ObjectLifecycle 객체 생명주기}의 일부를
+     * 보다 정확히는 객체의 생성과 사용, 참조 해제에 이르는 {@link IocContainerDocs.ObjectLifecycleDocs 객체 생명주기}의 일부를
      * 프레임워크가 대신 관리하며(제어의 역전, IoC), 생성 시점에 의존성 주입(Dependency Injection)을 제공하는 객체를 말합니다.
      * <p>
      * 사용자는 클래스를 정의하고 {@link org.smoodi.core.annotation.Module 전용 어노테이션}을 부착하기만 하면, 모듈 로더가 자동으로 인스턴스화하고 IoC 컨테이너에 등록합니다.
@@ -31,7 +31,7 @@ public class DocsCore {
      * <h3>인스턴스화 가능한 타입과 모듈</h3>
      * 인터페이스나 추상 클래스처럼 직접 인스턴스화할 수 없는 타입도 모듈이 될 수 있습니다. 다시 말해, 모든 모듈이 인스턴스화할 수 있는 건 아닙니다.<br>
      * 이는 DIP(Dependency Inversion Principle), 의존성 역전 원칙에 따라, 실제 구현체가 IoC 컨테이너에 등록되어 있으면 주입이 가능하기 때문입니다.<br>
-     * 자세한 내용은 {@link DocsCore.Module.DependencyInjection 의존성 주입}을 참고하세요.
+     * 자세한 내용은 {@link DependencyInjectionDocs 의존성 주입}을 참고하세요.
      * <p>
      *
      * <h3>의존성 주입과 모듈 판단 방식</h3>
@@ -44,7 +44,7 @@ public class DocsCore {
      * </ul>
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Module {
+    public static class ModuleDocs {
 
         /**
          * 의존성 주입<sup>Dependency Injection</sup>이란, 객체가 필요로 하는 의존성을 외부에서 주입하는 설계 패턴입니다.
@@ -60,14 +60,14 @@ public class DocsCore {
          * 다시 말해, 실제로 인스턴스화가 가능한 구체 클래스가 아닌, 인터페이스나 추상 클래스를 통해서도 의존성을 선언할 수 있습니다.
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class DependencyInjection {
+        public static class DependencyInjectionDocs {
         }
 
         /**
          * 모듈 초기화 생성자<sup>Module Initialization Constructor</sup>란, 모듈이 인스턴스화될 때 호출되는 생성자를 의미합니다.
          * <p>
          * 모듈의 생성자 매개변수는 모두 의존성 주입 대상이며, IoC 컨테이너에 등록된 모듈이어야 합니다.<br>
-         * 의존성 주입 대상이 되는 모듈은 {@link DocsCore.Module 의존성 주입}에서 설명한 바와 같은 기준에 따라 판단합니다.
+         * 의존성 주입 대상이 되는 모듈은 {@link ModuleDocs 의존성 주입}에서 설명한 바와 같은 기준에 따라 판단합니다.
          * <p>
          * 모듈 초기화 생성자는 아래의 기준에 따라 선택합니다.
          * <ol>
@@ -79,7 +79,7 @@ public class DocsCore {
          * 생성자의 접근 제어자는
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class ModuleInitConstructor {
+        public static class ModuleInitConstructorDocs {
         }
 
         /**
@@ -92,26 +92,26 @@ public class DocsCore {
          * </pre>
          * 모듈 로더가 해당 타입을 자동으로 인스턴스화하고 IoC 컨테이너에 등록할지 여부를 지정합니다.<br>
          * 기본값은 true이며, false로 설정하면 해당 타입을 모듈로 인식은 하지만, 자동 인스턴스화 대상에서는 제외합니다.<br>
-         * 이는 {@link DocsCore.Module.StaticModule 정적 모듈} 등 특수한 상황을 위한 옵션입니다.
+         * 이는 {@link StaticModuleDocs 정적 모듈} 등 특수한 상황을 위한 옵션입니다.
          * <p>
          * <pre>
-         * byte    order() default 0;
+         * byte order() default 0;
          * </pre>
          * 동일한 타입에 여러 모듈이 존재할 때, 이 모듈이 우선적으로 선택될 순서를 지정합니다.<br>
          * 값이 낮을수록 우선순위가 높으며, 기본값은 0입니다.<br>
-         * 자세한 내용은 {@link DocsCore.Module.OrderedModules 순서 지정 모듈}을 참고하세요.<br>
+         * 자세한 내용은 {@link OrderedModulesDocs 순서 지정 모듈}을 참고하세요.<br>
          * <p>
          * <pre>
          * boolean isPrimary() default false;
          * </pre>
          * 동일한 타입에 여러 모듈이 존재할 때, 이 모듈이 기본 모듈<sup>Primary Module</sup>임을 지정합니다.<br>
          * 기본값은 false이며, 단일 모듈만 존재할 때는 지정하지 않아도 무방합니다.<br>
-         * 자세한 내용은 {@link DocsCore.Module.PrimaryModule 기본 모듈}을 참고하세요.
+         * 자세한 내용은 {@link PrimaryModuleDocs 기본 모듈}을 참고하세요.
          *
          * @see org.smoodi.core.annotation.Module
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class Annotation {
+        public static class AnnotationDocs {
         }
 
         /**
@@ -132,19 +132,19 @@ public class DocsCore {
          * @see org.smoodi.core.annotation.Module#isPrimary()
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class PrimaryModule {
+        public static class PrimaryModuleDocs {
         }
 
         /**
          * 하나의 타입에 다수의 모듈이 등록될 수 있으며, IoC 컨테이너는 이를 <code>Collection</code>으로 제공합니다.
-         * 이때 {@link Annotation @Module}의 <code>order()</code>로 정렬 우선순위를 지정할 수 있습니다.
+         * 이때 {@link AnnotationDocs @Module}의 <code>order()</code>로 정렬 우선순위를 지정할 수 있습니다.
          * <p>
          * 기본적으로 순서는 없으며, 순서를 지정하지 않은 경우에는 무작위 배치가 발생할 수 있습니다.<br>
          * 동일한 순서 값끼리는 내부적으로 무작위 섞기(shuffle)를 수행하므로, 필요한 경우 명시적으로 순서를 지정하는 것을 권장합니다.<br>
          * 이는 클래스 이름 변경이나 컴파일러 버전 변경 등 개발자의 인지 하에 있지 않은 외부 요인에 의한 오작동을 방지하기 위함입니다.
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class OrderedModules {
+        public static class OrderedModulesDocs {
         }
 
         /**
@@ -156,12 +156,12 @@ public class DocsCore {
          * {@link org.smoodi.core.annotation.StaticModule @StaticModule} 어노테이션 또한 위처럼 구현되어 있습니다.
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class StaticModule {
+        public static class StaticModuleDocs {
         }
 
         /**
          * 모듈 로더<sup>Module Loader</sup>란, 클래스패스 상의 모든 클래스를 스캔하여 {@link org.smoodi.core.annotation.Module @Module} 어노테이션이 부착된 타입을 찾아내고,
-         * 이를 인스턴스화하여 {@link IocContainer IoC 컨테이너}에 등록하는 역할을 담당합니다.
+         * 이를 인스턴스화하여 {@link IocContainerDocs IoC 컨테이너}에 등록하는 역할을 담당합니다.
          * <p>
          * 모듈을 스캔하고 어노테이션 메타데이터를 해석하여 의존성 그래프를 구성한 뒤, 생성 순서를 계산하고 인스턴스를 생성/등록합니다.<br>
          * 이 과정에서 의존성 주입이 자동으로 이루어지며, 순환 참조가 있는 경우에는 {@link org.smoodi.core.module.ModuleDeclareError 순환 참조 오류}가 발생합니다.
@@ -169,17 +169,17 @@ public class DocsCore {
          * Smoodi에서는 모듈 로더의 책임을 넓은 의미의 IoC 컨테이너 범주에 포함하여 설명합니다.
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class ModuleLoader {
+        public static class ModuleLoaderDocs {
         }
     }
 
     /**
      * IoC 컨테이너<sup>IoC Container</sup>란, 제어의 역전<sup>Inversion of Control</sup>을 구현하며, 그러한 객체들을 보관 및 관리하기 위한 저장소입니다.
      * <p>
-     * Project Smoodi에서 IoC는 {@link ObjectLifecycle 객체 생명주기}가 관리되며, 동시에 의존성의 주입과 같은 의존성 관리까지를 포함한 개념입니다.
+     * Project Smoodi에서 IoC는 {@link ObjectLifecycleDocs 객체 생명주기}가 관리되며, 동시에 의존성의 주입과 같은 의존성 관리까지를 포함한 개념입니다.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class IocContainer {
+    public static class IocContainerDocs {
 
         /**
          * 객체 생명주기<sup>Object Lifecycle</sup>란, 객체의 생성<sup>Create</sup>부터 파괴<sup>Destroy</sup>까지의 과정을 의미합니다.
@@ -208,7 +208,7 @@ public class DocsCore {
          * 참고로, Destroy가 제외된 이유는 JVM과 GC를 직접 제어해야 하기 때문입니다. 이러한 과정은 복잡하고, 유연하지 못하며, 무엇보다 JVM의 메모리 관리 시스템이 더 안정적이고 신뢰성이 높기 때문입니다.
          */
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class ObjectLifecycle {
+        public static class ObjectLifecycleDocs {
         }
     }
 }
