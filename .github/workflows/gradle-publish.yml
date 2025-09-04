@@ -10,9 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
-    if: startsWith(github.event.head_commit.message, 'SNAPSHOT') || startsWith(github.event.head_commit.message, 'RELEASE')
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +27,35 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build jreleaserConfig --stacktrace
         env:
-          USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_PASSWORD: ${{ secrets.MAVENCENTRAL_PASSWORD }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to GitHub Packages
-        run: ./gradlew publish
+      - name: Publish Release and Create GitHub Release
+        if: startsWith(github.event.head_commit.message, 'RELEASE')
+        run: ./gradlew clean publish jreleaserFullRelease --stacktrace
         env:
-          USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.MAVENCENTRAL_USERNAME }}
+          JRELEASER_DEPLOY_MAVEN_MAVENCENTRAL_SONATYPE_PASSWORD: ${{ secrets.MAVENCENTRAL_PASSWORD }}
+          JRELEASER_DEPLOY_MAVEN_NEXUS2_SONATYPE_SNAPSHOTS_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          JRELEASER_DEPLOY_MAVEN_NEXUS2_SONATYPE_SNAPSHOTS_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Publish Snapshot"
+        if: startsWith(github.event.head_commit.message, 'SNAPSHOT')
+        run: ./gradlew clean publish jreleaserDeploy --stacktrace
+        env:
+          JRELEASER_DEPLOY_MAVEN_NEXUS2_SONATYPE_SNAPSHOTS_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          JRELEASER_DEPLOY_MAVEN_NEXUS2_SONATYPE_SNAPSHOTS_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
