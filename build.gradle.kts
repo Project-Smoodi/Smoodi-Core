@@ -1,25 +1,23 @@
+import org.jreleaser.model.Active
+
 plugins {
     id("java")
     id("java-library")
     id("maven-publish")
+    id("org.jreleaser") version "1.17.0"
 }
 
 group = "org.smoodi.core"
+version = "0.1.5-SNAPSHOT"
 
 repositories {
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
-        credentials {
-            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
-        }
-    }
     mavenCentral()
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
+    withJavadocJar()
+    withSourcesJar()
 }
 
 val slf4jVersion = "2.0.13"
@@ -45,13 +43,13 @@ configurations.all {
 dependencies {
 
     // Smoodi
-    api("org.smoodi.framework:docs-annotations:1.2.0")
+    api("org.smoodi.annotation:docs-annotations:1.3.0")
 
     // Java
     implementation("org.reflections:reflections:0.10.2")
 
     // Jackson
-    api("com.fasterxml.jackson.core:jackson-databind:2.13.5")
+    api("com.fasterxml.jackson.core:jackson-databind:2.15.0")
 
     // Logger
     api("org.slf4j:slf4j-api:$slf4jVersion")
@@ -101,22 +99,11 @@ tasks.withType<JavaCompile> {
     )
 }
 
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
-}
-
 publishing {
 
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-
-            groupId = "org.smoodi.framework"
-            artifactId = "smoodi-core"
-            version = "0.1.5-SNAPSHOT"
-
-            artifact(tasks["sourcesJar"])
 
             pom {
                 name.set("Smoodi Framework Core")
@@ -134,7 +121,6 @@ publishing {
                     developer {
                         id.set("Daybreak312")
                         name.set("Daybreak312")
-                        email.set("leetyxodud312@gmail.com")
                     }
                 }
 
@@ -149,12 +135,43 @@ publishing {
 
     repositories {
         maven {
-            name = "Smoodi-Framework-Core"
-            url = uri("https://maven.pkg.github.com/Project-Smoodi/Smoodi-Core")
-            isAllowInsecureProtocol = true
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
+            name = "staging"
+            url = uri("${layout.buildDirectory}/staging-deploy")
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active.set(Active.RELEASE)
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                create("sonatype") {
+                    active.set(Active.RELEASE)
+                    url.set("https://central.sonatype.com/api/v1/publisher")
+                    stagingRepository("${layout.buildDirectory}/staging-deploy")
+                }
+            }
+            nexus2 {
+                create("sonatype-snapshots") {
+                    active.set(Active.SNAPSHOT)
+                    url.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    snapshotUrl.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    applyMavenCentralRules.set(true)
+                }
+            }
+        }
+    }
+    release {
+        github {
+            tagName.set("v{{projectVersion}}")
+            releaseName.set("Release v{{projectVersion}}")
+            changelog {
+                formatted.set(Active.ALWAYS)
+                preset.set("conventional-commits")
             }
         }
     }

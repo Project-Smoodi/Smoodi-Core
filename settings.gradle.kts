@@ -1,2 +1,2 @@
-rootProject.name = "Smoodi-Core"
+rootProject.name = "smoodi-core"
 
