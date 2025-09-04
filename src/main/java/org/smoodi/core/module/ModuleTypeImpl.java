@@ -8,7 +8,6 @@ import org.smoodi.core.util.ModuleUtils;
 import org.smoodi.core.util.Nullability;
 
 import java.util.List;
-import java.util.Set;
 
 public final class ModuleTypeImpl<T> implements ModuleType<T> {
 

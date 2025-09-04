@@ -16,8 +16,8 @@ import org.smoodi.annotation.Nullable;
  *         .notNull(d)
  * </pre>
  *
- * @since v0.1.0
  * @author Daybreak312
+ * @since v0.1.0
  */
 public class NullChecker {
 

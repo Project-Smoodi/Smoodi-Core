@@ -22,7 +22,7 @@ java {
 
 val slf4jVersion = "2.0.13"
 val logbackVersion = "1.5.13"
-val lombokVersion = "1.18.30"
+val lombokVersion = "1.18.34"
 
 configurations.all {
     resolutionStrategy {
