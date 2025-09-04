@@ -15,7 +15,7 @@ import java.util.Collections;
  * <p>아래와 같이 사용.</p>
  * <pre>
  *     private final{@literal LazyInitUnmodifiableCollection<List<Long>>} list
- *         = new LazyInitUnmodifiableCollection<>();
+ *         = new LazyInitUnmodifiableCollection&lt;&gt;();
  *
  *    {@literal private void lazyInit(List<Long> values)} {
  *         list.initWith(

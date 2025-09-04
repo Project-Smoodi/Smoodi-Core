@@ -5,6 +5,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("org.jreleaser") version "1.17.0"
+    id("io.freefair.lombok") version "8.4"
 }
 
 group = "org.smoodi.core"
@@ -22,7 +23,7 @@ java {
 
 val slf4jVersion = "2.0.13"
 val logbackVersion = "1.5.13"
-val lombokVersion = "1.18.34"
+val lombokVersion = "1.18.38"
 
 configurations.all {
     resolutionStrategy {
@@ -57,7 +58,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Lombok
-    api("org.projectlombok:lombok:$lombokVersion")
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
 
     // Test
@@ -86,6 +87,15 @@ tasks.register<Test>("forkedTests") {
         includeTags("fork")
     }
     forkEvery = 1
+}
+
+tasks.javadoc {
+    options {
+        (this as StandardJavadocDocletOptions).apply {
+            // Unable warnings of missing documentation
+            addStringOption("Xdoclint:all,-missing", "-quiet")
+        }
+    }
 }
 
 tasks.withType<JavaCompile> {
