@@ -1,4 +1,4 @@
 package org.smoodi.core.lifecycle;
 
-public class LifecycleDefineError extends Error{
+public class LifecycleDefineError extends Error {
 }
