@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "org.smoodi.core"
-version = "0.1.5-SNAPSHOT"
+version = "0.1.5"
 
 repositories {
     mavenCentral()
